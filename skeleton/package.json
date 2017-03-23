@@ -1,0 +1,22 @@
+{
+  "name": "untitled_flourish_template",
+  "version": "1.0.0",
+  "description": "A template for use on flourish.studio",
+  "main": "template.js",
+  "author": "Unknown author",
+  "license": "ISC",
+  "keywords": [
+    "flourish"
+  ],
+  "scripts": {
+    "build": "node_modules/.bin/rollup -c",
+    "less": "node_modules/.bin/lessc --plugin=less-plugin-clean-css --source-map less/style.less static/style.css"
+  },
+  "dependencies": {
+    "less": "^2.7.2",
+    "less-plugin-clean-css": "^1.5.1",
+    "rollup": "^0.37.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1"
+  }
+}

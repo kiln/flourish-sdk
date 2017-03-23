@@ -1,0 +1,78 @@
+#!/usr/bin/env node
+
+"use strict";
+
+const minimist = require("minimist"),
+
+      log = require("../lib/log");
+
+const OPTS = {
+	boolean: [ "build", "open" ],
+	string: [
+		"host", "port", "user", "password",
+
+		// Only relevant for admin users
+		"as",
+	],
+
+	default: {
+		/* Options for 'register', 'login', 'publish': */
+		host: "app.flourish.studio",
+		// --user and --password can also be used for basic auth credentials
+
+		/* Options for 'run' */
+		port: "1685",
+		build: true,
+		open: false
+	},
+
+	alias: {
+		open: "o",
+	},
+
+	unknown: function(unknown_option) {
+		if (unknown_option.startsWith("-")) {
+			log.die("Unknown option: " + unknown_option);
+		}
+	}
+};
+
+const args = minimist(process.argv.slice(2), OPTS),
+      command = args._[0];
+
+const server_opts = {
+	host: args.host,
+	user: args.user,
+	password: args.password,
+};
+
+switch(command) {
+	case "new":
+	case "build":
+	case "run":
+
+	case "register":
+	case "login":
+	case "logout":
+
+	case "whoami":
+
+	case "publish":
+	case "delete":
+	case "upgrade":
+	case "list":
+		require("../lib/cmd/" + command)(args, server_opts);
+		break;
+
+	case "is":
+		if (args._[1] === "the") {
+			log.victory("Word!");
+			break;
+		}
+
+	default:
+		log.die("Unknown command '" + command + "'. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+
+	case undefined:
+		log.die("No command specified. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+}

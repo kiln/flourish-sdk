@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Flourish | Data Visualisation &amp; Storytelling</title>
+	
+	<!-- Search engines -->
+	<meta name="description" content="Flourish is the most powerful platform for data visualisation and storytelling">
+	<!-- Google Plus -->
+	<meta itemprop="name" content="">
+	<meta itemprop="description" content="Flourish is the most powerful platform for data visualisation and storytelling">
+	<meta itemprop="image" content="/images/share_image.jpg">
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="Flourish">
+	<meta name="twitter:title" content="">
+	<meta name="twitter:description" content="Flourish is the most powerful platform for data visualisation and storytelling">
+	<meta name="twitter:creator" content="@f_l_o_u_r_i_s_h">
+	<meta name="twitter:image:src" content="/images/share_image.jpg">
+	<!-- Open Graph (Facebook & Pinterest) -->
+	<meta property="og:title" content="">
+	<meta property="og:description" content="Flourish is the most powerful platform for data visualisation and storytelling">
+	<meta property="og:site_name" content="Flourish">
+	<meta property="og:image" content="/images/share_image.jpg">
+	<meta property="fb:app_id" content="102649676918117">
+
+
+
+	<link href="/sdk.css" rel="stylesheet">
+	<script src="/script.js" charset="utf-8"></script>
+</head>
+<body class="sdk">
+	<div class="content">
+<div class="row editor">
+	<div class="row-inner">
+		<div class="row-menus">
+<div id="preview-menu" class="row-menu left no-select">
+	<span id="editor-full-screen" class="toggle-full-screen menu-item clickable popup" data-popup-head="Enter full screen mode" data-popup-body=""><i class="fa fa-expand"></i> <span class="label">Full-screen</span></span>
+	<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable popup selected" data-popup-head="Autosize preview" data-popup-body="The preview fills the available space"><i class="fa fa-desktop"></i> <span class="label">Auto</span></span>
+	<span id="editor-tablet" data-target="tablet" class="menu-item preview-mode clickable popup" data-popup-head="Tablet preview" data-popup-body="iPad size: 768px x 1024px"><i class="fa fa-tablet"></i> <span class="label">Tablet</span></span>
+	<span id="editor-mobile" data-target="mobile" class="menu-item preview-mode clickable popup" data-popup-head="Phone preview" data-popup-body="iPhone 4 size: 320px x 500px"><i class="fa fa-mobile"></i> <span class="label">Phone</span></span>
+	<span id="editor-rotate" class="menu-item clickable popup" data-popup-head="Rotate" data-popup-body="Toggle portrait/landscape"><i class="fa fa-retweet"></i> <span class="label">Rotate</span></span>
+</div>
+		</div>
+		<div id="visualisation" class="full-screen-ready">
+<div class="side-panel">
+	<div class="side-panel-top">
+		<div class="side-panel-close clickable popup" data-popup-head="Open/close the settings panel">
+			<i class="fa fa-times"></i>
+		</div>
+	</div>
+	<div class="side-panel-scrollbox">
+		<div class="side-panel-inner">
+<div class="current-template popup" data-popup-head="Template details" data-popup-body="Add or edit thumbnail.jpg and template.yml to change">
+	<div class="current-template-thumbnail"></div>
+	<div class="grad"></div>
+	<div class="current-template-info">
+		<h3 class="template-name">{{{ template_name }}}</h3>
+		<p><span class="label">Author:</span> <span class="author">{{{ template_author }}}</span></p>
+	</div>
+</div>
+<h1 class="no-select">Template settings</h1>
+<div class="template-settings"></div>
+<h1 class="no-select">Spreadsheet column selection</h1>
+<div class="tip"><i class="fa fa-info-circle"></i> Flourish users will be able to edit which columns are used in any data tables here. They will also be able to edit the data. For template development, just edit your data bindings in the template.yml and the CSV files in the template’s data directory.</div>
+		</div>
+	</div>
+</div>
+			<div id="visualisation-inner" class="editor-core">
+				<div class="preview-holder">
+					<iframe id="preview" sandbox="allow-same-origin allow-scripts" src="about:blank"></iframe>
+				</div>
+			</div>
+			<div id="exit-full-screen" class="toggle-full-screen clickable"><i class="fa fa-compress"></i></div>
+		</div>
+	</div>
+</div>
+	</div>
+
+	{{#build_failed}}
+	<div class="error shown">
+		<h1><i class="fa fa-exclamation-triangle"></i> Template failed to build</h1>
+		<h2>See your terminal for details</h2>
+	</div>
+	{{/build_failed}}
+	<div id="error-server-down" class="error">
+		<h1><i class="fa fa-exclamation-triangle"></i> SDK server not running</h1>
+		<h2>Check your terminal for errors</h2>
+	</div>
+
+<div class="row header no-select">
+	<div class="row-inner">
+		<a href=""><img class="logo" src="/images/logo.svg" alt="Flourish logo"></a>
+	
+		<div class="menu-holder desktop-nav">
+			<div class="menu">
+				<h2 class="menu-label">Views</h2>
+				<h2 class="menu-item selected"><a class="popup" data-popup-head="Editor preview" href="/">Editor</a></h2>
+				<h2 class="menu-item"><a class="popup" data-popup-head="Full-window preview" href="/preview">Preview</a></h2>
+			</div>
+		</div>
+
+	</div>
+</div>
+	<script>
+		Flourish.initVisualisationEditor({{{ visualisation }}}, {{{ settings }}}, {{{ data_bindings }}});
+		Flourish.app.preview_pane.loadTemplate();
+		Flourish.talkToServer();
+	</script>
+</body>
+</html>
