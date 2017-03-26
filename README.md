@@ -105,10 +105,10 @@ The following example sets up a dataset with two keys, one single-column and one
 ```yaml
 data:
 - Locations # Optional; breaks up the bindings into collapsible sections
-- name: Country code, # Name shown in UI
+- name: Country code # Name shown in UI
   description: Requires ISO 3166-1 alpha-2 codes # Optional description for the UI
-  dataset: country_scores, # Which dataset this binding is part of
-  key: iso_code, # The key used to access the data in this binding in the template code
+  dataset: country_scores # Which dataset this binding is part of
+  key: iso_code # The key used to access the data in this binding in the template code
   type: column # This binding can take only one column
   column: By Decade::A  # The default values are drawn from column A of `By Decade.csv`
 - name: Values
@@ -264,7 +264,7 @@ While it’s running it watches the template directory for changes:
 * if you edit a file that is the source for a [build rule](#build-configuration), the SDK will run that build rule and then refresh the page.
 
 Options:
-* `--open` or `-o` Try to open the SDK in your web browser once the server is running
+* `--open` or `-o` Try to open the SDK in your web browser once the server is running. At present this only works on macOS.
 * `--port` Specify a particular port; defaults to [1685](https://en.wikipedia.org/wiki/Johann_Sebastian_Bach)
 * `--no-build` Skip the build process
 

@@ -7,7 +7,7 @@ const minimist = require("minimist"),
       log = require("../lib/log");
 
 const OPTS = {
-	boolean: [ "build", "open" ],
+	boolean: [ "build", "open", "debug", "full" ],
 	string: [
 		"host", "port", "user", "password",
 

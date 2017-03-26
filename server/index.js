@@ -1,7 +1,8 @@
 "use strict";
 
 // Modules
-var child_process = require("child_process"),
+var cross_spawn = require("cross-spawn"),
+    chokidar = require("chokidar"),
     crypto = require("crypto"),
     fs = require("fs"),
     http = require("http"),
@@ -12,7 +13,7 @@ var child_process = require("child_process"),
     colors = require("colors"),
     d3_dsv = require("d3-dsv"),
     express = require("express"),
-    mustache = require("mustache"),
+    handlebars = require("handlebars"),
 
     columns = require("./columns"),
     comms_js = require("./comms_js"),
@@ -74,8 +75,9 @@ function loadFile(path_parts, options) {
 	});
 }
 
-function loadSDKTemplateText() {
-	return loadFile([__dirname, "views", "index.html"], { silentSuccess: true });
+function loadSDKTemplate() {
+	return loadFile([__dirname, "views", "index.html"], { silentSuccess: true })
+		.then((template_text) => handlebars.compile(template_text));
 }
 
 function loadTemplateText(template_dir) {
@@ -91,7 +93,7 @@ function loadJavaScript(template_dir) {
 }
 
 function loadSettings(template_dir) {
-	return loadFile([template_dir, "template.yml"], { type: "yaml" });
+	return sdk.readAndValidateConfig(template_dir);
 }
 
 function listDataTables(template_dir) {
@@ -153,7 +155,7 @@ function parseDataBindings(data_bindings, data_tables) {
 	return { 1: data_bindings_by_dataset };
 }
 
-function loadTemplate(template_dir, sdk_template_text, build_failed) {
+function loadTemplate(template_dir, sdk_template, build_failed) {
 	return Promise.all([
 		listDataTables(template_dir),
 		loadSettings(template_dir),
@@ -173,7 +175,8 @@ function loadTemplate(template_dir, sdk_template_text, build_failed) {
 	]) => {
 		const page_params = {
 			// Always use ID of 1 for SDK
-			visualisation: "new Flourish.Visualisation('1', 0," + json.safeStringify({
+			visualisation: { id: 1, can_edit: true },
+			visualisation_js: "new Flourish.Visualisation('1', 0," + json.safeStringify({
 				data_bindings: data_bindings,
 				data_tables: data_tables,
 			}) + ")",
@@ -195,7 +198,7 @@ function loadTemplate(template_dir, sdk_template_text, build_failed) {
 			"<script>" + preview_init_js + "</script>";
 
 		return Promise.all([
-			mustache.render(sdk_template_text, page_params),
+			sdk_template(page_params),
 			index_html.render(template_text, {
 				title: "Flourish SDK template preview",
 				static: static_prefix,
@@ -243,7 +246,7 @@ function tryToOpen(url) {
 	// If it’s available and works, use /usr/bin/open to open
 	// the URL. If not just prompt the user to open it.
 	try {
-		child_process.spawn("/usr/bin/open", [url])
+		cross_spawn.spawn("/usr/bin/open", [url])
 			.on("exit", function(exit_code) {
 				if (exit_code != 0) {
 					log.success("Now open " + url + " in your web browser!");
@@ -270,7 +273,7 @@ function isPrefix(a, b) {
 }
 
 
-module.exports = function(template_dir, port, open_browser) {
+module.exports = function(template_dir, port, open_browser, debug) {
 	let app = express(),
 	    reloadPreview,
 
@@ -330,7 +333,7 @@ module.exports = function(template_dir, port, open_browser) {
 	app.use(`/template/1/embed/${static_prefix}/`, express.static(path.join(template_dir, "static")));
 
 
-	function startServer(sdk_template_text, template_) {
+	function startServer(sdk_template, template_) {
 		template = template_;
 
 		// Run the server
@@ -349,7 +352,7 @@ module.exports = function(template_dir, port, open_browser) {
 				for (let socket of sockets) socket.close();
 			};
 
-			watchForChanges(sdk_template_text);
+			watchForChanges(sdk_template);
 			if (open_browser) tryToOpen(url);
 		})
 		.on("error", function(error) {
@@ -364,12 +367,12 @@ module.exports = function(template_dir, port, open_browser) {
 
 	let build_failed = new Set(),
 	    rebuilding = new Set();
-	function watchForChanges(sdk_template_text) {
+	function watchForChanges(sdk_template) {
 		// Watch for file changes. If something changes, tell the page to reload itself
 		// If the source code has changed, rebuild it.
 
 		function reloadTemplate() {
-			loadTemplate(template_dir, sdk_template_text, build_failed)
+			loadTemplate(template_dir, sdk_template, build_failed)
 				.then((template_) => {
 					template = template_;
 					log.info("Template reloaded. Trying to reload preview.");
@@ -380,8 +383,8 @@ module.exports = function(template_dir, port, open_browser) {
 				});
 		}
 
-		fs.watch(template_dir, { recursive: true }, function(event_type, filename) {
-			const path_parts = filename.split("/");
+		chokidar.watch(template_dir, { ignoreInitial: true }).on("all", function(event_type, filename) {
+			const path_parts = filename.split(path.sep);
 
 			let should_reload = false;
 			if (sdk.TEMPLATE_SPECIAL.has(path_parts[0])) {
@@ -393,7 +396,7 @@ module.exports = function(template_dir, port, open_browser) {
 			const build_commands = new Map();
 			if (template.build_rules) {
 				for (const build_rule of template.build_rules) {
-					if ((build_rule.directory && isPrefix(build_rule.directory.split("/"), path_parts))
+					if ((build_rule.directory && isPrefix(build_rule.directory.split(path.sep), path_parts))
 					    || (build_rule.files && build_rule.files.indexOf(filename) != -1))
 					{
 						build_commands.set(build_rule.key, build_rule.script);
@@ -440,16 +443,17 @@ module.exports = function(template_dir, port, open_browser) {
 		});
 	}
 
-	loadSDKTemplateText()
-		.then((sdk_template_text) => {
+	loadSDKTemplate()
+		.then((sdk_template) => {
 			return Promise.all([
-				sdk_template_text, loadTemplate(template_dir, sdk_template_text)
+				sdk_template, loadTemplate(template_dir, sdk_template)
 			]);
 		})
-		.then(([sdk_template_text, template]) => {
-			startServer(sdk_template_text, template);
+		.then(([sdk_template, template]) => {
+			startServer(sdk_template, template);
 		})
 		.catch((error) => {
-			log.problem("Failed to start server", error.message, error.stack);
+			if (debug) log.problem("Failed to start server", error.message, error.stack);
+			else log.problem("Failed to start server", error.message);
 		});
 };

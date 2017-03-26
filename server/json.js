@@ -10,7 +10,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 // Stringify an object (etc.) in a form that can safely be inserted
 // into a <script> block in a web page.
 function safeStringify(obj) {
-	return JSON.stringify(obj).replace(/<\/script>/g, "<\\/script>");
+	const raw = JSON.stringify(obj);
+	if (typeof raw === "undefined") return undefined;
+	else return raw.replace(/<\/script>/g, "<\\/script>");
 }
 
 function stringifyDataset(dataset) {

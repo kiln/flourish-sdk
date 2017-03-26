@@ -12,7 +12,7 @@ export function update() {
   // The update function is called whenever the user changes a data table or settings
   // in the visualisation editor, or when changing slides in the story editor.
 
-  // Tip: to make your template works nicely in the story editor, ensure that all user
+  // Tip: to make your template work nicely in the story editor, ensure that all user
   // interface controls such as buttons and sliders update the state and then call update.
 }
 

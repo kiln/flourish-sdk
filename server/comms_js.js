@@ -47,9 +47,9 @@ window.addEventListener("message", function(event) {
 			break;
 		}
 
-		port.postMessage(JSON.stringify({result: result}));
+		port.postMessage({result: result});
 	} catch (e) {
-		port.postMessage(JSON.stringify({error: e.message}));
+		port.postMessage({error: e.message});
 		throw e;
 	}
 }, false);
