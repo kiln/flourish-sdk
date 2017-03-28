@@ -7,7 +7,7 @@ const minimist = require("minimist"),
       log = require("../lib/log");
 
 const OPTS = {
-	boolean: [ "build", "open", "debug", "full" ],
+	boolean: [ "help", "build", "open", "debug", "full" ],
 	string: [
 		"host", "port", "user", "password",
 
@@ -28,6 +28,7 @@ const OPTS = {
 
 	alias: {
 		open: "o",
+		help: "h",
 	},
 
 	unknown: function(unknown_option) {
@@ -37,42 +38,50 @@ const OPTS = {
 	}
 };
 
-const args = minimist(process.argv.slice(2), OPTS),
-      command = args._[0];
+function main() {
+	const args = minimist(process.argv.slice(2), OPTS);
+	let command = args._[0];
 
-const server_opts = {
-	host: args.host,
-	user: args.user,
-	password: args.password,
-};
+	const server_opts = {
+		host: args.host,
+		user: args.user,
+		password: args.password,
+	};
 
-switch(command) {
-	case "new":
-	case "build":
-	case "run":
+	if (args.help) command = "help";
 
-	case "register":
-	case "login":
-	case "logout":
+	switch(command) {
+		case "help":
 
-	case "whoami":
+		case "new":
+		case "build":
+		case "run":
 
-	case "publish":
-	case "delete":
-	case "upgrade":
-	case "list":
-		require("../lib/cmd/" + command)(args, server_opts);
-		break;
+		case "register":
+		case "login":
+		case "logout":
 
-	case "is":
-		if (args._[1] === "the") {
-			log.victory("Word!");
+		case "whoami":
+
+		case "publish":
+		case "delete":
+		case "upgrade":
+		case "list":
+			require("../lib/cmd/" + command)(args, server_opts);
 			break;
-		}
 
-	default:
-		log.die("Unknown command '" + command + "'. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+		case "is":
+			if (args._[1] === "the") {
+				log.victory("Word!");
+				break;
+			}
 
-	case undefined:
-		log.die("No command specified. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+		default:
+			log.die("Unknown command '" + command + "'. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+
+		case undefined:
+			log.die("No command specified. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+	}
 }
+
+main();

@@ -1,3 +1,8 @@
+# 2.3.0
+
+* Add command-line help with “flourish help”.
+* “flourish delete” now takes a template id, not a template directory.
+
 # 2.2.0
 
 * Cross-platform compatibility improvements: it should now work correctly on

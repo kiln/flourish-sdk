@@ -11,7 +11,7 @@ This SDK allows developers to make templates and upload them to Flourish.
 * [Register an account](#login-logout-register-check-status): `flourish register`
 * [Publish your template](#publish-a-template): `flourish publish [dir_name]`
 
-See [all commands and options](#using-the-sdk). There are also a few [example templates](https://github.com/kiln/example-template-circle/wiki/Example-Flourish-templates) you can use for reference.
+See [all commands and options](#using-the-sdk). There are also a few [example templates](https://flourish.studio/developers/examples/) you can use for reference.
 
 ## Template overview
 There is no limit to what a Flourish template can be or do. It may be a simple chart, a 3D visualisation in WebGL, or a richly interactive app with a complex UI. There's also no limit to how you can write your code, what libraries you can use, etc. The only requirement is that the template directory includes [certain files](#template-files), as specified below, and that the `template.js` creates a `window.template` object with the following properties:
