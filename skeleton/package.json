@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "less": "node_modules/less/bin/lessc --plugin=less-plugin-clean-css --source-map less/style.less static/style.css"
+    "less": "lessc --plugin=less-plugin-clean-css --source-map less/style.less static/style.css"
   },
   "dependencies": {
     "less": "^2.7.2",

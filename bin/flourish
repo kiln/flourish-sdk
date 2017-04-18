@@ -29,6 +29,7 @@ const OPTS = {
 	alias: {
 		open: "o",
 		help: "h",
+		version: "v",
 	},
 
 	unknown: function(unknown_option) {
@@ -48,10 +49,12 @@ function main() {
 		password: args.password,
 	};
 
-	if (args.help) command = "help";
+	if (args.version) command = "version";
+	else if (args.help) command = "help";
 
 	switch(command) {
 		case "help":
+		case "version":
 
 		case "new":
 		case "build":
@@ -77,10 +80,10 @@ function main() {
 			}
 
 		default:
-			log.die("Unknown command '" + command + "'. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+			log.die("Unknown command '" + command + "'. Type 'flourish help' for help.");
 
 		case undefined:
-			log.die("No command specified. Use 'run' to point to a template directory or 'new' to create a skeleton template.");
+			log.die("No command specified. Type ‘flourish help’ for help.");
 	}
 }
 

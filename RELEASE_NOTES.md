@@ -1,3 +1,15 @@
+# 2.4.0
+
+* Add “flourish --version”, to print the SDK version number.
+
+# 2.3.1
+
+* Update top-level “flourish help”.
+* Refer to the help command if you just type “flourish”.
+* Do not include meta tags in SDK HTML.
+* Remove full path to lessc script in the skeleton package.json, because it
+  was not working on Windows.
+
 # 2.3.0
 
 * Add command-line help with “flourish help”.
