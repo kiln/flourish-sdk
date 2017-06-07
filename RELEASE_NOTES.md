@@ -1,3 +1,31 @@
+# 2.5.4
+
+* Don’t show the “pointer” icon on the rotate button when it’s disabled.
+
+# 2.5.3
+
+* Specify in package.json that it only works with Node 6 and later.
+
+# 2.5.2
+
+* Remove another popup that slipped through the net in 2.5.1.
+
+# 2.5.1
+
+* Fix resizing on IE11 and Edge.
+* Remove popups that don’t display properly.
+
+# 2.5.0
+
+* New preview interface, matching the new visualisation editor
+  on flourish.studio
+
+# 2.4.1
+
+* Fix bug affecting error reporting for invalid data bindings
+* Ignore repeated and trailing slashes in build rule directory paths
+* Handle CSV files that have a UTF-8 BOM, as saved by Excel
+
 # 2.4.0
 
 * Add “flourish --version”, to print the SDK version number.

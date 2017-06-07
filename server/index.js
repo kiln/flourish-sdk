@@ -131,6 +131,7 @@ function getDataTable(template_dir, data_table) {
 	return new Promise(function(resolve, reject) {
 		fs.readFile(path.join(template_dir, "data", data_table + ".csv"), "utf8", function(error, csv_text) {
 			if (error) return reject(error);
+			if (csv_text.charAt(0) === "\uFEFF") csv_text = csv_text.substr(1);
 			resolve(d3_dsv.csvParseRows(csv_text));
 		});
 	});
@@ -272,6 +273,10 @@ function isPrefix(a, b) {
 	return true;
 }
 
+function splitPath(p) {
+	return p.split(path.sep).filter(c => c != "");
+}
+
 
 module.exports = function(template_dir, port, open_browser, debug) {
 	let app = express(),
@@ -396,7 +401,7 @@ module.exports = function(template_dir, port, open_browser, debug) {
 			const build_commands = new Map();
 			if (template.build_rules) {
 				for (const build_rule of template.build_rules) {
-					if ((build_rule.directory && isPrefix(build_rule.directory.split(path.sep), path_parts))
+					if ((build_rule.directory && isPrefix(splitPath(build_rule.directory), path_parts))
 					    || (build_rule.files && build_rule.files.indexOf(filename) != -1))
 					{
 						build_commands.set(build_rule.key, build_rule.script);

@@ -11,62 +11,65 @@
 	<script src="/script.js" charset="utf-8"></script>
 </head>
 <body class="sdk">
-	<div class="row header no-select">
-		<div class="row-inner">
-			<a href=""><img class="logo" src="/images/logo.svg" alt="Flourish logo"></a>
-	
-			<div class="menu-holder desktop-nav">
-				<div class="menu">
-				</div>
-			</div>
-	
-		</div>
+	<div class="row header no-select" style="padding-left:10px">
+			<a href=""><img class="logo" src="/images/logo.svg" alt="Flourish logo"> SDK</a>
 	</div>
 	<div class="content">
 		<div class="row editor">
 			<div class="row-inner">
-				<div class="row-menus">
-					<div id="preview-menu" class="row-menu left no-select">
-						<span id="editor-preview" class="menu-item clickable popup" data-popup-head="Standalone view" data-popup-body="Preview the project outside of the editor"><a href="preview" target="_blank"><i class="fa fa-external-link"></i> <span class="label">Standalone</span></a></span>
-						<span id="editor-full-screen" class="toggle-full-screen menu-item clickable popup" data-popup-head="Enter full screen mode" data-popup-body="Full-screen editor mode"><i class="fa fa-expand"></i> <span class="label">Full-screen</span></span>
-						<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable popup selected" data-popup-head="Autosize preview" data-popup-body="The preview fills the available space"><i class="fa fa-desktop"></i> <span class="label">Auto</span></span>
-						<span id="editor-tablet" data-target="tablet" class="menu-item preview-mode clickable popup" data-popup-head="Tablet preview" data-popup-body="iPad size: 768px x 1024px"><i class="fa fa-tablet"></i> <span class="label">Tablet</span></span>
-						<span id="editor-mobile" data-target="mobile" class="menu-item preview-mode clickable popup" data-popup-head="Phone preview" data-popup-body="iPhone 4 size: 320px x 500px"><i class="fa fa-mobile"></i> <span class="label">Phone</span></span>
-						<span id="editor-rotate" class="menu-item clickable popup" data-popup-head="Rotate" data-popup-body="Toggle portrait/landscape"><i class="fa fa-retweet"></i> <span class="label">Rotate</span></span>
-					</div>
-					
-				</div>
 				<div id="visualisation" class="full-screen-ready">
-					<div class="side-panel">
-						<div class="side-panel-top">
-							<div class="side-panel-close clickable popup" data-popup-head="Open/close the settings panel">
-								<i class="fa fa-times"></i>
-							</div>
-						</div>
-						<div class="side-panel-scrollbox">
-							<div class="side-panel-inner">
-									<div class="current-template popup" data-popup-head="Template details" data-popup-body="Add or edit thumbnail.jpg and template.yml to change">
-										<div class="current-template-thumbnail"></div>
-										<div class="grad"></div>
-										<div class="current-template-info">
-											<h3 class="template-name">{{{ template_name }}}</h3>
-											<p><span class="label">Author:</span> <span class="author">{{{ template_author }}}</span></p>
-										</div>
-									</div>
-									<h1 class="no-select">Template settings</h1>
-									<div class="template-settings"></div>
-									
-									<h1 class="no-select">Spreadsheet column selection</h1>
-									<div class="tip"><i class="fa fa-info-circle"></i> Flourish users will be able to edit which columns are used in any data tables here. They will also be able to edit the data. For template development, just edit your data bindings in the template.yml and the CSV files in the template’s data directory.</div>
-							</div>
-						</div>
-					</div>
 					<div id="visualisation-inner" class="editor-core">
 						<div class="preview-holder">
 							<iframe id="preview" sandbox="allow-same-origin allow-scripts" src="about:blank"></iframe>
+							<div id="resize-handle"><i class="fa fa-arrows-v"></i></div>
+						</div>
+						<div id="preview-menu" class="row-menu left no-select">
+							<span id="editor-custom" class="menu-item">
+								<input id="editor-custom-width" type="number" min="1" data-target="custom" class="clickable selected"> x
+								<input id="editor-custom-height" type="number" min="1" data-target="custom" class="clickable selected">
+								<span id="editor-rotate" class="menu-item clickable">
+									<i class="fa fa-retweet"></i>
+								</span>
+							</span>
+							<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable selected">
+								<span class="label">fill space</span>
+							</span>
+							<span id="editor-mobile" data-target="mobile" class="menu-item preview-mode clickable">
+								<span class="label">phone</span>
+							</span>
+							<span id="editor-tablet" data-target="tablet" class="menu-item preview-mode clickable">
+								<span class="label">tablet</span>
+							</span>
+							<span id="editor-full-screen" class="toggle-full-screen menu-item clickable">
+								<span class="label">full-screen</span>
+							</span>
+							<span id="editor-preview" class="menu-item clickable"><a href="preview" target="_blank"><i class="fa fa-external-link"></i> <span class="label">Open in new window</span></a></span>
 						</div>
 					</div>
-					<div id="exit-full-screen" class="toggle-full-screen clickable"><i class="fa fa-compress"></i></div>
+					<div class="side-panel">
+						<div class="side-panel-scrollbox">
+							<div class="side-panel-inner">
+									<div class="current-template popup" data-popup-head="Template details" data-popup-body="Add or edit thumbnail.jpg and template.yml to change">
+										<div class="current-template-title">
+											<div class="current-template-thumbnail"></div>
+											<h1>Selected template <span class="template-name">{{{ template_name }}}</span></h1>
+										</div>
+									
+										<div class="current-template-info">
+											<div class="current-template-description">
+												<p><span class="label">Author:</span> <span class="author">{{{ template_author }}}</span></p>
+											</div>
+										</div>
+									
+									</div>
+									
+									<div class="template-settings"></div>
+									
+									
+									
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

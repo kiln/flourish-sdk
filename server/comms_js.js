@@ -3,11 +3,11 @@ window.addEventListener("message", function(event) {
 	var a = document.createElement("a");
 	a.href = event.origin;
 	var origin_okay = (a.hostname == window.location.hostname)
-		|| (a.hostname.endsWith("flourish.local") && window.location.hostname.endsWith("flourish.local"))
-		|| (a.hostname.endsWith(".flourish.rocks") && window.location.hostname.endsWith(".flourish.rocks"))
-		|| (a.hostname.endsWith(".flourish.studio") && window.location.hostname.endsWith(".flourish.studio"));
-	if (!origin_okay) return;
+		|| (a.hostname.match(/\flourish\.local$/) && window.location.hostname.match(/\.flourish\.local$/))
+		|| (a.hostname.match(/\.flourish\.rocks$/) && window.location.hostname.match(/\.flourish\.rocks$/))
+		|| (a.hostname.match(/\.flourish\.studio$/) && window.location.hostname.match(/\.flourish\.studio$/));
 
+	if (!origin_okay) return;
 	var message = event.data;
 	var port = event.ports[0];
 	if (!port || typeof message !== "object" || message.sender !== "Flourish") return;

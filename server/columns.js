@@ -8,6 +8,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 function parseColumn(col_spec) {
+	col_spec = col_spec.toUpperCase();
 	if (!/^[A-Z]+$/.test(col_spec)) {
 		throw new Error("Invalid column spec: " + col_spec);
 	}
@@ -35,7 +36,7 @@ function printColumn(col_ix) {
 }
 
 function parseRange(col_range) {
-	var dash_mo = col_range.match(/[-–—]|\.\./);
+	var dash_mo = col_range.match(/\s*(?:[-–—:]|\.\.)\s*/);
 	if (!dash_mo) throw new Error("Failed to parse column range: " + col_range);
 
 	var first = col_range.substr(0, dash_mo.index),
@@ -44,8 +45,11 @@ function parseRange(col_range) {
 	var first_ix = parseColumn(first),
 	    last_ix = parseColumn(last);
 
-	return Array(Math.max(0, last_ix - first_ix + 1)).fill()
-		.map(function(x,i) { return i + first_ix; });
+	var r = Array(Math.max(0, last_ix - first_ix + 1));
+	for (var i = 0; i <= last_ix - first_ix; i++) {
+		r[i] = i + first_ix;
+	}
+	return r;
 }
 
 function printRange(start, end) {
@@ -61,7 +65,7 @@ function parseColumns(cols_spec) {
 
 	for (var i = 0; i < split_cols.length; i++) {
 		var col_or_range = split_cols[i];
-		if (/^[A-Z]+$/.test(col_or_range)) {
+		if (/^[A-Za-z]+$/.test(col_or_range)) {
 			indexes.push(parseColumn(col_or_range));
 		}
 		else {
@@ -102,7 +106,7 @@ function printColumns(indexes) {
 
 function parseDataBinding(d, data_table_ids) {
 	var r = {};
-
+	
 	if (!(d.type in d)) {
 		throw new Error("Data binding must specify '" + d.type + "': " + JSON.stringify(d));
 	}
@@ -120,13 +124,13 @@ function parseDataBinding(d, data_table_ids) {
 	return r;
 }
 
-function printDataBinding(r, data_table_names) {
-	var data_table_name = data_table_names[r.data_table_id];
+function printDataBinding(r, data_table_names, print_data_table_name) {
+	var data_table_name = print_data_table_name ? data_table_names[r.data_table_id] + "::" : "";
 	if ("column" in r) {
-		return data_table_name + "::" + printColumn(r.column);
+		return data_table_name + printColumn(r.column);
 	}
 	else if ("columns" in r) {
-		return data_table_name + "::" + printColumns(r.columns);
+		return data_table_name + printColumns(r.columns);
 	}
 	throw new Error("Data binding must have .column or .columns");
 }
