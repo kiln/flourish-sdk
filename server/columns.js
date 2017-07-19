@@ -106,7 +106,7 @@ function printColumns(indexes) {
 
 function parseDataBinding(d, data_table_ids) {
 	var r = {};
-	
+
 	if (!(d.type in d)) {
 		throw new Error("Data binding must specify '" + d.type + "': " + JSON.stringify(d));
 	}

@@ -1,28 +1,32 @@
 "use strict";
 
 // Modules
-var cross_spawn = require("cross-spawn"),
-    chokidar = require("chokidar"),
-    crypto = require("crypto"),
-    fs = require("fs"),
-    http = require("http"),
-    path = require("path"),
-    ws = require("ws"),
-    yaml = require("js-yaml"),
+const crypto = require("crypto"),
+      fs = require("fs"),
+      http = require("http"),
+      os = require("os"),
+      path = require("path"),
 
-    colors = require("colors"),
-    d3_dsv = require("d3-dsv"),
-    express = require("express"),
-    handlebars = require("handlebars"),
+      colors = require("colors"),
+      cross_spawn = require("cross-spawn"),
+      chokidar = require("chokidar"),
+      d3_dsv = require("d3-dsv"),
+      express = require("express"),
+      handlebars = require("handlebars"),
+      parse5 = require("parse5"),
+      ws = require("ws"),
+      yaml = require("js-yaml"),
 
-    columns = require("./columns"),
-    comms_js = require("./comms_js"),
-    data_utils = require("./data"),
-    index_html = require("./index_html"),
-    json = require("./json"),
+      columns = require("./columns"),
+      comms_js = require("./comms_js"),
+      data_utils = require("./data"),
+      index_html = require("./index_html"),
+      json = require("./json"),
 
-    log = require("../lib/log"),
-    sdk = require("../lib/sdk");
+      log = require("../lib/log"),
+      sdk = require("../lib/sdk");
+
+const TA = parse5.treeAdapters.default;
 
 // Generate a static prefix randomly
 //
@@ -156,6 +160,25 @@ function parseDataBindings(data_bindings, data_tables) {
 	return { 1: data_bindings_by_dataset };
 }
 
+function documentFragment(elements) {
+	const fragment = TA.createDocumentFragment();
+	for (const element of elements) {
+		TA.appendChild(fragment, element);
+	}
+	return fragment;
+}
+
+function scriptElementInline(code) {
+	const element = TA.createElement("script", "http://www.w3.org/1999/xhtml", []);
+	TA.insertText(element, code);
+	return element;
+}
+
+function scriptElementExternal(url) {
+	return TA.createElement("script", "http://www.w3.org/1999/xhtml", [{ name: "src", value: url }]);
+}
+
+
 function loadTemplate(template_dir, sdk_template, build_failed) {
 	return Promise.all([
 		listDataTables(template_dir),
@@ -188,27 +211,36 @@ function loadTemplate(template_dir, sdk_template, build_failed) {
 			build_failed: build_failed && build_failed.size > 0
 		};
 
-		const script = "<script>window.Flourish = " + json.safeStringify({ static_prefix, environment: "sdk" }) + ";</script>" +
-			"<script src=\"/template.js\"></script>" +
-			"<script src=\"/comms.js\"></script>";
+		const script = documentFragment([
+			scriptElementInline("window.Flourish = " + json.safeStringify({
+				static_prefix, environment: "sdk"
+			}) + ";"),
+			scriptElementExternal("/template.js"),
+			scriptElementExternal("/comms.js"),
+		]);
 
-		const preview_script = "<script>window.Flourish = " + json.safeStringify({ static_prefix: preview_static_prefix, environment: "sdk" }) + ";</script>" +
-			"<script src=\"/template.js\"></script>" +
-			"<script src=\"/comms.js\"></script>" +
-			"<script src=\"/talk_to_server.js\"></script><script>_Flourish_talkToServer();</script>" +
-			"<script>" + preview_init_js + "</script>";
+		const preview_script = documentFragment([
+			scriptElementInline("window.Flourish = " + json.safeStringify({
+				static_prefix: preview_static_prefix, environment: "sdk"
+			}) + ";"),
+			scriptElementExternal("/template.js"),
+			scriptElementExternal("/comms.js"),
+			scriptElementExternal("/talk_to_server.js"),
+			scriptElementInline("_Flourish_talkToServer();"),
+			scriptElementInline(preview_init_js),
+		]);
 
 		return Promise.all([
 			sdk_template(page_params),
 			index_html.render(template_text, {
 				title: "Flourish SDK template preview",
 				static: static_prefix,
-				script: script
+				parsed_script: script
 			}),
 			index_html.render(template_text, {
 				title: "Flourish SDK template preview",
 				static: preview_static_prefix,
-				script: preview_script,
+				parsed_script: preview_script,
 			}),
 			template_js,
 			sdk.buildRules(template_dir),
@@ -376,7 +408,21 @@ module.exports = function(template_dir, port, open_browser, debug) {
 		// Watch for file changes. If something changes, tell the page to reload itself
 		// If the source code has changed, rebuild it.
 
+		let reload_timer = null;
 		function reloadTemplate() {
+			if (rebuilding.size > 0) {
+				log.info("Not reloading template while rebuild is in progress.");
+				return;
+			}
+			if (reload_timer) {
+				clearTimeout(reload_timer);
+				reload_timer = null;
+			}
+			reload_timer = setTimeout(_reloadTemplate, 50);
+		}
+		function _reloadTemplate() {
+			reload_timer = null;
+			log.info("Reloading...");
 			loadTemplate(template_dir, sdk_template, build_failed)
 				.then((template_) => {
 					template = template_;
@@ -388,7 +434,8 @@ module.exports = function(template_dir, port, open_browser, debug) {
 				});
 		}
 
-		chokidar.watch(template_dir, { ignoreInitial: true }).on("all", function(event_type, filename) {
+		const chokidar_opts = { ignoreInitial: true, disableGlobbing: true, cwd: template_dir };
+		chokidar.watch(".", chokidar_opts).on("all", function(event_type, filename) {
 			const path_parts = filename.split(path.sep);
 
 			let should_reload = false;
@@ -414,6 +461,10 @@ module.exports = function(template_dir, port, open_browser, debug) {
 				for (const [key, command] of build_commands) {
 					if (rebuilding.has(key)) continue;
 					rebuilding.add(key);
+					if (reload_timer) {
+						clearTimeout(reload_timer);
+						reload_timer = null;
+					}
 					log.info("Detected change to file: " + filename, "Running build for " + key);
 					build_commands_to_run.push(
 						sdk.runBuildCommand(template_dir, command)
@@ -441,10 +492,7 @@ module.exports = function(template_dir, port, open_browser, debug) {
 						}
 					});
 			}
-			else if (should_reload) {
-				log.info("Reloading...");
-				reloadTemplate();
-			}
+			else if (should_reload) reloadTemplate();
 		});
 	}
 

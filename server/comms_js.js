@@ -3,9 +3,10 @@ window.addEventListener("message", function(event) {
 	var a = document.createElement("a");
 	a.href = event.origin;
 	var origin_okay = (a.hostname == window.location.hostname)
-		|| (a.hostname.match(/\flourish\.local$/) && window.location.hostname.match(/\.flourish\.local$/))
-		|| (a.hostname.match(/\.flourish\.rocks$/) && window.location.hostname.match(/\.flourish\.rocks$/))
-		|| (a.hostname.match(/\.flourish\.studio$/) && window.location.hostname.match(/\.flourish\.studio$/));
+	  || window.location.hostname === "localhost"
+		|| (a.hostname.match(/\\.flourish\\.local$/) && window.location.hostname.match(/\\.flourish\\.local$/))
+		|| (a.hostname.match(/\\.flourish\\.rocks$/) && window.location.hostname.match(/\\.flourish\\.rocks$/))
+		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/));
 
 	if (!origin_okay) return;
 	var message = event.data;
@@ -44,6 +45,10 @@ window.addEventListener("message", function(event) {
 
 			case "update":
 			window.template.update();
+			break;
+
+			case "snapshot":
+			result = window.snapshot(message.argument, port);
 			break;
 		}
 

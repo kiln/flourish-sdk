@@ -1,3 +1,16 @@
+# 2.6.0
+
+* Bundle fonts locally, so the SDK doesn’t need an internet connection.
+* Work around a browser-dependent issue where mousewheel scrolling sometimes
+  did not work after the viewport had been resized. #14
+* Fix file watching when the template directory is not the current directory. #15
+
+# 2.5.5
+
+* More efficient generation of HTML: significantly faster reloads for
+  large data tables. #11
+* Avoid reloading many times in parallel when switching branches in git. #12
+
 # 2.5.4
 
 * Don’t show the “pointer” icon on the rotate button when it’s disabled.

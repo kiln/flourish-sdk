@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "2.5.4",
+  "version": "2.6.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -20,8 +20,8 @@
     "d3-dsv": "^1.0.3",
     "express": "~4.14.0",
     "getpass": "^0.1.6",
-    "handlebars": "^4.0.6",
-    "js-yaml": "^3.7.0",
+    "handlebars": "^4.0.10",
+    "js-yaml": "^3.9.0",
     "minimist": "^1.2.0",
     "ncp": "^2.0.0",
     "parse5": "^3.0.1",
@@ -33,9 +33,11 @@
   },
   "devDependencies": {
     "d3-request": "^1.0.3",
-    "rollup": "*",
+    "rollup": "^0.43.1",
     "rollup-plugin-node-resolve": "*",
-    "rollup-plugin-uglify": "*"
+    "rollup-plugin-uglify": "^2.0.1"
   },
-  "engines" : { "node" : ">=6" }
+  "engines": {
+    "node": ">=6"
+  }
 }

@@ -80,7 +80,7 @@ function rewrite(url) {
 
 function render(template_text, params) {
 	const document = parse5.parse(template_text),
-	      script_fragment = parse5.parseFragment(params.script);
+	      script_fragment = params.parsed_script || parse5.parseFragment(params.script);
 
 	replaceTitle(document, params.title);
 	appendFragmentToBody(document, script_fragment);
