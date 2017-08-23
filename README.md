@@ -48,6 +48,21 @@ The main Flourish configuration file for your template. The top-level properties
 * `name` What the template will be called within Flourish
 * `author` Who wrote the template
 * `description` A short description of the template
+* `autoheight` Optional configuration for autoheight embedding (see below)
+
+Other properties are [settings](#settings), [data](#data) and [build](#build), which are described below.
+
+#### autoheight
+When a Flourish user embeds a visualisation or story, the default sizes are width `100%` and height `auto`. (The user can override these with any valid css values.) If no `autoheight` property is specified in the `template.yml`, height `auto` means that the embedding iframe will be automatically updated to match the computed height of the template’s body. This works well for most templates, but not for vertically fluid templates that have no natural height (e.g. a slippy map that fills the window). For these templates, you can optionally specify what `auto` should mean by setting the `autoheight` property. You can set it to any CSS value – such as `600px` or `200vh` – or to an aspect ratio using the syntax `4x3`, `16x9`, etc. For additional control you can specify an object representing min-width breakpoints. For example:
+
+```yaml
+autoheight:
+    600: 500px # Height is 500px up to width of 600px
+    1200: 4x3 # Aspect ratio is 4x3 600–1200px
+    ∞: 50vh # 50% of viewport above 1200.
+```
+
+Infinity can be specified with ∞ or *. If the infinity option is left off, the largest specified breakpoint will apply to infinity.
 
 #### build configuration
 The `template.yml` file will usually also include a `build` section defining build rules. For example:
@@ -93,6 +108,20 @@ settings:
   type: number # Required; see available types above
 ```
 
+For string settings you can also create a dropdown by adding `choices`:
+
+```yaml
+- property: size
+  name: Size
+  type: string
+  choices: # An array of values to fill the dropdown
+    – small_size # A choice can be a string
+    – # Or a choice can be an array of two elements…
+      – Absolutely enormous # … in which case the first string is the display name
+      – large_size # … and the second string is the value passed to the template
+  choices_other: true # allows the user to input any value they like
+```
+
 #### data bindings
 The `template.yml` file may also include a `data` section. This section consists of an array of data ‘bindings’ that sets how the template should use and refer to the template’s editable data tables (which are initially populated by the CSV files in [`data/`](#data)). Each binding adds one or more columns of data to a `dataset` under a particular `key`. You can define as many datasets as you like. They are made available to the template as properties of [the `data` object](#data-1). Each one consists of an array containing an object for each row of the relevant data table, as shown in the example below.
 
@@ -105,6 +134,7 @@ The following example sets up a dataset with two keys, one single-column and one
 ```yaml
 data:
 - Locations # Optional; breaks up the bindings into collapsible sections
+- Description string # Optional; additional description to explain to the user how the data binding works
 - name: Country code # Name shown in UI
   description: Requires ISO 3166-1 alpha-2 codes # Optional description for the UI
   dataset: country_scores # Which dataset this binding is part of
@@ -278,11 +308,11 @@ You'll first need to be logged in. If `dir_name` is omitted it uses the current 
 New users should `flourish register` and follow the prompts. Existing users can log in and out with `flourish login` and `flourish logout`. To check which account you are currently logged in with, use `flourish whoami`.
 
 ### Download a template
-To download an existing template, such as one of our examples or an open-source template, simply `git clone` the repo, then change into the new directory and `npm update` then `flourish run`. For example:
+To download an existing template, such as one of our examples or an open-source template, simply `git clone` the repo, then change into the new directory and `npm install` then `flourish run`. For example:
 ```sh
 git clone https://github.com/kiln/example-template-circle
 cd example-template-circle/
-npm update
+npm install
 flourish run
 ```
 

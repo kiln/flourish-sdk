@@ -1,3 +1,21 @@
+# 2.7.0
+
+* New metadata property in template.yml “autoheight” to specify how the width of
+  the embed should depend on the height when an auto-height embed is used.
+* String settings can now have a “choices” property which restricts the values
+  users can enter, and displays the setting as a dropdown list rather than a
+  free-text field. If the optional “choices_other” property is also true, the
+  user may type free text in addition to selecting from the listed choices.
+  The choices property should be an array of strings or pairs of strings: if
+  a pair of strings is given, the first element is displayed to the user on the
+  dropdown menu and the second is used as the value of the setting.
+* New data binding description metadata property in template.yml: in the data
+  section, if a second string is supplied immediately following the binding
+  name, it will be treated as the binding decription, and displayed to the
+  user in the data bindings panel.
+* Run “npm install” rather than “npm update” to install modules. (Newer versions
+  of NPM will update package.json and package-lock.json when “npm update” is used.)
+
 # 2.6.0
 
 * Bundle fonts locally, so the SDK doesn’t need an internet connection.

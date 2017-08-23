@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "express": "~4.14.0",
     "getpass": "^0.1.6",
     "handlebars": "^4.0.10",
-    "js-yaml": "^3.9.0",
+    "js-yaml": "^3.9.1",
     "minimist": "^1.2.0",
     "ncp": "^2.0.0",
     "parse5": "^3.0.1",
