@@ -1,3 +1,12 @@
+# 2.8.0
+
+* Add missing font files. #21
+* Add support for optional number settings. If “optional: true” is specified, 
+  and no value is supplied for the setting, then a null value will be passed to 
+  the template rather than zero.
+* Fix “Uncaught TypeError: Cannot read property 'fireEvent' of undefined” #22
+* Add support for optional column bindings.
+
 # 2.7.0
 
 * New metadata property in template.yml “autoheight” to specify how the width of

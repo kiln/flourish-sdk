@@ -2,7 +2,6 @@
  * * * * * * GENERATED FILE - DO NOT EDIT * * * * * *
  * * * * * * GENERATED FILE - DO NOT EDIT * * * * * */
  
- 
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -65,4 +64,15 @@ function extractData(data_binding, data_by_id) {
 	return dataset;
 }
 
+function trimTrailingEmptyRows(data) {
+	for (var i = data.length; i-- > 0; ) {
+		if (data[i].findIndex(function(col) { return col !== null && col !== "" }) == -1) {
+			data.splice(i,1);
+		} 
+		else break;
+	}
+	return data;
+}
+
 exports.extractData = extractData;
+exports.trimTrailingEmptyRows = trimTrailingEmptyRows;

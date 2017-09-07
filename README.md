@@ -97,6 +97,8 @@ The `template.yml` file will usually also include a `settings` section defining 
 * `boolean` A true/false value
 * `color` A colour; represented in the state as a string containing a hex RGB colour e.g. `"#123456"`
 
+You can specify that a value is optional by adding `optional: true`. Currently this is only supported for `number` type settings.
+
 This section contains an array of objects and optional headings. For example:
 
 ```yaml
@@ -127,7 +129,9 @@ The `template.yml` file may also include a `data` section. This section consists
 
 Once your template is published, Flourish users can change the data in the Flourish editor, and also change which columns are linked to each binding. But in your code you don’t need to worry about this because you just refer to the `key` rather than referencing the column header or index.
 
-There are two types of data binding: `column` is used when the number of columns is and must always be one; `columns` supports any number of columns, including none.
+There are two types of data binding: `column` is used when the number of columns is and must always be one; `columns` supports any number of columns, including none. 
+
+A default value must be supplied for each data binding, unless you have specified `optional: true` (only supported for single `column` bindings). The example below shows how this is done.
 
 The following example sets up a dataset with two keys, one single-column and one multi-column.
 
@@ -146,6 +150,11 @@ data:
   key: values
   type: columns # This binding can take any number of columns
   columns: By Decade::B-D,F # The default values are arrays drawing from columns B-D and F of `By Decade.csv`
+- name: Flag image 
+  dataset: country_scores
+  key: flag_pic
+  type: column
+  optional: true # Default values can be omitted for an optional binding
 ```
 
 In this example, if `By Decade.csv` contained the following…
