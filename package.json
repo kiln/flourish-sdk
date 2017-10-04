@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "chokidar": "^1.6.1",
     "colors": "^1.1.1",
     "cross-spawn": "^5.1.0",
-    "d3-dsv": "^1.0.3",
+    "d3-dsv": "^1.0.7",
     "express": "~4.14.0",
     "getpass": "^0.1.6",
     "handlebars": "^4.0.10",

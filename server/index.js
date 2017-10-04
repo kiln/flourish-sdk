@@ -310,7 +310,7 @@ function splitPath(p) {
 }
 
 
-module.exports = function(template_dir, port, open_browser, debug) {
+module.exports = function(template_dir, options) {
 	let app = express(),
 	    reloadPreview,
 
@@ -374,8 +374,9 @@ module.exports = function(template_dir, port, open_browser, debug) {
 		template = template_;
 
 		// Run the server
-		const server = app.listen(port, "localhost", function() {
-			const url = "http://localhost:" + port + "/";
+		const listen_hostname = options.listen || "localhost";
+		const server = app.listen(options.port, listen_hostname, function() {
+			const url = "http://" + listen_hostname + ":" + options.port + "/";
 			log.info(`Running server at ${url}`);
 
 			// Set up the WebSocket server and the reloadPreview() function
@@ -390,11 +391,11 @@ module.exports = function(template_dir, port, open_browser, debug) {
 			};
 
 			watchForChanges(sdk_template);
-			if (open_browser) tryToOpen(url);
+			if (options.open) tryToOpen(url);
 		})
 		.on("error", function(error) {
 			if (error.code === "EADDRINUSE") {
-				log.die("Another process is already listening on port " + port,
+				log.die("Another process is already listening on port " + options.port,
 					"Perhaps you’re already running flourish in another terminal?",
 					"You can use the --port option to listen on a different port");
 			}
@@ -506,7 +507,7 @@ module.exports = function(template_dir, port, open_browser, debug) {
 			startServer(sdk_template, template);
 		})
 		.catch((error) => {
-			if (debug) log.problem("Failed to start server", error.message, error.stack);
+			if (options.debug) log.problem("Failed to start server", error.message, error.stack);
 			else log.problem("Failed to start server", error.message);
 		});
 };

@@ -49,17 +49,18 @@ The main Flourish configuration file for your template. The top-level properties
 * `author` Who wrote the template
 * `description` A short description of the template
 * `autoheight` Optional configuration for autoheight embedding (see below)
+* `image_download` Flag to indicate whether image snapshots work for the template (default is `true`)
 
 Other properties are [settings](#settings), [data](#data) and [build](#build), which are described below.
 
 #### autoheight
-When a Flourish user embeds a visualisation or story, the default sizes are width `100%` and height `auto`. (The user can override these with any valid css values.) If no `autoheight` property is specified in the `template.yml`, height `auto` means that the embedding iframe will be automatically updated to match the computed height of the template’s body. This works well for most templates, but not for vertically fluid templates that have no natural height (e.g. a slippy map that fills the window). For these templates, you can optionally specify what `auto` should mean by setting the `autoheight` property. You can set it to any CSS value – such as `600px` or `200vh` – or to an aspect ratio using the syntax `4x3`, `16x9`, etc. For additional control you can specify an object representing min-width breakpoints. For example:
+When a Flourish user embeds a visualisation or story, the default sizes are width `100%` and height `auto`. (The user can override these with any valid css values.) If no `autoheight` property is specified in the `template.yml`, height `auto` means that the embedding iframe will be automatically updated to match the computed height of the template’s body. This works well for most templates, but not for vertically fluid templates that have no natural height (e.g. a slippy map that fills the window). For these templates, you can optionally specify what `auto` should mean by setting the `autoheight` property. You can set it to a px-based CSS value – such as `600px` – or to an aspect ratio using the syntax `4x3`, `16x9`, etc. For additional control you can specify an object representing min-width breakpoints. For example:
 
 ```yaml
 autoheight:
     600: 500px # Height is 500px up to width of 600px
     1200: 4x3 # Aspect ratio is 4x3 600–1200px
-    ∞: 50vh # 50% of viewport above 1200.
+    ∞: 1400px # Height is 1400px for all widths above 1200.
 ```
 
 Infinity can be specified with ∞ or *. If the infinity option is left off, the largest specified breakpoint will apply to infinity.
@@ -89,28 +90,43 @@ build:
 ```
 
 #### settings
-The `template.yml` file will usually also include a `settings` section defining user-editable properties. Each setting allows the user to change a specific property in the template [`state`](#state). When a setting is changed by the user in the SDK or the Flourish visualisation editor, `state` is updated and the template's `update()` function is called. The following types of settings are supported:
+The `template.yml` file will usually also include a `settings` section which populates the settings panel in the Flourish visualisation editor (and SDK). Each setting allows the user to change a specific property in the template [`state`](#state). When a setting is changed by the user , `state` is updated and the template's `update()` function is called.
 
-* `number` A number. Optionally add `min`, `max` and `step` properties to control how the input increment buttons work.
-* `string` A single line of text
-* `text` Multiline text
-* `boolean` A true/false value
-* `color` A colour; represented in the state as a string containing a hex RGB colour e.g. `"#123456"`
-
-You can specify that a value is optional by adding `optional: true`. Currently this is only supported for `number` type settings.
-
-This section contains an array of objects and optional headings. For example:
+If an entry in the settings array is a string, it is interpreted as a section title. Otherwise it must be an object with the `property` and `type` properties. Other properties are optional, but `name` and `description` are recommended to help the user understand the role of the setting.
 
 ```yaml
 settings:
 - Section title # Headings can be used to break up the settings into collapsible sections
-- property: my_state_property # Required; must be a state property
-  name: Example number setting # Optional; display name
-  description: A setting for changing a number # Optional; description
-  type: number # Required; see available types above
+- property: my_state_property # Required; must be a property of the state object
+  name: Example number setting # Optional; appears next to the setting
+  description: A setting for changing a number # Optional; appears on mouseover
+  type: number # Required; see available types below
 ```
 
-For string settings you can also create a dropdown by adding `choices`:
+To improve the layout of your settings, you can set the `width` of any setting to be `half` or `quarter` of the width of the settings panel. You can also add a horizontal separator above a setting using `new_section: true`.
+
+```yaml
+- property: my_number
+  name: Near little number input
+  width: quarter # Optional; sets the width of the setting
+  new_line: true # Optional; starts a new line with the current setting and adds a line above
+```
+
+The following types of settings are supported:
+
+##### `boolean`
+Creates a checkbox that sets the state property to `true` or `false`.
+
+##### `color`
+Creates a colour picker that sets the state property to a string containing a hex RGB colour e.g. `"#123456"`.
+
+##### `number`
+Creates a number input that sets the state property to a number. Optionally add `min` and `max` properties to limit the range, `step` to control the input’s increment buttons. By default number settings always return a number and blanked inputs are set to zero; to allow blanked input, with `null` returned as the value, add `optional: true`.
+
+##### `string`
+By default, creates a single-line text input that sets the state property to the relevant string text. If you add a valid `choices` property, the setting instead creates a dropdown (by default) or button group (if you also add `style: buttons`). The `choices` property must be an array. Each of its element can be a string (in which case this string is returned to the state) or an array containing a display name, the associated string value and (for button groups) a background image.
+
+To a special dropdown that allows the user to specify any text in addition to choosing from the list, add `choices_other: true`. This is ignored for button groups.
 
 ```yaml
 - property: size
@@ -118,11 +134,15 @@ For string settings you can also create a dropdown by adding `choices`:
   type: string
   choices: # An array of values to fill the dropdown
     – small_size # A choice can be a string
-    – # Or a choice can be an array of two elements…
-      – Absolutely enormous # … in which case the first string is the display name
-      – large_size # … and the second string is the value passed to the template
+    – # Or a choice can be an array of two or three elements …
+      – Absolutely enormous # … in which case the first string is the display name,
+      – large_size # … the second string is the value passed to the template
+      – massive.jpg # … the third is an image file name in your `static` directory
   choices_other: true # allows the user to input any value they like
 ```
+
+##### `text`
+Creates a multiline text input.
 
 #### data bindings
 The `template.yml` file may also include a `data` section. This section consists of an array of data ‘bindings’ that sets how the template should use and refer to the template’s editable data tables (which are initially populated by the CSV files in [`data/`](#data)). Each binding adds one or more columns of data to a `dataset` under a particular `key`. You can define as many datasets as you like. They are made available to the template as properties of [the `data` object](#data-1). Each one consists of an array containing an object for each row of the relevant data table, as shown in the example below.

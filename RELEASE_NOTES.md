@@ -1,3 +1,21 @@
+# 2.9.0
+
+* New settings layout options:
+  * width: half
+  * width: quarter
+  * new_section: true
+  * style: buttons
+
+  See https://flourish.rocks/developers/reference/template-files.html#settings
+
+* Add support for optional column bindings.
+* Add --listen option for `flourish run` to listen on a non-localhost interface.
+* Add support for `image_download: false`
+* Upgrade d3-dsv to 1.0.7. #17
+* Match data table names case-sensitively, even on case-insensitive filesystems. #25
+* Warn if there is no autoheight configuration.
+* Upgrade skeleton project to rollup 0.50.0
+
 # 2.8.0
 
 * Add missing font files. #21
@@ -5,7 +23,6 @@
   and no value is supplied for the setting, then a null value will be passed to 
   the template rather than zero.
 * Fix “Uncaught TypeError: Cannot read property 'fireEvent' of undefined” #22
-* Add support for optional column bindings.
 
 # 2.7.0
 

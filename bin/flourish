@@ -9,7 +9,7 @@ const minimist = require("minimist"),
 const OPTS = {
 	boolean: [ "help", "build", "open", "debug", "full" ],
 	string: [
-		"host", "port", "user", "password",
+		"host", "listen", "port", "user", "password",
 
 		// Only relevant for admin users
 		"as",
