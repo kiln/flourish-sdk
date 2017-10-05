@@ -1,3 +1,8 @@
+# 2.9.1
+
+* Fix botched release (with many missing files) that was caused by
+  a bug in npm: See https://github.com/npm/npm/issues/18461
+
 # 2.9.0
 
 * New settings layout options:
