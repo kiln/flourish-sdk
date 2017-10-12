@@ -44,7 +44,7 @@ function connectSocket() {
 
 function talkToServer() {
 	error_element = document.getElementById("error-server-down");
-	socket_url = window.location.origin.replace(/^http(s?):\/\//, 'ws$1://');
+	socket_url = window.location.origin.replace(/^http(s?):\/\//, "ws$1://");
 	window.addEventListener("beforeunload", function() {
 		leaving_page = true;
 	});

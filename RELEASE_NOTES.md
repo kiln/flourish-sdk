@@ -1,3 +1,11 @@
+# 2.10.0
+
+* The template documentation is now taken from `GUIDE.md` if there is
+  such a file, and only from `README.md` as a fallback if `GUIDE.md`
+  does not exist.
+* Settings can now be displayed conditionally on the values of other settings.
+  See the “Conditional settings” section of the documentation.
+
 # 2.9.1
 
 * Fix botched release (with many missing files) that was caused by

@@ -1,7 +1,6 @@
 "use strict";
 
-const URL = require("url"),
-      path = require("path");
+const URL = require("url");
 
 const parse5 = require("parse5"),
       RewriteLinks = require("rewrite-links");
@@ -65,17 +64,6 @@ function rewriteLinks(document, static_prefix) {
 	});
 
 	return rewriter.rewriteDocument(document);
-}
-
-
-function rewrite(url) {
-	// We don’t want to rewrite URLs that are just fragment identifiers
-	if (url.startsWith("#")) return url;
-
-	// ... or relative self-links
-	if (url == "" || url == ".") return url;
-
-	return URL.resolve(args.base, url);
 }
 
 function render(template_text, params) {

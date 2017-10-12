@@ -3,11 +3,8 @@
 // Modules
 const crypto = require("crypto"),
       fs = require("fs"),
-      http = require("http"),
-      os = require("os"),
       path = require("path"),
 
-      colors = require("colors"),
       cross_spawn = require("cross-spawn"),
       chokidar = require("chokidar"),
       d3_dsv = require("d3-dsv"),
@@ -32,8 +29,8 @@ const TA = parse5.treeAdapters.default;
 //
 // Use a different prefix for /preview, to catch the situation where the template
 //   developer mistakenly prepends a / to the static prefix.
-const static_prefix = crypto.randomBytes(15).toString("base64").replace(/[+\/]/g, (c) => ({ "/": "_", "+": "-" })[c]),
-      preview_static_prefix = crypto.randomBytes(15).toString("base64").replace(/[+\/]/g, (c) => ({ "/": "_", "+": "-" })[c]);
+const static_prefix = crypto.randomBytes(15).toString("base64").replace(/[+/]/g, (c) => ({ "/": "_", "+": "-" })[c]),
+      preview_static_prefix = crypto.randomBytes(15).toString("base64").replace(/[+/]/g, (c) => ({ "/": "_", "+": "-" })[c]);
 
 function loadFile(path_parts, options) {
 	return new Promise(function(resolve, reject) {
@@ -60,20 +57,20 @@ function loadFile(path_parts, options) {
 		fs.readFile(file_path, "utf8", function(error, loaded_text) {
 			if (error) return fail(`Failed to load ${file_path}`, error);
 			switch (options.type) {
-			case "json":
-				try { return succeed(JSON.parse(loaded_text)); }
-				catch(error) {
-					return fail(`Uh-oh! There's a problem with your ${filename} file.`, error);
-				}
+				case "json":
+					try { return succeed(JSON.parse(loaded_text)); }
+					catch (error) {
+						return fail(`Uh-oh! There's a problem with your ${filename} file.`, error);
+					}
 
-			case "yaml":
-				try { return succeed(yaml.safeLoad(loaded_text)); }
-				catch(error) {
-					return fail(`Uh-oh! There's a problem with your ${filename} file.`, error);
-				}
+				case "yaml":
+					try { return succeed(yaml.safeLoad(loaded_text)); }
+					catch (error) {
+						return fail(`Uh-oh! There's a problem with your ${filename} file.`, error);
+					}
 
-			default:
-				return succeed(loaded_text);
+				default:
+					return succeed(loaded_text);
 			}
 		});
 	});
@@ -267,8 +264,8 @@ function previewInitJs(template_dir, data_bindings, data_tables) {
 		var _Flourish_data_column_names = ${json.safeStringify(column_names)},
 		    _Flourish_data = ${json.safeStringify(prepared_data)};
 		for (var _Flourish_dataset in _Flourish_data) {
-		    window.template.data[_Flourish_dataset] = _Flourish_data[_Flourish_dataset];
-		    window.template.data[_Flourish_dataset].column_names = _Flourish_data_column_names[_Flourish_dataset];
+			window.template.data[_Flourish_dataset] = _Flourish_data[_Flourish_dataset];
+			window.template.data[_Flourish_dataset].column_names = _Flourish_data_column_names[_Flourish_dataset];
 		}
 		window.template.draw();
 		`;
@@ -292,7 +289,7 @@ function tryToOpen(url) {
 				log.success("Now open " + url + " in your web browser!");
 			});
 	}
-	catch(error) {
+	catch (error) {
 		log.success("Now open " + url + " in your web browser!");
 	}
 }
@@ -450,7 +447,7 @@ module.exports = function(template_dir, options) {
 			if (template.build_rules) {
 				for (const build_rule of template.build_rules) {
 					if ((build_rule.directory && isPrefix(splitPath(build_rule.directory), path_parts))
-					    || (build_rule.files && build_rule.files.indexOf(filename) != -1))
+						|| (build_rule.files && build_rule.files.indexOf(filename) != -1))
 					{
 						build_commands.set(build_rule.key, build_rule.script);
 					}

@@ -3,7 +3,7 @@ window.addEventListener("message", function(event) {
 	var a = document.createElement("a");
 	a.href = event.origin;
 	var origin_okay = (a.hostname == window.location.hostname)
-	  || window.location.hostname === "localhost"
+		|| window.location.hostname === "localhost"
 		|| (a.hostname.match(/\\.flourish\\.local$/) && window.location.hostname.match(/\\.flourish\\.local$/))
 		|| (a.hostname.match(/\\.flourish\\.rocks$/) && window.location.hostname.match(/\\.flourish\\.rocks$/))
 		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/));
@@ -53,7 +53,8 @@ window.addEventListener("message", function(event) {
 		}
 
 		port.postMessage({result: result});
-	} catch (e) {
+	}
+	catch (e) {
 		port.postMessage({error: e.message});
 		throw e;
 	}

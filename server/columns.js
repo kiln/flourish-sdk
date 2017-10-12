@@ -26,7 +26,10 @@ function printColumn(col_ix) {
 		var q = Math.floor(col_ix / 26),
 		    r = col_ix % 26;
 
-		if (r == 0) { q -= 1; r += 26; }
+		if (r == 0) {
+			q -= 1;
+			r += 26;
+		}
 
 		col_spec = String.fromCharCode(64 + r) + col_spec;
 		col_ix = q;

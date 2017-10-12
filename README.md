@@ -32,7 +32,8 @@ Templates often also include:
 * [`src/`](#src) JavaScript source files
 * [`data/`](#data) Data tables in CSV format that define the sample data shipped with the template
 * [`static/`](#static) Arbitrary static files that can be referenced by the template
-* [`README.md`](#readmemd) Documentation for users of the template, in Markdown format
+* [`GUIDE.md`](#guidemd) Documentation for end users of the template in Flourish, in Markdown format
+* [`README.md`](#readmemd) Documentation for developers working on the template, in Markdown format
 
 The following files are not treated specially by Flourish, but many templates include them as part of the way they are packaged and built:
 * [`package.json`](#packagejson) NPM package configuration specifying dependencies etc.
@@ -64,6 +65,8 @@ autoheight:
 ```
 
 Infinity can be specified with ∞ or *. If the infinity option is left off, the largest specified breakpoint will apply to infinity.
+
+All of this explains how the height is set by default when a visualisation or story based on your template is embedded. However, a Flourish user also has the option to embed at a fixed height. You can test for `Flourish.fixed_height` in your template to see whether that is the case.
 
 #### build configuration
 The `template.yml` file will usually also include a `build` section defining build rules. For example:
@@ -126,7 +129,7 @@ Creates a number input that sets the state property to a number. Optionally add 
 ##### `string`
 By default, creates a single-line text input that sets the state property to the relevant string text. If you add a valid `choices` property, the setting instead creates a dropdown (by default) or button group (if you also add `style: buttons`). The `choices` property must be an array. Each of its element can be a string (in which case this string is returned to the state) or an array containing a display name, the associated string value and (for button groups) a background image.
 
-To a special dropdown that allows the user to specify any text in addition to choosing from the list, add `choices_other: true`. This is ignored for button groups.
+To add a special dropdown that allows the user to specify any text in addition to choosing from the list, add `choices_other: true`. This is ignored for button groups.
 
 ```yaml
 - property: size
@@ -143,6 +146,51 @@ To a special dropdown that allows the user to specify any text in addition to ch
 
 ##### `text`
 Creates a multiline text input.
+
+#### Conditional settings
+Sometimes you might want to simplify the user experience for Flourish users by hiding some settings depending on whether they are needed or not. You can use the `show_if` and `hide_if` properties to control whether or not a setting should be displayed based on another setting’s value.
+
+In the following example, the x axis label setting will only be displayed if “Show x axis” is selected:
+
+```yaml
+- property: show_x_axis
+  name: Show x axis
+  type: boolean
+
+- property: x_axis_label
+  name: X axis label
+  type: string
+  show_if:
+    show_x_axis: true```
+
+You can use the following shorthand syntax for booleans. This is equivalent to the previous example:
+
+```yaml
+show_if: show_x_axis```
+
+If you specify an array of conditional values, this setting will be displayed if the referenced setting has _any_ of the specified values. In the following example, the setting is displayed if `color_mode` is set to either `"diverging"` or `"continuous"`:
+
+```yaml
+show_if:
+  color_mode: [diverging, continuous]
+```
+
+You can specify multiple conditions. All of these tests must pass for the setting to be displayed. For example:
+
+```yaml
+show_if:
+ show_x_axis: true
+ color_mode: diverging
+```
+
+The `hide_if` option works in exactly the same way, except that the setting is hidden if the conditional test passes.
+
+```yaml
+hide_if:
+  color_mode: diverging
+```
+
+You cannot specify both `show_if` and `hide_if` options on the same setting.
 
 #### data bindings
 The `template.yml` file may also include a `data` section. This section consists of an array of data ‘bindings’ that sets how the template should use and refer to the template’s editable data tables (which are initially populated by the CSV files in [`data/`](#data)). Each binding adds one or more columns of data to a `dataset` under a particular `key`. You can define as many datasets as you like. They are made available to the template as properties of [the `data` object](#data-1). Each one consists of an array containing an object for each row of the relevant data table, as shown in the example below.
@@ -260,8 +308,11 @@ Or from JavaScript use `Flourish.static_prefix`:
 var img_url = Flourish.static_prefix + "/my_image.jpg";
 ```
 
+#### `GUIDE.md`
+A file documenting the template for end Flourish users, in Markdown format. This documentation will be displayed on the template’s page on the Flourish site, when the template is [published](#publish-a-template) and made live.
+
 #### `README.md`
-A file documenting the template, in Markdown format. This documentation will be displayed on the template’s page on the Flourish site, when the template is [published](#publish-a-template) and made live.
+A standard README file for developers, available as part of the source like other files.
 
 ### Other files
 In general any files not listed above will be ignored by Flourish, and you may use them as part of your template’s build process or for any other purpose. They won’t be uploaded when you publish the template.

@@ -49,7 +49,7 @@ function extractData(data_binding, data_by_id) {
 	for (var i = 0; i < num_rows; i++) {
 		var o = {};
 		for (var j = 0; j < columns.length; j++) {
-			var b = columns[j];
+			b = columns[j];
 			var table = data_by_id[b.data_table_id];
 			if (i+1 >= table.length) continue;
 
@@ -67,9 +67,9 @@ function extractData(data_binding, data_by_id) {
 }
 
 function trimTrailingEmptyRows(data) {
-	for (var i = data.length; i-- > 0; ) {
-		if (data[i].findIndex(function(col) { return col !== null && col !== "" }) == -1) {
-			data.splice(i,1);
+	for (var i = data.length; i-- > 0;) {
+		if (data[i].findIndex(function(col) { return col !== null && col !== ""; }) == -1) {
+			data.splice(i, 1);
 		}
 		else break;
 	}
