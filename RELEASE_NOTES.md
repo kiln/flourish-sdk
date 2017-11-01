@@ -1,3 +1,14 @@
+# 2.11.0
+
+* New `credits:` property can be specified in template.yml
+
+# 2.10.1
+
+* Give a sensible error message if conditional settings configuration
+  (`show_if:`) blocks are indented incorrectly.
+* Correct the formatting of the `show_if` examples in README.md
+* Hide section dividers when setting is hidden
+
 # 2.10.0
 
 * The template documentation is now taken from `GUIDE.md` if there is

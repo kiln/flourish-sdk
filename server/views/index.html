@@ -20,6 +20,7 @@
 				<div id="visualisation" class="full-screen-ready">
 					<div id="visualisation-inner" class="editor-core">
 						<div class="preview-holder">
+							<img class="loading-spinner" src="/images/bosh.svg">
 							<iframe id="preview" sandbox="allow-same-origin allow-scripts" src="about:blank"></iframe>
 							<div id="resize-overlay"></div>
 							<div id="resize-handle"><i class="fa fa-arrows-v"></i></div>
@@ -65,9 +66,6 @@
 									</div>
 									
 									<div class="template-settings"></div>
-									
-									
-									
 							</div>
 						</div>
 					</div>
@@ -87,7 +85,6 @@
 		<h2>Check your terminal for errors</h2>
 	</div>
 
-	
 	<script>
 		Flourish.initSDK({{{ visualisation_js }}}, {{{ settings }}}, {{{ data_bindings }}});
 		Flourish.app.preview_pane.loadTemplate();

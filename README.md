@@ -49,6 +49,7 @@ The main Flourish configuration file for your template. The top-level properties
 * `name` What the template will be called within Flourish
 * `author` Who wrote the template
 * `description` A short description of the template
+* `credits` Optional credits for data sources, map tiles, etc, in Markdown format
 * `autoheight` Optional configuration for autoheight embedding (see below)
 * `image_download` Flag to indicate whether image snapshots work for the template (default is `true`)
 
@@ -110,7 +111,7 @@ To improve the layout of your settings, you can set the `width` of any setting t
 
 ```yaml
 - property: my_number
-  name: Near little number input
+  name: Neat little number input
   width: quarter # Optional; sets the width of the setting
   new_line: true # Optional; starts a new line with the current setting and adds a line above
 ```
@@ -161,12 +162,14 @@ In the following example, the x axis label setting will only be displayed if “
   name: X axis label
   type: string
   show_if:
-    show_x_axis: true```
+    show_x_axis: true
+```
 
 You can use the following shorthand syntax for booleans. This is equivalent to the previous example:
 
 ```yaml
-show_if: show_x_axis```
+show_if: show_x_axis
+```
 
 If you specify an array of conditional values, this setting will be displayed if the referenced setting has _any_ of the specified values. In the following example, the setting is displayed if `color_mode` is set to either `"diverging"` or `"continuous"`:
 
@@ -179,8 +182,8 @@ You can specify multiple conditions. All of these tests must pass for the settin
 
 ```yaml
 show_if:
- show_x_axis: true
- color_mode: diverging
+  show_x_axis: true
+  color_mode: diverging
 ```
 
 The `hide_if` option works in exactly the same way, except that the setting is hidden if the conditional test passes.

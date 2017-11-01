@@ -1,3 +1,4 @@
 /src
 /site/*.map
 /rollup.config.js
+/.eslintrc.json
