@@ -107,7 +107,7 @@ settings:
   type: number # Required; see available types below
 ```
 
-To improve the layout of your settings, you can set the `width` of any setting to be `half` or `quarter` of the width of the settings panel. You can also add a horizontal separator above a setting using `new_section: true`.
+To improve the layout of your settings, you can set the `width` of any setting to be `full`, `half`, `three quarters` or `quarter` of the width of the settings panel. You can also add a horizontal separator above a setting using `new_section: true`, or a subheading using `new_section: This is a subheading`.
 
 ```yaml
 - property: my_number
@@ -119,13 +119,21 @@ To improve the layout of your settings, you can set the `width` of any setting t
 The following types of settings are supported:
 
 ##### `boolean`
-Creates a checkbox that sets the state property to `true` or `false`.
+Creates a checkbox that sets the state property to `true` or `false`. Alternatively can be displayed as two buttons using the `choices` attribute to specify labels and/or images. For example:
+
+```yaml
+- property: ranked
+- type: boolean
+- choices:
+  - [ Ranks, true ]
+  - [ Scores, false ]
+```
 
 ##### `color`
 Creates a colour picker that sets the state property to a string containing a hex RGB colour e.g. `"#123456"`.
 
 ##### `number`
-Creates a number input that sets the state property to a number. Optionally add `min` and `max` properties to limit the range, `step` to control the input’s increment buttons. By default number settings always return a number and blanked inputs are set to zero; to allow blanked input, with `null` returned as the value, add `optional: true`.
+Creates a number input that sets the state property to a number. Optionally add `min` and `max` properties to limit the range, `step` to control the input’s increment buttons. By default number settings always return a number and blanked inputs are set to zero; to allow blanked input, with `null` returned as the value, add `optional: true`. Width defaults to `half`.
 
 ##### `string`
 By default, creates a single-line text input that sets the state property to the relevant string text. If you add a valid `choices` property, the setting instead creates a dropdown (by default) or button group (if you also add `style: buttons`). The `choices` property must be an array. Each of its element can be a string (in which case this string is returned to the state) or an array containing a display name, the associated string value and (for button groups) a background image.
@@ -191,6 +199,15 @@ The `hide_if` option works in exactly the same way, except that the setting is h
 ```yaml
 hide_if:
   color_mode: diverging
+```
+
+You can also control settings display depending on whether or not particular data bindings have been specified. A binding is specified using the syntax `data.[dataset].[key]`. For example:
+
+```yaml
+show_if: data.values.filter1 // shorthand syntax
+
+show_if:
+  data.values.filter1: true
 ```
 
 You cannot specify both `show_if` and `hide_if` options on the same setting.

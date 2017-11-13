@@ -1,10 +1,11 @@
 {
   "name": "@flourish/sdk",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
-    "prepublish": "cd .. && make sdk_clean sdk"
+    "prepublish": "cd .. && make sdk_clean sdk",
+    "test": "mocha"
   },
   "bin": {
     "flourish": "bin/flourish"
@@ -33,9 +34,11 @@
   },
   "devDependencies": {
     "d3-request": "^1.0.3",
+    "mocha": "^4.0.1",
     "rollup": "^0.43.1",
     "rollup-plugin-node-resolve": "*",
-    "rollup-plugin-uglify": "^2.0.1"
+    "rollup-plugin-uglify": "^2.0.1",
+    "tempy": "^0.2.1"
   },
   "engines": {
     "node": ">=6"

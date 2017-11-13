@@ -1,3 +1,14 @@
+# 2.12.0
+
+* New `is_master_slide` property can be specified in template.yml.
+  This is currently an undocumented feature intended for internal
+  use by Flourish.
+* New setting width option “three quarters”.
+* Settings display can now be conditional on data bindings being set.
+* Boolean settings can specify `choices` in template.yml to display as buttons.
+* Add tests for template.yml validation, fix some validation bugs, and make some
+  error messages more consistent.
+
 # 2.11.0
 
 * New `credits:` property can be specified in template.yml

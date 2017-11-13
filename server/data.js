@@ -54,10 +54,13 @@ function extractData(data_binding, data_by_id) {
 			if (i+1 >= table.length) continue;
 
 			if ("columns" in b && b.columns != null) {
-				o[b.key] = b.columns.map(function(c) { return table[i+1][c]; });
+				o[b.key] = b.columns
+					.filter(function(c) { return c < table[i+1].length; })
+					.map(function(c) { return table[i+1][c]; });
 			}
 			else if ("column" in b && b.column != null) {
-				o[b.key] = table[i+1][b.column];
+				if (b.column >= table[i+1].length) o[b.key] = "";
+				else o[b.key] = table[i+1][b.column];
 			}
 		}
 		dataset.push(o);
