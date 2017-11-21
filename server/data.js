@@ -27,13 +27,21 @@ function extractData(data_binding, data_by_id) {
 			continue;
 		}
 
+		var data_table = data_by_id[b.data_table_id];
+		if (data_table.length == 0) {
+			console.warn("Empty data table");
+			continue;
+		}
+
 		if ("columns" in b && b.columns != null) {
+			var column_count = data_table[0].length;
+			b.columns = b.columns.filter(function(i) { return i < column_count; });
 			dataset.column_names[key] = b.columns.map(function(i) {
 				return data_by_id[b.data_table_id][0][i];
 			});
 		}
 		else if ("column" in b && b.column != null) {
-			dataset.column_names[key] = data_by_id[b.data_table_id][0][b.column];
+			dataset.column_names[key] = data_table[0][b.column];
 		}
 		else {
 			throw new Error("Data binding includes no column(s) specification: " + JSON.stringify(b));

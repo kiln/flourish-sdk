@@ -1,3 +1,7 @@
+# 2.12.1
+
+* Handle strings containing U+2028 or U+2029 characters in data.
+
 # 2.12.0
 
 * New `is_master_slide` property can be specified in template.yml.

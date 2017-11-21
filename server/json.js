@@ -2,17 +2,22 @@
  * * * * * * GENERATED FILE - DO NOT EDIT * * * * * *
  * * * * * * GENERATED FILE - DO NOT EDIT * * * * * */
  
- 
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
+
+function escapeChar(c) {
+	var hex = c.charCodeAt(0).toString(16);
+	while (hex.length < 4) hex = "0" + hex;
+	return "\\u" + hex;
+}
 
 // Stringify an object (etc.) in a form that can safely be inserted
 // into a <script> block in a web page.
 function safeStringify(obj) {
 	const raw = JSON.stringify(obj);
 	if (typeof raw === "undefined") return undefined;
-	else return raw.replace(/<\/script>/g, "<\\/script>");
+	return raw.replace(/[\u2028\u2029<]/g, escapeChar);
 }
 
 function stringifyDataset(dataset) {
@@ -24,7 +29,7 @@ function stringifyPreparedData(data) {
 	var first = true;
 	for (var dataset in data) {
 		if (first) first = false; else s += ", ";
-		s += JSON.stringify(dataset) + ": " + stringifyDataset(data[dataset]);
+		s += safeStringify(dataset) + ": " + stringifyDataset(data[dataset]);
 	}
 	s += "}";
 
