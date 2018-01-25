@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "2.12.1",
+  "version": "2.13.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "bin": {
     "flourish": "bin/flourish"
   },
-  "author": "Robin Houston and Duncan Clark",
+  "author": "Kiln Enterprises Ltd",
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": "kiln/flourish-sdk",
   "dependencies": {

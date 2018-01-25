@@ -1,3 +1,15 @@
+# 2.13.0
+
+Major change: the preview pane is now embedded using the same height-adjustment
+logic as when a published visualisation is embedded on another site. If the
+preview pane is set to a fixed height, then `Flourish.fixed_height` is true
+in the template.
+
+Bug fixes:
+* Fixes boolean button group bugs
+* With a subhead in place, the new_section line didn't get hidden properly
+* Only send nulls for empty number settings
+
 # 2.12.1
 
 * Handle strings containing U+2028 or U+2029 characters in data.

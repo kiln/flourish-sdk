@@ -123,8 +123,8 @@ Creates a checkbox that sets the state property to `true` or `false`. Alternativ
 
 ```yaml
 - property: ranked
-- type: boolean
-- choices:
+  type: boolean
+  choices:
   - [ Ranks, true ]
   - [ Scores, false ]
 ```
