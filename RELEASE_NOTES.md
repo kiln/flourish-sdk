@@ -1,3 +1,15 @@
+# 2.15.0
+
+* Upgrade all node module dependencies to their current versions. This will also
+  affect new user projects created with the “flourish new” command.
+* Support the --no-build option for “flourish publish”.
+* New setting type “code”.
+* New “size: large” option for text and code settings.
+
+# 2.14.0
+
+* Drop support for specifying a username in the `id` of `template.yml` by setting id to `<username>/<template>`. Specifying one now throws an error when publishing a template. (This feature was only used internally for Flourish templates on the @flourish account. This should not affect external users of the SDK.)
+
 # 2.13.0
 
 Major change: the preview pane is now embedded using the same height-adjustment

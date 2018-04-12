@@ -13,6 +13,11 @@ window.addEventListener("message", function(event) {
 	var port = event.ports[0];
 	if (!port || typeof message !== "object" || message.sender !== "Flourish") return;
 	var result = null;
+	function assign(target, source) {
+		for (var k in source) {
+			target[k] = source[k];
+		}
+	}
 	try {
 		switch(message.method) {
 			case "getState":
@@ -20,9 +25,7 @@ window.addEventListener("message", function(event) {
 			break;
 
 			case "setState":
-			for (var k in message.argument) {
-				window.template.state[k] = message.argument[k];
-			}
+			assign(window.template.state, message.argument);
 			break;
 
 			case "hasData":
@@ -30,9 +33,7 @@ window.addEventListener("message", function(event) {
 			break;
 
 			case "setData":
-			for (var k in message.argument) {
-				window.template.data[k] = message.argument[k];
-			}
+			assign(window.template.data, message.argument);
 			break;
 
 			case "getData":
@@ -59,6 +60,24 @@ window.addEventListener("message", function(event) {
 					window.Flourish.checkHeight();
 				}
 			}
+			break;
+
+			case "sync":
+			var spec = message.argument;
+			if (spec.data) {
+				assign(window.template.data, spec.data);
+			}
+			if (spec.state) {
+				assign(window.template.state, spec.state);
+			}
+			// only allow draw or update, not both
+			if (spec.draw) {
+				window.template.draw();
+			}
+			else if (spec.update) {
+				window.template.update();
+			}
+			result = "success";
 			break;
 		}
 

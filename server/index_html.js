@@ -51,6 +51,15 @@ function appendFragmentToBody(document, fragment) {
 	}
 }
 
+function insertCanonicalLink(document, canonical_url) {
+	const head = findHead(document);
+	let link_node = TA.createElement("link", head.namespaceURI, [
+		{ name: "rel", value: "canonical" },
+		{ name: "href", value: canonical_url }
+	]);
+	TA.appendChild(head, link_node);
+}
+
 function rewriteLinks(document, static_prefix) {
 	if (!static_prefix.endsWith("/")) static_prefix += "/";
 	const rewriter = new RewriteLinks(function(url) {
@@ -71,6 +80,7 @@ function render(template_text, params) {
 	      script_fragment = params.parsed_script || parse5.parseFragment(params.script);
 
 	replaceTitle(document, params.title);
+	if (params.canonical_url) insertCanonicalLink(document, params.canonical_url);
 	appendFragmentToBody(document, script_fragment);
 	return rewriteLinks(document, params.static)
 		.then(parse5.serialize.bind(parse5));

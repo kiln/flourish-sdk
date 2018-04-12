@@ -154,7 +154,10 @@ To add a special dropdown that allows the user to specify any text in addition t
 ```
 
 ##### `text`
-Creates a multiline text input.
+Creates a user-resizeable multiline text input. Defaults to two lines tall. Can be made taller by adding `size: large`, which sets the height to half of the viewport height.
+
+##### `code`
+Same as `text` but with a monospace font and text-wrapping control.
 
 #### Conditional settings
 Sometimes you might want to simplify the user experience for Flourish users by hiding some settings depending on whether they are needed or not. You can use the `show_if` and `hide_if` properties to control whether or not a setting should be displayed based on another setting’s value.
