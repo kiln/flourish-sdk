@@ -1,3 +1,8 @@
+# 2.15.1
+
+* Upgrade ws module to 5.1.1.
+* Avoid crash after publishing a template. #40
+
 # 2.15.0
 
 * Upgrade all node module dependencies to their current versions. This will also
