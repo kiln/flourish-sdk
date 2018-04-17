@@ -1,3 +1,7 @@
+# 2.15.2
+
+* Slightly better fix for #40, so that the temporary zip file is still deleted on exit.
+
 # 2.15.1
 
 * Upgrade ws module to 5.1.1.
