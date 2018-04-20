@@ -1,10 +1,10 @@
 {
   "name": "@flourish/sdk",
-  "version": "2.15.2",
+  "version": "2.16.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
-    "prepublish": "cd .. && make sdk_clean sdk",
+    "prepare": "cd .. && make sdk_clean sdk",
     "test": "mocha"
   },
   "bin": {

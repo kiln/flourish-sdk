@@ -1,3 +1,9 @@
+# 2.16.0
+
+* Tweak the Flourish logo, and make it link to the live app.
+* Change the “prepublish” npm script to “prepare”, to be compatible with future versions of NPM.
+* Set the file permissions of the .flourish_sdk file so that only the current user can read it.
+
 # 2.15.2
 
 * Slightly better fix for #40, so that the temporary zip file is still deleted on exit.
@@ -91,8 +97,8 @@ Bug fixes:
 # 2.8.0
 
 * Add missing font files. #21
-* Add support for optional number settings. If “optional: true” is specified, 
-  and no value is supplied for the setting, then a null value will be passed to 
+* Add support for optional number settings. If “optional: true” is specified,
+  and no value is supplied for the setting, then a null value will be passed to
   the template rather than zero.
 * Fix “Uncaught TypeError: Cannot read property 'fireEvent' of undefined” #22
 
