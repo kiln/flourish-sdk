@@ -1,3 +1,20 @@
+# 3.1.0
+
+* Minor fix to the error handling in the template upgrade code.
+* Having an `autoheight` property in template.yml is now an error rather than a warning.
+* Updated tests.
+
+# 3.0.0
+
+This is a major version change, and a forced upgrade: older versions of the SDK can no longer publish templates to Flourish. The `autoheight` property is no longer supported, and instead iframe height is automatically set using default breakpoints. For templates that need to adjust the iframe height dynamically, there is a new method `Flourish.setHeight()`.
+
+Templates now need to have `sdk_version: 3` in their template.yml. Old templates can be upgraded by running `flourish upgrade`.
+
+# 2.16.1
+
+* Upgrade node modules (mocha → 5.1.1, rollup → 0.58.0)
+* Improve error message from “flourish login” in the case where the server returns something unexpected. (This is mainly useful for testing changes to Flourish itself: this should never happen in normal operation.)
+
 # 2.16.0
 
 * Tweak the Flourish logo, and make it link to the live app.

@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "2.16.0",
+  "version": "3.1.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "d3-request": "^1.0.6",
-    "mocha": "^5.0.5",
-    "rollup": "^0.57.1",
+    "mocha": "^5.1.1",
+    "rollup": "^0.58.1",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-uglify": "^3.0.0",
     "tempy": "^0.2.1"

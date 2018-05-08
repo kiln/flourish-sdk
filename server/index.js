@@ -214,6 +214,7 @@ function loadTemplate(template_dir, sdk_template, build_failed) {
 			}) + ";"),
 			scriptElementExternal("/template.js"),
 			scriptElementExternal("/comms.js"),
+			scriptElementExternal("/embedded.js"),
 		]);
 
 		const preview_script = documentFragment([
@@ -222,6 +223,7 @@ function loadTemplate(template_dir, sdk_template, build_failed) {
 			}) + ";"),
 			scriptElementExternal("/template.js"),
 			scriptElementExternal("/comms.js"),
+			scriptElementExternal("/embedded.js"),
 			scriptElementExternal("/talk_to_server.js"),
 			scriptElementInline("_Flourish_talkToServer();"),
 			scriptElementInline(preview_init_js),

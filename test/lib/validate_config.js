@@ -30,10 +30,9 @@ describe("validate_config", function() {
 	const id = "best-template",
 	      name = "Best template",
 	      author = "Robin Houston",
-	      sdk_version = 2,
-	      autoheight = "auto"; // include autoheight by default to avoid being spammed with warnings
+	      sdk_version = 3;
 
-	const metadata = { id, name, author, sdk_version, autoheight };
+	const metadata = { id, name, author, sdk_version };
 	const binding = { name: "My binding", dataset: "dataset", key: "key", type: "column", column: "Foo::A" };
 	const setting_foo = { name: "Foo", property: "foo", type: "string" };
 	const setting_bar = { name: "Bar", property: "bar", type: "string" };
@@ -223,82 +222,9 @@ describe("validate_config", function() {
 	});
 
 	describe("autoheight", function() {
-		it("should reject *", function() {
+		it("should reject autoheight", function() {
 			expectFailure(metadataPlus({ autoheight: "*" }),
-				"template.yml: Bad autoheight value “*”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-		it("should accept “auto”", function() {
-			expectSuccess(metadataPlus({ autoheight: "auto" }));
-		});
-		it("should accept 12px", function() {
-			expectSuccess(metadataPlus({ autoheight: "12px" }));
-		});
-		it("should reject “12 px”", function() {
-			expectFailure(metadataPlus({ autoheight: "12 px" }),
-				"template.yml: Bad autoheight value “12 px”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-		it("should reject “”", function() {
-			expectFailure(metadataPlus({ autoheight: "" }),
-				"template.yml: Bad autoheight value “”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-		it("should accept 4x3", function() {
-			expectSuccess(metadataPlus({ autoheight: "4x3" }));
-		});
-		it("should reject “4 x 3”", function() {
-			expectFailure(metadataPlus({ autoheight: "4 x 3" }),
-				"template.yml: Bad autoheight value “4 x 3”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-
-		it('should reject {"∞": "*"}', function() {
-			expectFailure(metadataPlus({ autoheight: {"∞": "*"} }),
-				"template.yml: Bad autoheight value “*”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-		it('should accept {"∞": "auto"}', function() {
-			expectSuccess(metadataPlus({ autoheight: {"∞": "auto"} }));
-		});
-		it('should accept {"∞": "12px"}', function() {
-			expectSuccess(metadataPlus({ autoheight: {"∞": "12px"} }));
-		});
-		it('should reject {"∞": "12 px"}', function() {
-			expectFailure(metadataPlus({ autoheight: {"∞": "12 px"} }),
-				"template.yml: Bad autoheight value “12 px”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-		it('should reject {"∞": ""}', function() {
-			expectFailure(metadataPlus({ autoheight: {"∞": ""} }),
-				"template.yml: Autoheight breakpoint “∞” is missing a height value");
-		});
-		it('should accept {"∞": "4x3"}', function() {
-			expectSuccess(metadataPlus({ autoheight: {"∞": "4x3"} }));
-		});
-		it('should reject {"∞": "4 x 3"}', function() {
-			expectFailure(metadataPlus({ autoheight: {"∞": "4 x 3"} }),
-				"template.yml: Bad autoheight value “4 x 3”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-
-		it('should reject {"*": "*"}', function() {
-			expectFailure(metadataPlus({ autoheight: {"*": "*"} }),
-				"template.yml: Bad autoheight value “*”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-		it('should accept {"*": "auto"}', function() {
-			expectSuccess(metadataPlus({ autoheight: {"*": "auto"} }));
-		});
-		it('should accept {"*": "12px"}', function() {
-			expectSuccess(metadataPlus({ autoheight: {"*": "12px"} }));
-		});
-		it('should reject {"*": "12 px"}', function() {
-			expectFailure(metadataPlus({ autoheight: {"*": "12 px"} }),
-				"template.yml: Bad autoheight value “12 px”; must be a valid css height in px or an aspect ratio in format “4x3”");
-		});
-		it('should reject {"*": ""}', function() {
-			expectFailure(metadataPlus({ autoheight: {"*": ""} }),
-				"template.yml: Autoheight breakpoint “*” is missing a height value");
-		});
-		it('should accept {"*": "4x3"}', function() {
-			expectSuccess(metadataPlus({ autoheight: {"*": "4x3"} }));
-		});
-		it('should reject {"*": "4 x 3"}', function() {
-			expectFailure(metadataPlus({ autoheight: {"*": "4 x 3"} }),
-				"template.yml: Bad autoheight value “4 x 3”; must be a valid css height in px or an aspect ratio in format “4x3”");
+				"template.yml: autoheight is no longer supported. You can use `Flourish.setHeight()` to dynamically adjust the height, if needed.");
 		});
 	});
 

@@ -50,24 +50,9 @@ The main Flourish configuration file for your template. The top-level properties
 * `author` Who wrote the template
 * `description` A short description of the template
 * `credits` Optional credits for data sources, map tiles, etc, in Markdown format
-* `autoheight` Optional configuration for autoheight embedding (see below)
 * `image_download` Flag to indicate whether image snapshots work for the template (default is `true`)
 
 Other properties are [settings](#settings), [data](#data) and [build](#build), which are described below.
-
-#### autoheight
-When a Flourish user embeds a visualisation or story, the default sizes are width `100%` and height `auto`. (The user can override these with any valid css values.) If no `autoheight` property is specified in the `template.yml`, height `auto` means that the embedding iframe will be automatically updated to match the computed height of the template’s body. This works well for most templates, but not for vertically fluid templates that have no natural height (e.g. a slippy map that fills the window). For these templates, you can optionally specify what `auto` should mean by setting the `autoheight` property. You can set it to a px-based CSS value – such as `600px` – or to an aspect ratio using the syntax `4x3`, `16x9`, etc. For additional control you can specify an object representing min-width breakpoints. For example:
-
-```yaml
-autoheight:
-    600: 500px # Height is 500px up to width of 600px
-    1200: 4x3 # Aspect ratio is 4x3 600–1200px
-    ∞: 1400px # Height is 1400px for all widths above 1200.
-```
-
-Infinity can be specified with ∞ or *. If the infinity option is left off, the largest specified breakpoint will apply to infinity.
-
-All of this explains how the height is set by default when a visualisation or story based on your template is embedded. However, a Flourish user also has the option to embed at a fixed height. You can test for `Flourish.fixed_height` in your template to see whether that is the case.
 
 #### build configuration
 The `template.yml` file will usually also include a `build` section defining build rules. For example:

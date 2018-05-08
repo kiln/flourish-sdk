@@ -7,14 +7,6 @@ author: Unknown author
 # This template is compatible with SDK version 2
 sdk_version: 2
 
-# Defines how the template will behave when embedded with the default settings.
-# Use "auto" to have the iframe get taller and shorter to match the content of
-# the DOM (ideal if the template’s height is determined by the flow of the body).
-# Alternatively specify a fixed height or aspect ratio, such as "600px" or "4x3",
-# if your template fills will fill the available height. You can also specify
-# breakpoints (https://flourish.studio/developers/reference/template-files.html).
-autoheight: auto
-
 build:
   # Defines the build processes used to build your template from source.
   # You can have any number of build processes, and changes to the relevant

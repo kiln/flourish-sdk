@@ -52,13 +52,11 @@ window.addEventListener("message", function(event) {
 			result = window.snapshot(message.argument, port);
 			break;
 
-			case "setHeight":
+			case "setFixedHeight":
 			if (window.Flourish) {
 				window.Flourish.fixed_height = message.argument != null;
 				window.Flourish.__container_height = message.argument;
-				if (window.Flourish.checkHeight) {
-					window.Flourish.checkHeight();
-				}
+				if (window.Flourish.checkHeight) window.Flourish.checkHeight();
 			}
 			break;
 
