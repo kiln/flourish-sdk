@@ -15,7 +15,7 @@
   "dependencies": {
     "less": "^3.0.1",
     "less-plugin-clean-css": "^1.5.1",
-    "rollup": "^0.57.0",
+    "rollup": "^0.58.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-uglify": "^3.0.0"
   }

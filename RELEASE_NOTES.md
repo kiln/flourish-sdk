@@ -1,3 +1,7 @@
+# 3.2.0
+
+* After upgrading template.yml, write it back out with { flowLevel: 4 }, which makes the YAML come out more like the way we write it in the documentation. In practice this only affects choices for settings in key-value format, since that is the only place currently where the structure is nested four levels deep.
+
 # 3.1.0
 
 * Minor fix to the error handling in the template upgrade code.

@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "dependencies": {
     "archiver": "^2.1.1",
     "chokidar": "^2.0.3",
-    "colors": "^1.2.1",
+    "colors": "^1.2.4",
     "cross-spawn": "^6.0.5",
     "d3-dsv": "^1.0.8",
     "express": "^4.16.3",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "d3-request": "^1.0.6",
     "mocha": "^5.1.1",
-    "rollup": "^0.58.1",
+    "rollup": "^0.58.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-uglify": "^3.0.0",
     "tempy": "^0.2.1"
