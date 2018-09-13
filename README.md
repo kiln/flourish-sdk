@@ -44,7 +44,7 @@ The template script. Typically generated using a build process, such as rollup.j
 
 ### `template.yml`
 The main Flourish configuration file for your template. The top-level properties are:
-* `sdk_version` Which major version of the Flourish SDK the template is compatible with. Currently this should be `2`.
+* `sdk_version` Which major version of the Flourish SDK the template is compatible with. Currently this should be `3`.
 * `id` A unique identifier for your template. If you publish a template and the `id` is already in use by you, the Flourish server will assume you are updating an existing template and overwrite it.
 * `name` What the template will be called within Flourish
 * `author` Who wrote the template
@@ -98,7 +98,7 @@ To improve the layout of your settings, you can set the `width` of any setting t
 - property: my_number
   name: Neat little number input
   width: quarter # Optional; sets the width of the setting
-  new_line: true # Optional; starts a new line with the current setting and adds a line above
+  new_section: true # Optional; starts a new line with the current setting and adds a line above
 ```
 
 The following types of settings are supported:

@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "ncp": "^2.0.0",
     "parse5": "^4.0.0",
     "request": "^2.85.0",
+    "resolve": "^1.8.1",
     "rewrite-links": "^1.1.0",
     "shell-quote": "^1.6.1",
     "tmp": "0.0.33",

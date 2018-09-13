@@ -1,3 +1,16 @@
+# 3.4.0
+
+* Modules imported using the “import” syntax are now resolved using
+  Node's [`require.resolve` algorithm](https://nodejs.org/api/modules.html#modules_all_together).
+* New “overrides” property for imported settings.
+
+# 3.3.1
+
+* New `joinable_data` property can be specified in template.yml.
+  This is currently an undocumented feature intended for internal
+  use by Flourish.
+* Since 3.3.0, the SDK now only supports Node 8+. This is now specified in `package.json`.
+
 # 3.3.0
 
 * Added new `colors` setting type for palette picking.

@@ -79,7 +79,7 @@ function extractData(data_binding, data_by_id) {
 
 function trimTrailingEmptyRows(data) {
 	for (var i = data.length; i-- > 0;) {
-		if (data[i].findIndex(function(col) { return col !== null && col !== ""; }) == -1) {
+		if (!data[i] || !data[i].length || data[i].findIndex(function(col) { return col !== null && col !== ""; }) == -1) {
 			data.splice(i, 1);
 		}
 		else break;
