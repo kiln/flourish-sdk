@@ -2,7 +2,8 @@
 <html lang="en-GB">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+
 	<title>Flourish | Data Visualisation &amp; Storytelling</title>
 
 	<script>if ("ontouchstart" in window) { document.documentElement.classList.add("is-touch"); }</script>
@@ -17,22 +18,27 @@
 	</div>
 	<div class="row editor-bar">
 	<div id="preview-menu" class="row-menu left no-select">
-		<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable selected popup" data-popup-head="Preview using available width">
-			<i class="fa fa-tv"></i>
-		</span>
-		<span id="editor-tablet" data-target="tablet" class="menu-item preview-mode clickable popup" data-popup-head="Preview at typical tablet width">
-			<i class="fa fa-tablet"></i>
-		</span>
-		<span id="editor-mobile" data-target="mobile" class="menu-item preview-mode clickable popup" data-popup-head="Preview at typical mobile width">
-			<i class="fa fa-mobile-phone"></i>
-		</span>
-		<span id="editor-custom" data-target="custom" class="menu-item preview-mode clickable popup" data-popup-head="Preview at custom size">
-			<i class="fa fa-cog"></i>
-		</span>
-		<span id="editor-custom-inputs">
-			<input id="editor-custom-width" type="number" min="100" data-target="custom" class="clickable selected"> x
-			<input id="editor-custom-height" type="number" min="100" data-target="custom" class="clickable selected" placeholder="auto">
-		</span>
+		<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window">
+			<i class="fa fa-expand"></i>
+		</a>
+		<div id="editor-previews">
+			<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable selected popup" data-popup-head="Preview using available width">
+				<i class="fa fa-tv"></i>
+			</span>
+			<span id="editor-tablet" data-target="tablet" class="menu-item preview-mode clickable popup" data-popup-head="Preview at typical tablet width">
+				<i class="fa fa-tablet"></i>
+			</span>
+			<span id="editor-mobile" data-target="mobile" class="menu-item preview-mode clickable popup" data-popup-head="Preview at typical mobile width">
+				<i class="fa fa-mobile-phone"></i>
+			</span>
+			<span id="editor-custom" data-target="custom" class="menu-item preview-mode clickable popup" data-popup-head="Preview at custom size">
+				<i class="fa fa-cog"></i>
+			</span>
+			<span id="editor-custom-inputs">
+				<input id="editor-custom-width" type="number" min="100" data-target="custom" class="clickable selected"> x
+				<input id="editor-custom-height" type="number" min="100" data-target="custom" class="clickable selected" placeholder="auto">
+			</span>
+		</div>
 	</div>
 	</div>
 	<div class="content">

@@ -9,7 +9,8 @@ describe("validate_config", function() {
 	let temp_directory;
 	before(function() {
 		temp_directory = tempy.directory();
-		fs.openSync(path.join(temp_directory, "Foo.csv"), "w");
+		fs.mkdirSync(path.join(temp_directory, "data"));
+		fs.openSync(path.join(temp_directory, "data", "Foo.csv"), "w");
 	});
 
 	function expectFailure(config, expected_message) {

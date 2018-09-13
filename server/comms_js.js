@@ -18,14 +18,29 @@ window.addEventListener("message", function(event) {
 			target[k] = source[k];
 		}
 	}
+	function deepAssign(target, source) {
+		for (var k in source) {
+			if (
+				typeof target[k] === "object" && target[k] != null && !Array.isArray(target[k])
+				&& typeof source[k] === "object" && source[k] != null && !Array.isArray(source[k])
+			) {
+				deepAssign(target[k], source[k]);
+			}
+			else target[k] = source[k];
+		}
+	}
 	try {
+		var i, a;
 		switch(message.method) {
 			case "getState":
-			result = (message.argument) ? window.template.state[message.argument] : window.template.state;
+			result = window.template.state;
+			if (message.argument) for (a = message.argument.split("."), i = 0; i < a.length; i++) {
+				result = result[a[i]];
+			}
 			break;
 
 			case "setState":
-			assign(window.template.state, message.argument);
+			deepAssign(window.template.state, message.argument);
 			break;
 
 			case "hasData":
@@ -66,7 +81,7 @@ window.addEventListener("message", function(event) {
 				assign(window.template.data, spec.data);
 			}
 			if (spec.state) {
-				assign(window.template.state, spec.state);
+				deepAssign(window.template.state, spec.state);
 			}
 			// only allow draw or update, not both
 			if (spec.draw) {

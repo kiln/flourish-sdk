@@ -1,3 +1,8 @@
+# 3.3.0
+
+* Added new `colors` setting type for palette picking.
+* New “import” syntax to import groups of settings from a node module.
+
 # 3.2.0
 
 * After upgrading template.yml, write it back out with { flowLevel: 4 }, which makes the YAML come out more like the way we write it in the documentation. In practice this only affects choices for settings in key-value format, since that is the only place currently where the structure is nested four levels deep.

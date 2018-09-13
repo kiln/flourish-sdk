@@ -39,6 +39,13 @@ const OPTS = {
 	}
 };
 
+// Unhandled rejections indicate an error in the app
+// and should be promoted to exceptions.
+process.on("unhandledRejection", function(reason, p) {
+	console.error("unhandled rejection", reason, p);
+	throw reason;
+});
+
 function main() {
 	const args = minimist(process.argv.slice(2), OPTS);
 	let command = args._[0];
