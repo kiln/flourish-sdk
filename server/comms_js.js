@@ -1,5 +1,8 @@
-module.exports = `
+const BEFORE = `
 window.addEventListener("message", function(event) {
+`;
+
+const CHECK_ORIGIN = `
 	var a = document.createElement("a");
 	a.href = event.origin;
 	var origin_okay = (a.hostname == window.location.hostname)
@@ -9,6 +12,9 @@ window.addEventListener("message", function(event) {
 		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/));
 
 	if (!origin_okay) return;
+`;
+
+const AFTER = `
 	var message = event.data;
 	var port = event.ports[0];
 	if (!port || typeof message !== "object" || message.sender !== "Flourish") return;
@@ -102,3 +108,8 @@ window.addEventListener("message", function(event) {
 	}
 }, false);
 `;
+
+module.exports = {
+	withOriginCheck: BEFORE + CHECK_ORIGIN + AFTER,
+	withoutOriginCheck: BEFORE + AFTER,
+};

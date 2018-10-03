@@ -1,8 +1,19 @@
+# 3.6.0
+
+* Fix a bug that meant conditional settings could not refer to a setting whose name begins with "data". #45
+* `flourish list` now recognises the `--full` option.
+* `flourish delete` now has a `--force` option that makes it possible to delete a template even if there are associated visualisations, provided they were created by the same user who created the template.
+
+# 3.5.0
+
+* `flourish new` now generates skeleton code for SDK version 3
+* What was called `api_token` is now called `sdk_token`. This is a purely internal change, which should not affect developers using the SDK to develop Flourish templates. (Developers running their own instances of the Flourish app will need to ensure they have an up-to-date version of Flourish. On the other hand, older versions of the SDK are compatible with the newer Flourish app.)
+
 # 3.4.0
 
 * Modules imported using the “import” syntax are now resolved using
   Node's [`require.resolve` algorithm](https://nodejs.org/api/modules.html#modules_all_together).
-* New “overrides” property for imported settings.
+* New “override” property for imported settings.
 
 # 3.3.1
 

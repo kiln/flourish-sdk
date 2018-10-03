@@ -4,8 +4,8 @@ name: Untitled template
 description: A Flourish template
 author: Unknown author
 
-# This template is compatible with SDK version 2
-sdk_version: 2
+# This template is compatible with SDK version 3
+sdk_version: 3
 
 build:
   # Defines the build processes used to build your template from source.

@@ -7,7 +7,7 @@ const minimist = require("minimist"),
       log = require("../lib/log");
 
 const OPTS = {
-	boolean: [ "help", "build", "open", "debug", "full" ],
+	boolean: [ "help", "build", "open", "debug", "full", "force" ],
 	string: [
 		"host", "listen", "port", "user", "password",
 
@@ -59,7 +59,7 @@ function main() {
 	if (args.version) command = "version";
 	else if (args.help) command = "help";
 
-	switch(command) {
+	switch (command) {
 		case "help":
 		case "version":
 

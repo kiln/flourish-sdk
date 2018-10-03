@@ -46,8 +46,8 @@ describe("validate_config", function() {
 		return metadataPlus({ data: [ Object.assign({}, binding, o) ] });
 	}
 
-	function settingPlus(o, other) {
-		return metadataPlus(Object.assign({ settings: [ Object.assign({}, setting_foo, o), setting_bar ] }, other));
+	function settingPlus(o, other, more_settings=[]) {
+		return metadataPlus(Object.assign({ settings: [ Object.assign({}, setting_foo, o), setting_bar ].concat(more_settings) }, other));
 	}
 
 	function testBoolean(name) {
@@ -821,6 +821,16 @@ describe("validate_config", function() {
 			// complicated to fix.
 			it.skip("should reject a string value when referencing a data binding", function() {
 				expectFailure(settingPlus({ show_if: {"data.dataset.key": "foo"} }, { data: [ binding ] }));
+			});
+
+			it("should reject a reference to a data binding that has no key", function() {
+				const binding_undef_key = { name: "No-key binding", dataset: "dataset", key: undefined, type: "column", column: "Foo::A" };
+				expectFailure(settingPlus({ show_if: "data.dataset" }, { data: [ binding_undef_key ] }),
+					"template.yml: “show_if” or “hide_if” property specifies invalid data binding “data.dataset”");
+			});
+			it("should accept settings whose names start with /data./ [kiln/flourish-sdk#45]", function() {
+				const data_foo = { name: "Data foo", property: "data_foo", type: "string" };
+				expectSuccess(settingPlus({ show_if: { "data_foo": "xxx" } }, undefined, [data_foo]));
 			});
 
 			// TODO could do with more tests here
