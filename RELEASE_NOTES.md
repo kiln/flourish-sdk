@@ -1,3 +1,18 @@
+# 3.7.0
+
+* Introduces new "font" setting type.
+* Allow headings in imported setting blocks
+* Take metadata from package.json, if present. #35
+  Specifically:
+  * Use the author, description and version fields from package.json if the
+    corresponding field is missing from template.yml.
+  * Use the name from package.json as the template id, if the template.yml has no id.
+* Respect the version number (as per semver.org): if the major version number is not incremented, assume the new version is backwards-compatible and upgrade existing visualisations. If the major version number is incremented, leave existing visualisations connected to the previous version.
+* Add --patch, --prerelease and --release options to “flourish publish”.
+* Make it possible to pass a template id as a parameter to “flourish list”, to list the available versions of a particular template.
+* Add a version parameter to “flourish delete”.
+* Add a “flourish history” command, to show the versions of a template that are available for use in the Live API.
+
 # 3.6.0
 
 * Fix a bug that meant conditional settings could not refer to a setting whose name begins with "data". #45

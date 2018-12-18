@@ -52,7 +52,7 @@ The main Flourish configuration file for your template. The top-level properties
 * `credits` Optional credits for data sources, map tiles, etc, in Markdown format
 * `image_download` Flag to indicate whether image snapshots work for the template (default is `true`)
 
-Other properties are [settings](#settings), [data](#data) and [build](#build), which are described below.
+Other properties are [settings](#settings), [data](#data), [build](#build), and [tour](#tour), which are described below.
 
 #### build configuration
 The `template.yml` file will usually also include a `build` section defining build rules. For example:
@@ -146,6 +146,20 @@ Creates a user-resizeable multiline text input. Defaults to two lines tall. Can 
 
 ##### `code`
 Same as `text` but with a monospace font and text-wrapping control.
+
+##### `font`
+Creates a font picker that sets the state property to the URL of a CSS stylesheet that will specify font imports. By default these are Google fonts, with URLs like `https://fonts.googleapis.com/css?family=Montserrat`. The value passed to the template `state` will be an object specifying both the font name and URL, for example: `body_font: { name: "Mali", url: "https://fonts.googleapis.com/css?family=Mali" }`. A template can load the font by inserting a `link` tag into the document, like this:
+```javascript
+  var font_link = document.createElement("link");
+  font_link.setAttribute("rel", "stylesheet");
+  document.body.appendChild(font_link);
+  // Assuming the setting property is named "body_font"
+  font_link.setAttribute("href", state.body_font.url);
+```
+Then elements can be styled by referencing the font name, whether in attributes or in CSS. If the font is being inherited in CSS, you could just add it to the document body, like this:
+```javascript
+document.body.style.fontFamily = state.body_font.url;
+```
 
 #### Conditional settings
 Sometimes you might want to simplify the user experience for Flourish users by hiding some settings depending on whether they are needed or not. You can use the `show_if` and `hide_if` properties to control whether or not a setting should be displayed based on another setting’s value.
@@ -259,6 +273,23 @@ The column headers are available in any dataset via the `column_names` property 
 	{ iso_code: "Country", values: [ "1980s", "1990s", "2000s", "2010s" ]}
 ```
 
+#### tour
+You can optionally include a `tour` block which can be used to guide people through using the template in the Flourish editor.
+
+A tour is an array of steps, each of which will be presented to the user in a popup. Here’s an example:
+
+```yaml
+tour:
+  - text: This template is ideal for displaying categorical data.
+  - text: Adjust these settings to customise the appearance of your visualisation.
+    anchor: '.settings'
+```
+Each step must include a `text` property, which will be displayed in the modal. Additional optional properties are as follows:
+
+* `anchor`: CSS selector for a DOM element in the editor to which the tour popup should be anchored. Use your browser’s web inspector to discover suitable class names or ids.
+* `position`: Where the popup should be positioned relative to its anchor. One of `bottom` (the default), `top`, `left` or `right`.
+* `button_text`: By default, each step displays with a button reading “Next”. You can specify an alternative label here.
+* `trigger`: In some cases, you might need to ensure a particular action has been triggered in the UI before you display the next step. For example, if you want to highlight something in the Data tab, then you need to ensure that the data tab has been selected. You can use the `trigger` property to do this, by supplying a string of the form `[event type] [selector]`, e.g. `click button.data`. If the user triggers this event, the next step will automatically be displayed. If they press the “Next” button first, then the specified event will be dispatched before the next popup is displayed.
 
 #### `thumbnail.jpg` or `thumbnail.png`
 A thumbnail image for your template in JPEG or PNG format. No particular size is required – the precise size at which the image is displayed depends on the size of the browser window – but we recommend approximately 600px × 400px.

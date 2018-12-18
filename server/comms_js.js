@@ -21,18 +21,24 @@ const AFTER = `
 	var result = null;
 	function assign(target, source) {
 		for (var k in source) {
-			target[k] = source[k];
+			if (source.hasOwnProperty(k)) target[k] = source[k];
 		}
 	}
-	function deepAssign(target, source) {
+	function deepAssign(target, source, is_destructive) {
 		for (var k in source) {
+			if (!source.hasOwnProperty(k)) continue;
 			if (
 				typeof target[k] === "object" && target[k] != null && !Array.isArray(target[k])
 				&& typeof source[k] === "object" && source[k] != null && !Array.isArray(source[k])
 			) {
-				deepAssign(target[k], source[k]);
+				deepAssign(target[k], source[k], is_destructive);
 			}
 			else target[k] = source[k];
+		}
+		if (is_destructive) {
+			for (var k in target) {
+				if (target.hasOwnProperty(k) && !source.hasOwnProperty(k)) delete target[k];
+			}
 		}
 	}
 	try {
@@ -87,7 +93,7 @@ const AFTER = `
 				assign(window.template.data, spec.data);
 			}
 			if (spec.state) {
-				deepAssign(window.template.state, spec.state);
+				deepAssign(window.template.state, spec.state, spec.overwrite_state);
 			}
 			// only allow draw or update, not both
 			if (spec.draw) {

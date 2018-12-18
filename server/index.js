@@ -10,7 +10,6 @@ const crypto = require("crypto"),
       d3_dsv = require("d3-dsv"),
       express = require("express"),
       handlebars = require("handlebars"),
-      parse5 = require("parse5"),
       ws = require("ws"),
       yaml = require("js-yaml"),
 
@@ -23,7 +22,7 @@ const crypto = require("crypto"),
       log = require("../lib/log"),
       sdk = require("../lib/sdk");
 
-const TA = parse5.treeAdapters.default;
+const TA = require("parse5/lib/tree-adapters/default.js");
 
 // Generate a static prefix randomly
 //
@@ -204,6 +203,7 @@ function loadTemplate(template_dir, sdk_template, build_failed) {
 			settings: json.safeStringify(settings.settings || []),
 			data_bindings: json.safeStringify(settings.data || []),
 			template_name: settings.name || "Untitled template",
+			template_version: settings.version,
 			template_author: settings.author || "",
 			build_failed: build_failed && build_failed.size > 0
 		};

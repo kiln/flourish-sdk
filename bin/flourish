@@ -7,7 +7,10 @@ const minimist = require("minimist"),
       log = require("../lib/log");
 
 const OPTS = {
-	boolean: [ "help", "build", "open", "debug", "full", "force" ],
+	boolean: [
+		"help", "build", "open", "debug", "full", "force",
+		"prerelease", "patch", "release"
+	],
 	string: [
 		"host", "listen", "port", "user", "password",
 
@@ -77,6 +80,7 @@ function main() {
 		case "delete":
 		case "upgrade":
 		case "list":
+		case "history":
 			require("../lib/cmd/" + command)(args, server_opts);
 			break;
 

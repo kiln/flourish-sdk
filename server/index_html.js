@@ -5,7 +5,7 @@ const URL = require("url");
 const parse5 = require("parse5"),
       RewriteLinks = require("rewrite-links");
 
-const TA = parse5.treeAdapters.default;
+const TA = require("parse5/lib/tree-adapters/default.js");
 
 function findChild(node, nodeName, ok_if_not_found) {
 	for (let child of TA.getChildNodes(node)) {
