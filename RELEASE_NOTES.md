@@ -1,3 +1,7 @@
+# 3.7.1
+
+* Skeleton project: suppress “circular dependency” warnings in the rollup configuration.
+
 # 3.7.0
 
 * Introduces new "font" setting type.
