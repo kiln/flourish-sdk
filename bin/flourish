@@ -9,7 +9,9 @@ const minimist = require("minimist"),
 const OPTS = {
 	boolean: [
 		"help", "build", "open", "debug", "full", "force",
-		"prerelease", "patch", "release"
+
+		// Options for 'publish'
+		"prerelease", "patch", "release", "local-testing"
 	],
 	string: [
 		"host", "listen", "port", "user", "password",

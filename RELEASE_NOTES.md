@@ -1,3 +1,7 @@
+# 3.8.0
+
+* Add a new undocumented “flourish publish” option `--local-testing`, which is only useful if you are running your own instance of the Flourish server.
+
 # 3.7.1
 
 * Skeleton project: suppress “circular dependency” warnings in the rollup configuration.
