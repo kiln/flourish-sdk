@@ -467,7 +467,7 @@ module.exports = function(template_dir, options) {
 					}
 					log.info("Detected change to file: " + filename, "Running build for " + key);
 					build_commands_to_run.push(
-						sdk.runBuildCommand(template_dir, command)
+						sdk.runBuildCommand(template_dir, command, "development")
 							.then(() => {
 								rebuilding.delete(key);
 								build_failed.delete(key);

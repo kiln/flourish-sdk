@@ -1,3 +1,11 @@
+# 3.9.0
+
+* Add the “flourish history” command to the output of “flourish help”.
+* Add the optional template id parameter for “flourish list” to the output of “flourish help”.
+* Raise an error if “flourish history” is called with no argument.
+* Set the NODE_ENV environment variable to "production" or "development" depending on whether the build was triggered by `flourish publish` or `flourish run`.
+* New command `flourish assign-version-number`, which must be used to assign a version number to an already-published template before it can be republished. 
+
 # 3.8.0
 
 * Add a new undocumented “flourish publish” option `--local-testing`, which is only useful if you are running your own instance of the Flourish server.

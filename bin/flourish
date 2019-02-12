@@ -16,6 +16,8 @@ const OPTS = {
 	string: [
 		"host", "listen", "port", "user", "password",
 
+		"env",
+
 		// Only relevant for admin users
 		"as",
 	],
@@ -28,7 +30,9 @@ const OPTS = {
 		/* Options for 'run' */
 		port: "1685",
 		build: true,
-		open: false
+		open: false,
+
+		env: "development"
 	},
 
 	alias: {
@@ -78,6 +82,7 @@ function main() {
 
 		case "whoami":
 
+		case "assign-version-number":
 		case "publish":
 		case "delete":
 		case "upgrade":
