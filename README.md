@@ -81,7 +81,7 @@ build:
 #### settings
 The `template.yml` file will usually also include a `settings` section which populates the settings panel in the Flourish visualisation editor (and SDK). Each setting allows the user to change a specific property in the template [`state`](#state). When a setting is changed by the user , `state` is updated and the template's `update()` function is called.
 
-If an entry in the settings array is a string, it is interpreted as a section title. Otherwise it must be an object with the `property` and `type` properties. Other properties are optional, but `name` and `description` are recommended to help the user understand the role of the setting.
+If an entry in the settings array is a string, it is interpreted as a section title. Otherwise it must be an object with the `property` and `type` properties. Other properties are optional, but `name` and `description` are recommended to help the user understand the role of the setting. (As a special case, a section titled "State documentation" will be hidden in the visualisation editor: it's just for grouping documentation of non-settings state properties.)
 
 ```yaml
 settings:
@@ -160,6 +160,9 @@ Then elements can be styled by referencing the font name, whether in attributes 
 ```javascript
 document.body.style.fontFamily = state.body_font.url;
 ```
+
+#### `hidden`
+This type is for documenting state properties which should not be editable from the settings panel in the visualisation editor. Any property with a `hidden` type will not be editable within the visualisation editor interface.
 
 #### Conditional settings
 Sometimes you might want to simplify the user experience for Flourish users by hiding some settings depending on whether they are needed or not. You can use the `show_if` and `hide_if` properties to control whether or not a setting should be displayed based on another setting’s value.

@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.9.0",
+  "version": "3.9.2",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -21,12 +21,12 @@
     "cross-spawn": "^6.0.5",
     "d3-dsv": "^1.0.10",
     "express": "^4.16.4",
-    "getpass": "^0.1.6",
     "handlebars": "^4.0.12",
     "js-yaml": "^3.12.0",
     "minimist": "^1.2.0",
     "ncp": "^2.0.0",
     "parse5": "^5.1.0",
+    "read": "^1.0.7",
     "request": "^2.88.0",
     "resolve": "^1.8.1",
     "rewrite-links": "^1.1.0",

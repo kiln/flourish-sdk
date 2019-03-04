@@ -1,10 +1,19 @@
+# 3.9.2
+
+* The “flourish login” command was failing at the password prompt, with Node 10. Change the way we read the password, so it works. #56
+
+# 3.9.1
+
+* Allow "type: hidden" properties under settings in template.yml, for documenting state that isn't an exposed setting. This is intend to help document the template for programmatic use via the upcoming API.
+* Document the suggestion that such state documentation is under a "State documentation" settings block.
+
 # 3.9.0
 
 * Add the “flourish history” command to the output of “flourish help”.
 * Add the optional template id parameter for “flourish list” to the output of “flourish help”.
 * Raise an error if “flourish history” is called with no argument.
 * Set the NODE_ENV environment variable to "production" or "development" depending on whether the build was triggered by `flourish publish` or `flourish run`.
-* New command `flourish assign-version-number`, which must be used to assign a version number to an already-published template before it can be republished. 
+* New command `flourish assign-version-number`, which must be used to assign a version number to an already-published template before it can be republished.
 
 # 3.8.0
 
