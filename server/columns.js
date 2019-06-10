@@ -142,9 +142,9 @@ function printDataBinding(r, data_table_names, print_data_table_name, optional) 
 }
 
 exports.parseColumn = parseColumn;
-exports.printColumn = printColumn;
-exports.parseRange = parseRange;
 exports.parseColumns = parseColumns;
-exports.printColumns = printColumns;
 exports.parseDataBinding = parseDataBinding;
+exports.parseRange = parseRange;
+exports.printColumn = printColumn;
+exports.printColumns = printColumns;
 exports.printDataBinding = printDataBinding;

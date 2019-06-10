@@ -1,3 +1,12 @@
+# 3.10.1
+
+* Template name and author were being inserted into the page unescaped, which would cause problems if either contains characters such as `<` that have a special meaning in HTML. This is now fixed.
+
+# 3.10.0
+
+* Log a warning to the console if the draw() or update() functions are declared to have parameters. #19
+* Support the `--as` flag consistently across commands. (This change only affects internal users at Flourish HQ.)
+
 # 3.9.2
 
 * The “flourish login” command was failing at the password prompt, with Node 10. Change the way we read the password, so it works. #56

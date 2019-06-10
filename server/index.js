@@ -331,7 +331,7 @@ module.exports = function(template_dir, options) {
 	});
 
 	app.get("/comms.js", function (req, res) {
-		res.header("Content-Type", "application/javascript").send(comms_js.withoutOriginCheck);
+		res.header("Content-Type", "application/javascript").send(comms_js.withoutOriginCheck + comms_js.validate);
 	});
 
 	app.get("/thumbnail", function (req, res) {

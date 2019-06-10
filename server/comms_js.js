@@ -115,7 +115,17 @@ const AFTER = `
 }, false);
 `;
 
+const VALIDATE = `
+if (template && template.draw && template.draw.length != 0) {
+	console.warn("The draw() function should be declared with no parameters");
+}
+if (template && template.update && template.update.length != 0) {
+	console.warn("The update() function should be declared with no parameters");
+}
+`;
+
 module.exports = {
 	withOriginCheck: BEFORE + CHECK_ORIGIN + AFTER,
 	withoutOriginCheck: BEFORE + AFTER,
+	validate: VALIDATE,
 };
