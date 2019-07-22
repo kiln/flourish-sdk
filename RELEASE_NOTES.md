@@ -1,3 +1,7 @@
+# 3.10.3
+
+* Update the documentation for the `colors` setting type.
+
 # 3.10.2
 
 * One of the dependency packages used by the SDK fails to compile with versions of node earlier than 8.3. Update the "engines" specification in package.json to specify that we require node 8.3 or later.

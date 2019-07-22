@@ -118,7 +118,7 @@ Creates a checkbox that sets the state property to `true` or `false`. Alternativ
 Creates a colour picker that sets the state property to a string containing a hex RGB colour e.g. `"#123456"`.
 
 ##### `colors`
-Creates a colour palette picker that sets the state property to an array of strings, each containing a colour value, e.g. `"#ff33c0"`. For convenience, you can specify a standard d3 colour scheme such as “schemeCategory10” as the default palette in the template state: this will be converted to an array of hex colours for you.
+Creates a colour palette picker that sets the state property to an array of strings, each containing a colour value, e.g. `"#ff33c0"`. The menu contains the Flourish standard palettes plus any additional ones associated with the user's company. The user can edit the selected palette to add/remove/change colours.
 
 ##### `number`
 Creates a number input that sets the state property to a number. Optionally add `min` and `max` properties to limit the range, `step` to control the input’s increment buttons. By default number settings always return a number and blanked inputs are set to zero; to allow blanked input, with `null` returned as the value, add `optional: true`. Width defaults to `half`.
