@@ -1,3 +1,8 @@
+# 3.11.0
+
+* Update all node modules to their current versions. This also means that templates created with “flourish new” will be configured to use the current version of rollup.
+* New design for settings panel (matching flourish.studio). Checkboxes are now iOS-style toggle switches, and editing the color palette opens the palette editor in a separate overlay.
+
 # 3.10.3
 
 * Update the documentation for the `colors` setting type.
