@@ -1,3 +1,7 @@
+# 3.11.1
+
+* Fix bug that broke show_if/hide_if settings rules.
+
 # 3.11.0
 
 * Update all node modules to their current versions. This also means that templates created with “flourish new” will be configured to use the current version of rollup.
