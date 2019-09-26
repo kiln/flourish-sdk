@@ -757,6 +757,24 @@ describe("validate_config", function() {
 				expectSuccess(settingPlus({ hide_if: "bar" }));
 			});
 
+			it("should forbid a reference to itself (show_if shortform)", function() {
+				expectFailure(settingPlus({ show_if: "foo" }),
+					"template.yml setting “foo” cannot be conditional on itself");
+			});
+			it("should forbid a reference to itself (hide_if shortform)", function() {
+				expectFailure(settingPlus({ hide_if: "foo" }),
+					"template.yml setting “foo” cannot be conditional on itself");
+			});
+
+			it("should forbid a reference to itself (show_if)", function() {
+				expectFailure(settingPlus({ show_if: { "foo": true }}),
+					"template.yml setting “foo” cannot be conditional on itself");
+			});
+			it("should forbid a reference to itself (hide_if)", function() {
+				expectFailure(settingPlus({ hide_if: { "foo": true }}),
+					"template.yml setting “foo” cannot be conditional on itself");
+			});
+
 			it("should forbid a reference to a non-existent setting (show_if)", function() {
 				expectFailure(settingPlus({ show_if: "baz" }),
 					"template.yml: “show_if” or “hide_if” property refers to non-existent setting “baz”");

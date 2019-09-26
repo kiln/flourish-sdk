@@ -1,3 +1,7 @@
+# 3.11.2
+
+* Do not allow template settings to be conditional on themselves.
+
 # 3.11.1
 
 * Fix bug that broke show_if/hide_if settings rules.
