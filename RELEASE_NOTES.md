@@ -1,3 +1,7 @@
+# 3.11.3
+
+* Add support for `svg_download`, which you should now set to `false` for templates where SVG download wouldn't produce useful results (for example if the only SVG in the template is a legend, not the main chart)
+
 # 3.11.2
 
 * Do not allow template settings to be conditional on themselves.

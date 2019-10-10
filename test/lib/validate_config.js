@@ -231,6 +231,8 @@ describe("validate_config", function() {
 
 	describe("image_download", testBoolean("image_download"));
 
+	describe("svg_download", testBoolean("svg_download"));
+
 	describe("build rules", function() {
 		testObject("build_rules", "template.yml “build” must be a mapping");
 		it("should reject null", function() {
