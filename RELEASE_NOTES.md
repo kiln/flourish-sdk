@@ -1,3 +1,7 @@
+# 3.11.5
+
+* Print date and time when publishing a template.
+
 # 3.11.4
 
 * The “flourish register” command used to fail at the point of asking you to enter a password if you are using Node 10. This version fixes that problem.
