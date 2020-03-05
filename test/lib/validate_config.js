@@ -1,6 +1,8 @@
 const assert = require("assert"),
       fs = require("fs"),
+      nodeResolve = require("resolve"),
       path = require("path"),
+      sinon = require("sinon"),
       tempy = require("tempy");
 
 const validateConfig = require("../../lib/validate_config");
@@ -574,14 +576,17 @@ describe("validate_config", function() {
 		describe("optional settings", function() {
 			it("should not support optional strings", function() {
 				expectFailure(settingPlus({ optional: true }),
-					"The “optional” property is only supported for “number” type settings");
+					"The “optional” property is only supported for “number”, “color” and “font” type settings");
 			});
 			it("should not support optional booleans", function() {
 				expectFailure(settingPlus({ type: "boolean", optional: true }),
-					"The “optional” property is only supported for “number” type settings");
+					"The “optional” property is only supported for “number”, “color” and “font” type settings");
 			});
 			it("should support optional numbers", function() {
 				expectSuccess(settingPlus({ type: "number", optional: true }));
+			});
+			it("should support optional fonts", function() {
+				expectSuccess(settingPlus({ type: "font", optional: true }));
 			});
 			it("should support non-optional numbers", function() {
 				expectSuccess(settingPlus({ type: "number", optional: false }));
@@ -852,8 +857,84 @@ describe("validate_config", function() {
 				const data_foo = { name: "Data foo", property: "data_foo", type: "string" };
 				expectSuccess(settingPlus({ show_if: { "data_foo": "xxx" } }, undefined, [data_foo]));
 			});
+		});
 
-			// TODO could do with more tests here
+		describe("import", function() {
+			describe("when the module to import exists", function() {
+				let imported_module_directory, imported_settings_filename;
+				before(function() {
+					imported_module_directory = path.join(temp_directory, "node_modules/@flourish/layout/");
+					imported_settings_filename = path.join(imported_module_directory, "settings.yml");
+					fs.mkdirSync(imported_module_directory, { recursive: true });
+					fs.closeSync(fs.openSync(imported_settings_filename, "w"));
+					sinon.stub(nodeResolve, "sync").returns(imported_settings_filename);
+				});
+				after(function() {
+					nodeResolve.sync.restore();
+					fs.unlinkSync(imported_settings_filename);
+				});
+				it("should permit the import of a component", function() {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout" }]}));
+				});
+				it("should allow for a show_if condition for an imported component", function() {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", show_if: true }]}));
+				});
+				it("should allow for a hide_if condition for an imported component", function() {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", hide_if: true }]}));
+				});
+				it("should not allow for a name property (for example) for an imported component", function() {
+					expectFailure(
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", name: "Flourish" }]}),
+						"template.yml: Unexpected property 'name' in import"
+					);
+				});
+				it("should allow for an overrides array for an imported component", function() {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [] }]}));
+				});
+				it("should throw if overrides is a string", function() {
+					expectFailure(
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: "Hello Mark!" }]}),
+						"template.yml Setting import overrides must be an array"
+					);
+				});
+				it("should throw if overrides is an object", function() {
+					expectFailure(
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: {} }]}),
+						"template.yml Setting import overrides must be an array"
+					);
+				});
+				it("should throw if an override is missing the 'property' property", function() {
+					expectFailure(
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{}] }]}),
+						`template.yml Setting import overrides must each specify overridden “property”`
+					);
+				});
+				it("should allow for an override without a 'method' property", function() {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color"}] }]}));
+				});
+				it("should allow for an override with a 'method' property equal to 'replace'", function() {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", method: "replace"}] }]}));
+				});
+				it("should allow for an override with a 'method' property equal to 'extend'", function() {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", method: "extend"}] }]}));
+				});
+				it("should throw if an override has a 'method' property of (eg) 'delete'", function() {
+					expectFailure(
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", method: "delete"}] }]}),
+						`template.yml Setting import override “method” method must be either “replace” or “extend”`
+					);
+				});
+			});
+
+			describe("when the module to import doesn't exist", function() {
+				it("should error when trying to import the component", function() {
+					const expected_error = `Cannot find module '@flourish/layout/settings.yml' from '${temp_directory}'`;
+					expectFailure(
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout" }] }),
+						expected_error
+					);
+				});
+			});
 		});
 
 		describe("new_section", function() {

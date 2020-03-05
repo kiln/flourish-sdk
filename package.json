@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.11.5",
+  "version": "3.13.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -40,6 +40,7 @@
     "rollup": "^1.16.2",
     "rollup-plugin-node-resolve": "^5.1.0",
     "rollup-plugin-uglify": "^6.0.2",
+    "sinon": "^8.1.1",
     "tempy": "^0.3.0"
   },
   "engines": {

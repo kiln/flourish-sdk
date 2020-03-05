@@ -1,3 +1,23 @@
+# 3.13.0
+
+* Support is_optional on font type settings so that they can be set to null
+* Support is_optional on color type settings so that they can be set to null
+
+# 3.12.0
+
+* Support hide_if and show_if properties for components so that whole blocks of imported settings can be easily hidden.
+* Support extending (as an alternative to replacing) entities through overrides
+* Support 'property' property of override object being an array of properties
+* Support template show_if/hide_if conditionals referencing imported component properties
+
+# 3.11.7
+
+* Fix bug with boolean-valued show_if/hide_if in settings.yml of modules
+
+# 3.11.6
+
+* Fix show_if and hide_if conditionals involving data bindings
+
 # 3.11.5
 
 * Print date and time when publishing a template.
