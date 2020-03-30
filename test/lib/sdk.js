@@ -3,7 +3,7 @@ const assert = require("assert"),
       path = require("path"),
       tempy = require("tempy");
 
-const { readConfig } = require("../../lib/sdk.js");
+const { readConfig, readAndValidateConfig } = require("../../lib/sdk.js");
 
 
 describe("readConfig", () => {
@@ -59,5 +59,82 @@ describe("readConfig", () => {
 			);
 			assert.equal(config.id, "value that should be used");
 		});
+	});
+});
+
+describe("readAndValidateConfig", () => {
+	before(function() {
+		this.temporary_directories_created = [];
+		this.tryReadConfig = function(template_yaml_string, package_json_string) {
+			const d = tempy.directory();
+			this.temporary_directories_created.push(d);
+			fs.writeFileSync(path.join(d, "template.yml"), template_yaml_string);
+			fs.writeFileSync(path.join(d, "package.json"), package_json_string);
+			return readAndValidateConfig(d);
+		};
+	});
+
+	after(function() {
+		this.temporary_directories_created.forEach(function (d) {
+			fs.unlinkSync(path.join(d, "template.yml"));
+			fs.unlinkSync(path.join(d, "package.json"));
+			fs.rmdirSync(d);
+		});
+	});
+
+	it(`should reject a config with no id`, async function() {
+		await assert.rejects(this.tryReadConfig(
+			`name: the name\nauthor: Mr Brock\nsdk_version: 3`,
+			`{}`
+		));
+	});
+
+	it(`should reject a config with no name`, async function() {
+		await assert.rejects(this.tryReadConfig(
+			`id: "sample value"\nauthor: Mr Brock\nsdk_version: 3`,
+			`{}`
+		));
+	});
+
+	it(`should reject a config with no author`, async function() {
+		await assert.rejects(this.tryReadConfig(
+			`id: "sample value"\nname: the name\nsdk_version: 3`,
+			`{}`
+		));
+	});
+
+	it(`should reject a config with no sdk_version`, async function() {
+		await assert.rejects(this.tryReadConfig(
+			`id: "sample value"\nname: the name\nauthor: Mr Brock`,
+			`{}`
+		));
+	});
+
+	it(`should accept a config with the wrong sdk_version`, async function() {
+		await this.tryReadConfig(
+			`id: "sample value"\nname: the name\nauthor: Mr Brock\nsdk_version: 1`,
+			`{}`
+		);
+	});
+
+	it(`should accept a config with author specified in package.json`, async function() {
+		await this.tryReadConfig(
+			`id: "sample value"\nname: the name\nsdk_version: 3`,
+			`{"author": "Mr Brock"}`
+		);
+	});
+
+	it(`should accept a config with author and id specified in package.json`, async function() {
+		await this.tryReadConfig(
+			`name: the name\nsdk_version: 3`,
+			`{"author": "Mr Brock", "name": "sample value"}`
+		);
+	});
+
+	it(`should accept a config with no settings or data`, async function() {
+		await this.tryReadConfig(
+			`id: "sample value"\nname: the name\nauthor: Mr Brock\nsdk_version: 3`,
+			`{}`
+		);
 	});
 });

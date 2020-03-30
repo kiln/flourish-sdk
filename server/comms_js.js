@@ -10,7 +10,8 @@ const CHECK_ORIGIN = `
 		|| (a.hostname.match(/\\.flourish\\.local$/) && window.location.hostname.match(/\\.flourish\\.local$/))
 		|| (a.hostname.match(/\\.flourish\\.net$/) && window.location.hostname.match(/\\.flourish\\.net$/))
 		|| (a.hostname.match(/\\.flourish\\.rocks$/) && window.location.hostname.match(/\\.flourish\\.rocks$/))
-		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/));
+		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/))
+		|| (a.hostname.match(/\\.uri\\.sh$/) && window.location.hostname.match(/\\.uri\\.sh$/));
 
 	if (!origin_okay) return;
 `;

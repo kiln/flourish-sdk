@@ -1,3 +1,7 @@
+# 3.13.1
+
+* Fix a regression that caused errors in a template with no settings: block defined in its template.yml. #63
+
 # 3.13.0
 
 * Support is_optional on font type settings so that they can be set to null
