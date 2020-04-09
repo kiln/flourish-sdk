@@ -79,6 +79,8 @@ build:
     directory: less
 ```
 
+It’s also possible to use a custom watch command, instead of relying on Flourish to run your build script when one of the specified files has changed. Specify the watch script using the `watch:` key within the build rule. In this case the build script will not execute when you use `flourish run`, but the watch script will be run instead. You may not specify `files:` or `directory:` if you use `watch:`.
+
 #### settings
 The `template.yml` file will usually also include a `settings` section which populates the settings panel in the Flourish visualisation editor (and SDK). Each setting allows the user to change a specific property in the template [`state`](#state). When a setting is changed by the user , `state` is updated and the template's `update()` function is called.
 

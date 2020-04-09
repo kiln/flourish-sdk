@@ -283,15 +283,26 @@ describe("validate_config", function() {
 				"template.yml: build.foo.script must be a string");
 		});
 
-		it("should expect directory or files", function() {
+		it("should expect directory, files or watch", function() {
 			expectFailure(metadataPlus({ build: { foo: { script: "" } } }),
-				"template.yml: build rule “foo” has no “directory” or “files”");
+				"template.yml: build rule “foo” has no “directory”, “files” or “watch”");
 		});
 		it("should accept a directory alone", function() {
 			expectSuccess(metadataPlus({ build: { foo: { script: "", directory: "." } } }));
 		});
 		it("should accept a files array alone", function() {
 			expectSuccess(metadataPlus({ build: { foo: { script: "", files: [] } } }));
+		});
+		it("should accept a watch command alone", function() {
+			expectSuccess(metadataPlus({ build: { foo: { script: "", watch: "" } } }));
+		});
+		it("should reject a watch command and a directory", function() {
+			expectFailure(metadataPlus({ build: { foo: { script: "", watch: "", directory: "" } } }),
+				"template.yml: build rule “foo” has both “watch” and “directory”");
+		});
+		it("should reject a watch command and a list of files", function() {
+			expectFailure(metadataPlus({ build: { foo: { script: "", watch: "", files: [""] } } }),
+				"template.yml: build rule “foo” has both “watch” and files");
 		});
 		it("should reject null files", function() {
 			expectFailure(metadataPlus({ build: { foo: { script: "", files: null } } }),

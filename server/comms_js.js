@@ -11,7 +11,12 @@ const CHECK_ORIGIN = `
 		|| (a.hostname.match(/\\.flourish\\.net$/) && window.location.hostname.match(/\\.flourish\\.net$/))
 		|| (a.hostname.match(/\\.flourish\\.rocks$/) && window.location.hostname.match(/\\.flourish\\.rocks$/))
 		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/))
-		|| (a.hostname.match(/\\.uri\\.sh$/) && window.location.hostname.match(/\\.uri\\.sh$/));
+		|| (${"" /* Cope with previously-published stories, that are still on the old domain,
+			     that have been republished (hence rerendered to use the new template URLs) */}
+			(a.hostname == "public.flourish.studio" && window.location.hostname == "flo.uri.sh")
+			|| (a.hostname == "public.flourish.rocks" && window.location.hostname == "staging-flo.uri.sh")
+			|| (a.hostname == "public.dev.flourish.rocks" && window.location.hostname == "dev-flo.uri.sh")
+		);
 
 	if (!origin_okay) return;
 `;

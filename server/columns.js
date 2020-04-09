@@ -47,10 +47,14 @@ function parseRange(col_range) {
 	var first_ix = parseColumn(first),
 	    last_ix = parseColumn(last);
 
-	var r = Array(Math.max(0, last_ix - first_ix + 1));
-	for (var i = 0; i <= last_ix - first_ix; i++) {
-		r[i] = i + first_ix;
+	var r = [];
+	var incrementer = last_ix >= first_ix ? 1 : -1;
+	var n = Math.abs(last_ix - first_ix) + 1;
+
+	for (var i = 0; i < n; i++) {
+		r.push(first_ix + i*incrementer);
 	}
+
 	return r;
 }
 

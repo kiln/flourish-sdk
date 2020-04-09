@@ -10,6 +10,7 @@ const crypto = require("crypto"),
       d3_dsv = require("d3-dsv"),
       express = require("express"),
       handlebars = require("handlebars"),
+      shell_quote = require("shell-quote"),
       ws = require("ws"),
       yaml = require("js-yaml"),
 
@@ -432,6 +433,24 @@ module.exports = function(template_dir, options) {
 				.catch((error) => {
 					log.problem("Failed to reload template", error.message);
 				});
+		}
+
+		// Run any custom watchers
+		if (template.build_rules) {
+			for (const build_rule of template.build_rules) {
+				console.log("Build rule:", build_rule);
+				if ("watch" in build_rule) {
+					const command_parts = shell_quote.parse(build_rule.watch),
+					      prog = command_parts[0],
+					      args = command_parts.slice(1);
+
+					const env = process.env;
+					env.NODE_ENV = "development";
+
+					log.info(`Running watcher command: ${build_rule.watch}`);
+					cross_spawn.spawn(prog, args, { cwd: template_dir, stdio: "inherit", env });
+				}
+			}
 		}
 
 		const chokidar_opts = { ignoreInitial: true, disableGlobbing: true, cwd: template_dir };

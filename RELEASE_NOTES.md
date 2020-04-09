@@ -1,3 +1,7 @@
+# 3.14.0
+
+* Add a “watch” option for build rules, to use a custom watcher
+
 # 3.13.1
 
 * Fix a regression that caused errors in a template with no settings: block defined in its template.yml. #63
