@@ -438,7 +438,6 @@ module.exports = function(template_dir, options) {
 		// Run any custom watchers
 		if (template.build_rules) {
 			for (const build_rule of template.build_rules) {
-				console.log("Build rule:", build_rule);
 				if ("watch" in build_rule) {
 					const command_parts = shell_quote.parse(build_rule.watch),
 					      prog = command_parts[0],

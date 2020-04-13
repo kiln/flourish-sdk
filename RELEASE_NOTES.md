@@ -1,3 +1,8 @@
+# 3.14.1
+
+* Remove stray build logging. #64
+* Wait for build to finish before starting server. #65
+
 # 3.14.0
 
 * Add a “watch” option for build rules, to use a custom watcher
