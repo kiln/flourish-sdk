@@ -18,6 +18,9 @@
 	<div class="row editor-bar">
 	<div id="preview-menu" class="row-menu left no-select">
 		
+		<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window">
+			<i class="fa fa-expand"></i>
+		</a>
 		<div id="editor-previews">
 			<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable selected popup" data-popup-head="Preview using available width">
 				<i class="fa fa-tv"></i>
@@ -48,7 +51,7 @@
 					<div id="visualisation-inner" class="editor-core">
 						<div class="preview-holder">
 							<img class="loading-spinner" src="/images/bosh.svg">
-							<iframe id="preview" sandbox="allow-same-origin allow-scripts" src="about:blank"></iframe>
+							<iframe id="preview" sandbox="allow-same-origin allow-scripts allow-downloads" src="about:blank"></iframe>
 							<div id="resize-overlay"></div>
 							<div id="resize-handle-container">
 								<div id="resize-handle"></div>
@@ -62,13 +65,6 @@
 					      		<div class="current-template-thumbnail"></div>
 					      		<h1>Selected template <span class="template-name">{{ template_name }}</span></h1>
 					      	</div>
-					      
-					      	<div class="current-template-info">
-					      		<div class="current-template-description">
-					      			<p><span class="label">Author:</span> <span class="author">{{ template_author }}</span></p>
-					      		</div>
-					      	</div>
-					      
 					      </div>
 					      
 					      <div class="template-settings"></div>

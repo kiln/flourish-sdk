@@ -1,3 +1,13 @@
+# 3.15.0
+
+* Reinstate preview link
+* Remove template author info from side panel
+* Fix z-index issue on resize bar
+
+# 3.14.2
+
+* Improve error checking of conditional-property overrides
+
 # 3.14.1
 
 * Remove stray build logging. #64
