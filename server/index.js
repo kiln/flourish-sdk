@@ -9,7 +9,6 @@ const crypto = require("crypto"),
       chokidar = require("chokidar"),
       d3_dsv = require("d3-dsv"),
       express = require("express"),
-      handlebars = require("handlebars"),
       shell_quote = require("shell-quote"),
       ws = require("ws"),
       yaml = require("js-yaml"),
@@ -22,6 +21,9 @@ const crypto = require("crypto"),
 
       log = require("../lib/log"),
       sdk = require("../lib/sdk");
+
+const { allowInsecurePrototypeAccess } = require("@handlebars/allow-prototype-access");
+const handlebars = allowInsecurePrototypeAccess(require("handlebars"));
 
 const TA = require("parse5/lib/tree-adapters/default.js");
 

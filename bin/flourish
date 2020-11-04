@@ -57,6 +57,11 @@ process.on("unhandledRejection", function(reason, p) {
 
 function main() {
 	const args = minimist(process.argv.slice(2), OPTS);
+
+	// minimist unhelpfully treats numeric strings as numbers;
+	// which means we have to turn them back into strings.
+	args._ = args._.map(x => "" + x);
+
 	let command = args._[0];
 
 	const server_opts = {

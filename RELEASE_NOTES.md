@@ -1,3 +1,9 @@
+# 3.16.0
+* Upgrade all NPM dependencies.
+
+# 3.15.1
+* Avoid treating numeric-looking arguments as numbers.
+
 # 3.15.0
 
 * Reinstate preview link
