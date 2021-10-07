@@ -9,14 +9,12 @@
     "flourish"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "esbuild src/index.js --bundle --global-name=template --sourcemap --outfile=template.js",
     "less": "lessc --plugin=less-plugin-clean-css --source-map less/style.less static/style.css"
   },
   "dependencies": {
+    "esbuild": "^0.13.4",
     "less": "^3.0.1",
-    "less-plugin-clean-css": "^1.5.1",
-    "rollup": "^1.16.2",
-    "rollup-plugin-node-resolve": "^5.1.0",
-    "rollup-plugin-uglify": "^6.0.2"
+    "less-plugin-clean-css": "^1.5.1"
   }
 }
