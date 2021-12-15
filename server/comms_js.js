@@ -131,8 +131,6 @@ if (template && template.update && template.update.length != 0) {
 }
 `;
 
-module.exports = {
-	withOriginCheck: BEFORE + CHECK_ORIGIN + AFTER,
-	withoutOriginCheck: BEFORE + AFTER,
-	validate: VALIDATE,
-};
+exports.withOriginCheck = BEFORE + CHECK_ORIGIN + AFTER;
+exports.withoutOriginCheck = BEFORE + AFTER;
+exports.validate = VALIDATE;

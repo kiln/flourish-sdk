@@ -1,3 +1,7 @@
+# 3.17.0
+
+* Allow published visualisations to be cloned into the SDK
+
 # 3.16.0
 * Upgrade all NPM dependencies.
 

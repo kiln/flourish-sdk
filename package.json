@@ -1,11 +1,13 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.16.0",
+  "version": "3.17.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
     "prepare": "cd .. && make sdk_clean sdk",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "audit": "check-audit",
+    "audit:resolve": "resolve-audit"
   },
   "bin": {
     "flourish": "bin/flourish"
@@ -14,32 +16,37 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": "kiln/flourish-sdk",
   "dependencies": {
+    "@flourish/interpreter": "^6.0.3",
     "@flourish/semver": "^1.0.1",
+    "@flourish/transform-data": "^2.1.0",
     "@handlebars/allow-prototype-access": "^1.0.3",
+    "@rollup/plugin-commonjs": "^17.1.0",
     "archiver": "^5.0.2",
     "chokidar": "^3.4.3",
     "colors": "^1.4.0",
     "cross-spawn": "^7.0.3",
     "d3-dsv": "^2.0.0",
     "express": "^4.17.1",
+    "form-data": "^4.0.0",
     "handlebars": "^4.7.6",
     "js-yaml": "^3.14.0",
     "minimist": "^1.2.5",
     "ncp": "^2.0.0",
+    "node-fetch": "^2.6.6",
     "parse5": "^6.0.1",
     "read": "^1.0.7",
-    "request": "^2.88.2",
     "resolve": "^1.18.1",
     "rewrite-links": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "shell-quote": "^1.7.2",
     "tmp": "^0.2.1",
-    "ws": "^7.3.1"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^9.0.0",
     "d3-request": "^1.0.6",
-    "mocha": "^8.2.0",
+    "mocha": "^9.1.2",
+    "npm-audit-resolver": "^2.3.0",
     "rollup": "^2.32.1",
     "sinon": "^9.2.0",
     "tempy": "^1.0.0"

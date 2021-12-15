@@ -96,7 +96,7 @@ function loadJavaScript(template_dir) {
 }
 
 function loadSettings(template_dir) {
-	return sdk.readAndValidateConfig(template_dir);
+	return sdk.readAndValidateConfig(template_dir).then(({config}) => config);
 }
 
 function listDataTables(template_dir) {
@@ -123,10 +123,15 @@ function getData(template_dir, data_tables) {
 	return Promise.all(data_tables.map((data_table) => getDataTable(template_dir, data_table)))
 		.then((data_array) => {
 			const data_by_name = {};
+			const column_types_by_name = {};
 			for (var i = 0; i < data_tables.length; i++) {
 				data_by_name[data_tables[i]] = data_array[i];
 			}
-			return data_by_name;
+			for (const data_table in data_by_name) {
+				const data = data_by_name[data_table];
+				column_types_by_name[data_table] = data_utils.getColumnTypesForData(data);
+			}
+			return { data: data_by_name, column_types_by_name };
 		});
 }
 
@@ -141,7 +146,12 @@ function getDataTable(template_dir, data_table) {
 }
 
 function parseDataBindings(data_bindings, data_tables) {
-	if (!data_bindings) return {1: {}};
+	if (!data_bindings) {
+		return {
+			data_bindings: {1: {}},
+			template_data_bindings: {1: {}}
+		};
+	}
 
 	// Use the names as ids
 	const name_by_id = {};
@@ -149,14 +159,20 @@ function parseDataBindings(data_bindings, data_tables) {
 
 	// Collect parsed bindings by dataset
 	const data_bindings_by_dataset = {};
+	const template_data_bindings_by_dataset = {};
 	for (let binding of data_bindings) {
 		let dataset = binding.dataset;
 		if (!dataset) continue;
 
 		if (!data_bindings_by_dataset[dataset]) data_bindings_by_dataset[dataset] = {};
+		if (!template_data_bindings_by_dataset[dataset]) template_data_bindings_by_dataset[dataset] = {};
+		template_data_bindings_by_dataset[dataset][binding.key] = binding;
 		data_bindings_by_dataset[dataset][binding.key] = columns.parseDataBinding(binding, name_by_id);
 	}
-	return { 1: data_bindings_by_dataset };
+	return {
+		data_bindings: { 1: data_bindings_by_dataset },
+		template_data_bindings: { 1: template_data_bindings_by_dataset }
+	};
 }
 
 function documentFragment(elements) {
@@ -178,23 +194,24 @@ function scriptElementExternal(url) {
 }
 
 
-function loadTemplate(template_dir, sdk_template, build_failed) {
+function loadTemplate(template_dir, sdk_template, build_failed, options) {
 	return Promise.all([
 		listDataTables(template_dir),
 		loadSettings(template_dir),
 	])
 	.then(([data_tables, settings]) => {
-		const data_bindings = parseDataBindings(settings.data, data_tables);
+		const { data_bindings, template_data_bindings } = parseDataBindings(settings.data, data_tables);
 		return Promise.all([
 			settings, data_bindings, data_tables,
-			previewInitJs(template_dir, data_bindings["1"], data_tables),
+			previewInitJs(template_dir, template_data_bindings["1"], data_bindings["1"], data_tables),
 			loadTemplateText(template_dir),
-			loadJavaScript(template_dir)
+			loadJavaScript(template_dir),
+			getPublicUrlPrefix(options)
 		]);
 	})
 	.then(([
 		settings, data_bindings, data_tables,
-		preview_init_js, template_text, template_js
+		preview_init_js, template_text, template_js, public_url_prefix
 	]) => {
 		const page_params = {
 			// Always use ID of 1 for SDK
@@ -208,12 +225,13 @@ function loadTemplate(template_dir, sdk_template, build_failed) {
 			template_name: settings.name || "Untitled template",
 			template_version: settings.version,
 			template_author: settings.author || "",
-			build_failed: build_failed && build_failed.size > 0
+			build_failed: build_failed && build_failed.size > 0,
+			public_url_prefix
 		};
 
 		const script = documentFragment([
 			scriptElementInline("window.Flourish = " + json.safeStringify({
-				static_prefix, environment: "sdk"
+				static_prefix, environment: "sdk", is_read_only: false
 			}) + ";"),
 			scriptElementExternal("/template.js"),
 			scriptElementExternal("/comms.js"),
@@ -222,7 +240,7 @@ function loadTemplate(template_dir, sdk_template, build_failed) {
 
 		const preview_script = documentFragment([
 			scriptElementInline("window.Flourish = " + json.safeStringify({
-				static_prefix: preview_static_prefix, environment: "sdk"
+				static_prefix: preview_static_prefix, environment: "preview", is_read_only: true
 			}) + ";"),
 			scriptElementExternal("/template.js"),
 			scriptElementExternal("/comms.js"),
@@ -253,24 +271,31 @@ function loadTemplate(template_dir, sdk_template, build_failed) {
 	}));
 }
 
-function previewInitJs(template_dir, data_bindings, data_tables) {
-	return getData(template_dir, data_tables).then((data) => {
+function previewInitJs(template_dir, template_data_bindings, data_bindings, data_tables) {
+	return getData(template_dir, data_tables).then(({data, column_types_by_name}) => {
 		const prepared_data = {};
 		for (let dataset in data_bindings) {
-			prepared_data[dataset] = data_utils.extractData(data_bindings[dataset], data);
+			prepared_data[dataset] = data_utils.extractData(
+				data_bindings[dataset], data, column_types_by_name,
+				template_data_bindings[dataset],
+			);
 		}
 
 		const column_names = {};
+		const metadata = {};
 		for (let dataset in prepared_data) {
 			column_names[dataset] = prepared_data[dataset].column_names;
+			metadata[dataset] = prepared_data[dataset].metadata;
 		}
 
 		return `
 		var _Flourish_data_column_names = ${json.safeStringify(column_names)},
-		    _Flourish_data = ${json.safeStringify(prepared_data)};
+		    _Flourish_data_metadata = ${json.safeStringify(metadata)},
+		    _Flourish_data = ${json.javaScriptStringify(prepared_data)};
 		for (var _Flourish_dataset in _Flourish_data) {
 			window.template.data[_Flourish_dataset] = _Flourish_data[_Flourish_dataset];
 			window.template.data[_Flourish_dataset].column_names = _Flourish_data_column_names[_Flourish_dataset];
+			window.template.data[_Flourish_dataset].metadata = _Flourish_data_metadata[_Flourish_dataset];
 		}
 		window.template.draw();
 		`;
@@ -311,11 +336,16 @@ function splitPath(p) {
 	return p.split(path.sep).filter(c => c != "");
 }
 
+function getPublicUrlPrefix(options) {
+	return sdk.request(options, "config.json")
+		.then((config) => {
+			return config.PUBLIC_BUCKET_PREFIX;
+		});
+}
 
 module.exports = function(template_dir, options) {
 	let app = express(),
 	    reloadPreview,
-
 	    template;
 
 	// Editor and settings/bindings
@@ -426,7 +456,7 @@ module.exports = function(template_dir, options) {
 		function _reloadTemplate() {
 			reload_timer = null;
 			log.info("Reloading...");
-			loadTemplate(template_dir, sdk_template, build_failed)
+			loadTemplate(template_dir, sdk_template, build_failed, options)
 				.then((template_) => {
 					template = template_;
 					log.info("Template reloaded. Trying to reload preview.");
@@ -519,7 +549,7 @@ module.exports = function(template_dir, options) {
 	loadSDKTemplate()
 		.then((sdk_template) => {
 			return Promise.all([
-				sdk_template, loadTemplate(template_dir, sdk_template)
+				sdk_template, loadTemplate(template_dir, sdk_template, undefined, options)
 			]);
 		})
 		.then(([sdk_template, template]) => {

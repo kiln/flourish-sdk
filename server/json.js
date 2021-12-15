@@ -20,8 +20,33 @@ function safeStringify(obj) {
 	return raw.replace(/[\u2028\u2029<]/g, escapeChar);
 }
 
+function javaScriptStringify(v) {
+	var type = typeof v;
+	if (v == null) {
+		// Catches both null and undefined
+		return "null";
+	}
+	else if (type === "number" || type === "boolean" || type === "bigint" || type === "string" || type === "symbol") {
+		return safeStringify(v);
+	}
+	if (Array.isArray(v)) {
+		return "[" + v.map(javaScriptStringify).join(",") + "]";
+	}
+	else if (v instanceof Date) {
+		return "new Date(" + v.getTime() + ")";
+	}
+	else if (Object.prototype.toString.call(v) === "[object Object]") {
+		return "{" + Object.keys(v).map(function (k) {
+			return safeStringify(k) + ":" + javaScriptStringify(v[k]);
+		}) + "}";
+	}
+	else {
+		throw new Error("javaScriptStringify couldn't handle " + type + " object: " + v);
+	}
+}
+
 function stringifyDataset(dataset) {
-	return "(function(array, fields){ array.column_names = fields; return array; })(" + safeStringify(dataset) + ", " + safeStringify(dataset.column_names) + ")";
+	return "(function(array, column_names, metadata){ array.column_names = column_names; array.metadata = metadata; return array; })(" + javaScriptStringify(dataset) + ", " + safeStringify(dataset.column_names) + ", " + safeStringify(dataset.metadata) + ")";
 }
 
 function stringifyPreparedData(data) {
@@ -36,5 +61,6 @@ function stringifyPreparedData(data) {
 	return s;
 }
 
+exports.javaScriptStringify = javaScriptStringify;
 exports.safeStringify = safeStringify;
 exports.stringifyPreparedData = stringifyPreparedData;

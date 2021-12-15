@@ -50,8 +50,12 @@
 				<div id="visualisation" class="full-screen-ready">
 					<div id="visualisation-inner" class="editor-core">
 						<div class="preview-holder">
-							<img class="loading-spinner" src="/images/bosh.svg">
-							<iframe id="preview" sandbox="allow-same-origin allow-scripts allow-downloads" src="about:blank"></iframe>
+							<img class="loading-spinner" src="/images/bosh.svg" data-testid="loading-indicator">
+							<div class="preview-overlay">
+								<p class="empty-label"></p>
+								<p class="empty-details"></p>
+							</div>
+							<iframe id="preview" sandbox="allow-same-origin allow-scripts allow-downloads" src="about:blank" data-testid="visualisation-iframe"></iframe>
 							<div id="resize-overlay"></div>
 							<div id="resize-handle-container">
 								<div id="resize-handle"></div>
@@ -68,6 +72,7 @@
 					      </div>
 					      
 					      <div class="template-settings"></div>
+					      <div class="detailed-settings"></div>
 					  </div>
 					</div>
 				</div>
@@ -87,8 +92,8 @@
 	</div>
 
 	<script>
-		Flourish.initSDK({{{ visualisation_js }}}, {{{ settings }}}, {{{ data_bindings }}});
-		Flourish.app.preview_pane.loadTemplate();
+		const sdk = Flourish.initSDK({{{ visualisation_js }}}, {{{ settings }}}, {{{ data_bindings }}}, "{{ public_url_prefix }}");
+		Flourish.app.preview_pane.loadTemplate(() => sdk.loadFromUrlHash());
 		Flourish.talkToServer();
 	</script>
 </body>

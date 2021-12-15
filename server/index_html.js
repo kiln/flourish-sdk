@@ -8,7 +8,7 @@ const parse5 = require("parse5"),
 const TA = require("parse5/lib/tree-adapters/default.js");
 
 function findChild(node, nodeName, ok_if_not_found) {
-	for (let child of TA.getChildNodes(node)) {
+	for (const child of TA.getChildNodes(node)) {
 		if (child.nodeName == nodeName) return child;
 	}
 	if (ok_if_not_found) return null;
@@ -32,7 +32,7 @@ function replaceTitle(document, title) {
 	let title_node = findChild(head, "title", true);
 
 	if (title_node) {
-		for (let child of TA.getChildNodes(title_node)) {
+		for (const child of TA.getChildNodes(title_node)) {
 			TA.detachNode(child);
 		}
 	}
@@ -46,14 +46,24 @@ function replaceTitle(document, title) {
 
 function appendFragmentToBody(document, fragment) {
 	const body = findBody(document);
-	for (let child of TA.getChildNodes(fragment)) {
+	for (const child of TA.getChildNodes(fragment)) {
 		TA.appendChild(body, child);
 	}
 }
 
+function insertOembedLink(document, oembed_url) {
+	const head = findHead(document);
+	const link_node = TA.createElement("link", head.namespaceURI, [
+		{ name: "rel", value: "alternate" },
+		{ name: "type", value: "application/json+oembed" },
+		{ name: "href", value: oembed_url }
+	]);
+	TA.appendChild(head, link_node);
+}
+
 function insertCanonicalLink(document, canonical_url) {
 	const head = findHead(document);
-	let link_node = TA.createElement("link", head.namespaceURI, [
+	const link_node = TA.createElement("link", head.namespaceURI, [
 		{ name: "rel", value: "canonical" },
 		{ name: "href", value: canonical_url }
 	]);
@@ -69,7 +79,7 @@ function rewriteLinks(document, static_prefix) {
 		// ... or relative self-links
 		if (url == "" || url == ".") return url;
 
-		return URL.resolve(static_prefix, url);
+		return URL.resolve(static_prefix, url); // eslint-disable-line node/no-deprecated-api
 	});
 
 	return rewriter.rewriteDocument(document);
@@ -81,11 +91,10 @@ function render(template_text, params) {
 
 	replaceTitle(document, params.title);
 	if (params.canonical_url) insertCanonicalLink(document, params.canonical_url);
+	if (params.oembed_url) insertOembedLink(document, params.oembed_url);
 	appendFragmentToBody(document, script_fragment);
 	return rewriteLinks(document, params.static)
 		.then(parse5.serialize.bind(parse5));
 }
 
-module.exports = {
-	render
-};
+exports.render = render;

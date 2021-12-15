@@ -137,4 +137,13 @@ describe("readAndValidateConfig", () => {
 			`{}`
 		);
 	});
+
+	it(`should return an object containing "config" and "warnings" keys`, async function() {
+		const config = await this.tryReadConfig(
+			`id: "sample value"\nname: the name\nauthor: Mr Brock\nsdk_version: 3`,
+			`{"author": "Mr Brock", "name": "sample value"}`
+		);
+		const result = Object.keys(config).includes("config", "warnings");
+		assert.strictEqual(result, true);
+	});
 });

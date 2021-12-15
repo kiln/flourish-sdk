@@ -53,4 +53,4 @@ var _Flourish_talkToServer = (function () {
 
 	return talkToServer;
 
-}());
+})();

@@ -6,17 +6,41 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function parseColumn(col_spec) {
+const MAX_INTEGER = Math.pow(2, 31) - 1;
+const MAX_RANGE_LENGTH = Math.pow(2, 15);
+
+// Attempt to parse col_spec as a columns spec;
+// return true if we succeed, and false if not.
+function looksLikeMultipleColumns(col_spec) {
+	try {
+		parseColumns(col_spec);
+	}
+	catch (e) {
+		return false;
+	}
+	return true;
+}
+
+function parseColumn(col_spec, is_optional) {
 	col_spec = col_spec.toUpperCase();
 	if (!/^[A-Z]+$/.test(col_spec)) {
-		throw new Error("Invalid column spec: " + col_spec);
+		if (!col_spec) {
+			if (is_optional) return -1; // Use -1 for unassigned optional binding
+			else throw new Error("Non-optional data binding must specify column");
+		}
+		if (looksLikeMultipleColumns(col_spec)) {
+			throw new Error("You can only select one column");
+		}
+		else throw new Error("Invalid column specification: " + col_spec);
 	}
 
 	var col_ix = 0;
 	for (var i = 0; i < col_spec.length; i++) {
 		col_ix = col_ix * 26 + (col_spec.charCodeAt(i) - 64);
 	}
-	return col_ix - 1;
+
+	if (col_ix - 1 > MAX_INTEGER) console.warn("Column index out of range");
+	return Math.min(col_ix - 1, MAX_INTEGER);
 }
 
 function printColumn(col_ix) {
@@ -51,6 +75,11 @@ function parseRange(col_range) {
 	var incrementer = last_ix >= first_ix ? 1 : -1;
 	var n = Math.abs(last_ix - first_ix) + 1;
 
+	if (n > MAX_RANGE_LENGTH) {
+		console.warn("Truncating excessively long range");
+		n = MAX_RANGE_LENGTH;
+	}
+
 	for (var i = 0; i < n; i++) {
 		r.push(first_ix + i*incrementer);
 	}
@@ -83,18 +112,36 @@ function parseColumns(cols_spec) {
 }
 
 function splitIntoRanges(indexes) {
-	var ranges = [];
-	var start, end;
-	for (var i = 0; i < indexes.length; i++) {
-		if (i > 0 && indexes[i] == indexes[i-1] + 1) {
-			end = indexes[i];
-		}
-		else {
-			if (typeof start != "undefined") ranges.push([start, end]);
-			start = end = indexes[i];
-		}
+	if (!indexes.length) {
+		return [];
 	}
-	if (typeof start != "undefined") ranges.push([start, end]);
+	var ranges = [];
+	var start = indexes[0], end = indexes[0];
+	var direction = null;
+	for (var i = 0; i < indexes.length - 1; i++) {
+		var diff = indexes[i + 1] - indexes[i];
+		if (direction === null && Math.abs(diff) === 1) {
+			// It's a range with either ascending columns (direction=1), or descending
+			// columns (direction=-1)
+			end = indexes[i + 1];
+			direction = diff;
+			continue;
+		}
+
+		if (diff === direction) {
+			// The range is continuing in the same direction as before
+			end = indexes[i + 1];
+			continue;
+		}
+
+		// There's nothing more in the range, so add it, and start a new range from the
+		// next column
+		ranges.push([start, end]);
+		start = end = indexes[i + 1];
+		direction = null;
+	}
+	// There will always be a range which hasn't been added at the end
+	ranges.push([start, end]);
 	return ranges;
 }
 
@@ -124,7 +171,7 @@ function parseDataBinding(d, data_table_ids) {
 	r.data_table_id = data_table_ids[data_table_name];
 
 	var col_spec = d[d.type].substr(double_colon_ix + 2);
-	if (d.type == "column") r.column = parseColumn(col_spec);
+	if (d.type == "column") r.column = parseColumn(col_spec, d.optional);
 	else if (d.type == "columns") r.columns = parseColumns(col_spec);
 	else throw new Error("Unknown data binding type: " + d.type);
 

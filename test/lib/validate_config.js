@@ -438,11 +438,13 @@ describe("validate_config", function() {
 		});
 		it("should reject multiple columns", function() {
 			expectFailure(bindingPlus({ column: "Foo::A,B" }),
-				"Invalid column spec: A,B");
+				"You can only select one column");
 		});
-		it("should reject no columns", function() {
-			expectFailure(bindingPlus({ column: "Foo::" }),
-				"Invalid column spec: ");
+		it("should reject no columns if non-optional", function() {
+			expectFailure(bindingPlus({ column: "Foo::" }), "Non-optional data binding must specify column");
+		});
+		it("should accept no columns if optional", function() {
+			expectSuccess(bindingPlus({ column: "Foo::", optional: true }));
 		});
 
 		it("should reject a null column", function() {
@@ -862,7 +864,7 @@ describe("validate_config", function() {
 			it("should reject a reference to a data binding that has no key", function() {
 				const binding_undef_key = { name: "No-key binding", dataset: "dataset", key: undefined, type: "column", column: "Foo::A" };
 				expectFailure(settingPlus({ show_if: "data.dataset" }, { data: [ binding_undef_key ] }),
-					"template.yml: “show_if” or “hide_if” property specifies invalid data binding “data.dataset”");
+					"template.yml: “show_if” or “hide_if” property specifies invalid data binding or column type “data.dataset”");
 			});
 			it("should accept settings whose names start with /data./ [kiln/flourish-sdk#45]", function() {
 				const data_foo = { name: "Data foo", property: "data_foo", type: "string" };

@@ -6,6 +6,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+/* This file is used by the story player, and must be IE-compatible */
+
 function isObject(x) {
 	return !Array.isArray(x) && typeof x === "object" && x != null;
 }
