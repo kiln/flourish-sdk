@@ -1,5 +1,7 @@
-# 3.17.0
+# 3.17.1
+* Update version of @flourish/interpreter
 
+# 3.17.0
 * Allow published visualisations to be cloned into the SDK
 
 # 3.16.0

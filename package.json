@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.17.0",
+  "version": "3.17.1",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": "kiln/flourish-sdk",
   "dependencies": {
-    "@flourish/interpreter": "^6.0.3",
+    "@flourish/interpreter": "^6.0.4",
     "@flourish/semver": "^1.0.1",
     "@flourish/transform-data": "^2.1.0",
     "@handlebars/allow-prototype-access": "^1.0.3",
