@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.17.1",
+  "version": "3.17.2",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {

@@ -1,3 +1,6 @@
+# 3.17.2
+* Fixes an issue which could cause template publication to fail
+
 # 3.17.1
 * Update version of @flourish/interpreter
 
