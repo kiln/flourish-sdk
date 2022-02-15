@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.17.2",
+  "version": "3.17.3",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -23,7 +23,6 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "archiver": "^5.0.2",
     "chokidar": "^3.4.3",
-    "colors": "^1.4.0",
     "cross-spawn": "^7.0.3",
     "d3-dsv": "^2.0.0",
     "express": "^4.17.1",
@@ -32,8 +31,9 @@
     "js-yaml": "^3.14.0",
     "minimist": "^1.2.5",
     "ncp": "^2.0.0",
-    "node-fetch": "^2.6.6",
+    "node-fetch": "^2.6.7",
     "parse5": "^6.0.1",
+    "picocolors": "^1.0.0",
     "read": "^1.0.7",
     "resolve": "^1.18.1",
     "rewrite-links": "^1.1.0",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^9.0.0",
     "d3-request": "^1.0.6",
-    "mocha": "^9.1.2",
+    "mocha": "^9.2.0",
     "npm-audit-resolver": "^2.3.0",
     "rollup": "^2.32.1",
     "sinon": "^9.2.0",

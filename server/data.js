@@ -175,10 +175,41 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
 
 function getColumnTypesForData(data) {
 	return transposeNestedArray(data)
-		.map(function(d, i) {
-			const type_id = interpretColumn(d)[0].id;
+		.map(function(column, i) {
+			const sliced_column = getSlicedData(column);
+			const sample_size = 1000;
+			let sample_data;
+			if (sliced_column.length > (sample_size * 2)) sample_data = getRandomSeededSample(sliced_column, sample_size);
+			else sample_data = sliced_column;
+			const type_id = interpretColumn(sample_data)[0].id;
 			return { type_id: type_id, index: i, output_format_id: type_id };
 		});
+}
+
+// Returns a random seeded sample of column values based on the column length.
+// The sample is consistent and will update if the length of column changes.
+function getRandomSeededSample(column, sample_size) {
+	if (column.length <= sample_size * 2) return column;
+	const rng = mulberry32(column.length);
+
+	while (column.length > sample_size) {
+		const random_index = Math.floor(rng() * column.length);
+
+		column.splice(random_index, 1);
+	}
+
+	return column;
+}
+
+// Seeded RNG implementation taken from https://github.com/bryc/code/blob/master/jshash/PRNGs.md#mulberry32
+function mulberry32(seed) {
+	let a = seed;
+	return function() {
+		a |= 0; a = a + 0x6D2B79F5 | 0;
+		var t = Math.imul(a ^ a >>> 15, 1 | a);
+		t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+		return ((t ^ t >>> 14) >>> 0) / 4294967296;
+	};
 }
 
 function trimTrailingEmptyRows(data) {
@@ -194,9 +225,11 @@ function trimTrailingEmptyRows(data) {
 function dropReturnCharacters(data) {
 	for (const row of data) {
 		for (let i = 0; i < row.length; i++) {
-			// Replace new-line character and surrounding whitespace with single space
-			// This fixes issue with pasting cells containing long strings from Excel into HoT
-			row[i] = row[i].replace(/(\r\n|\n|\r)/g, " ");
+			// Due to a bug in HoT, pasting long lines from Excel can lead to the addition of
+			// a newline character and a space *before* a space character.
+			// This leads to a pattern of new line character followed by two spaces.
+			// Here we identify that pattern and revert it.
+			row[i] = row[i].replace(/(\r\n|\n|\r) {2}/g, " ");
 		}
 	}
 	return data;
@@ -262,8 +295,10 @@ function interpretColumn(arr) {
 exports.dropReturnCharacters = dropReturnCharacters;
 exports.extractData = extractData;
 exports.getColumnTypesForData = getColumnTypesForData;
+exports.getRandomSeededSample = getRandomSeededSample;
 exports.getSlicedData = getSlicedData;
 exports.interpretColumn = interpretColumn;
+exports.mulberry32 = mulberry32;
 exports.transposeNestedArray = transposeNestedArray;
 exports.trimTrailingEmptyRows = trimTrailingEmptyRows;
 exports.trimWhitespace = trimWhitespace;
