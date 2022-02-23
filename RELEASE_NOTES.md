@@ -1,3 +1,6 @@
+# 3.18.0
+* Support `tag` property in setting
+
 # 3.17.3
 * Use seeded random sample of column values to interpret columns
 

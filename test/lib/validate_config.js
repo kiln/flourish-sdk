@@ -916,11 +916,20 @@ describe("validate_config", function() {
 						"template.yml Setting import overrides must be an array"
 					);
 				});
-				it("should throw if an override is missing the 'property' property", function() {
+				it("should throw if an override is missing the 'property' or 'tag' property", function() {
 					expectFailure(
 						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{}] }]}),
-						`template.yml Setting import overrides must each specify overridden “property”`
+						`template.yml Setting import overrides must each specify overridden “property” or “tag”`
 					);
+				});
+				it("should throw if an override has both 'property' and 'tag' property", function () {
+					expectFailure(
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", tag: "categorical"}] }] }),
+						`template.yml Setting import overrides cannot contain both “property” and “tag” property`
+					);
+				});
+				it("should allow for an override to have 'tag' in place of 'property'", function () {
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{ tag: "categorical" }] }] }));
 				});
 				it("should allow for an override without a 'method' property", function() {
 					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color"}] }]}));
