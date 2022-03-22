@@ -18,7 +18,7 @@
 	<div class="row editor-bar">
 	<div id="preview-menu" class="row-menu left no-select">
 		
-		<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window">
+		<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window" aria-label="Full preview in new window">
 			<i class="fa fa-expand"></i>
 		</a>
 		<div id="editor-previews">
@@ -35,8 +35,8 @@
 				<i class="fa fa-cog"></i>
 			</span>
 			<span id="editor-custom-inputs">
-				<input id="editor-custom-width" type="number" min="100" data-target="custom" class="clickable selected"> x
-				<input id="editor-custom-height" type="number" min="100" data-target="custom" class="clickable selected" placeholder="auto">
+				<input id="editor-custom-width" type="number" min="100" data-target="custom" class="clickable selected" aria-label="Custom width"> x
+				<input id="editor-custom-height" type="number" min="100" data-target="custom" class="clickable selected" placeholder="auto" aria-label="Custom height">
 			</span>
 		</div>
 	</div>
@@ -50,12 +50,12 @@
 				<div id="visualisation" class="full-screen-ready">
 					<div id="visualisation-inner" class="editor-core">
 						<div class="preview-holder">
-							<img class="loading-spinner" src="/images/bosh.svg" data-testid="loading-indicator">
+							<img class="loading-spinner" src="/images/bosh.svg" data-testid="loading-indicator" alt="">
 							<div class="preview-overlay">
 								<p class="empty-label"></p>
 								<p class="empty-details"></p>
 							</div>
-							<iframe id="preview" sandbox="allow-same-origin allow-scripts allow-downloads" src="about:blank" data-testid="visualisation-iframe"></iframe>
+							<iframe id="preview" sandbox="allow-same-origin allow-scripts allow-downloads" src="about:blank" data-testid="visualisation-iframe" aria-label="Visualisation preview"></iframe>
 							<div id="resize-overlay"></div>
 							<div id="resize-handle-container">
 								<div id="resize-handle"></div>
@@ -73,6 +73,10 @@
 					      
 					      <div class="template-settings"></div>
 					      <div class="detailed-settings"></div>
+					      <div class="template-settings-search">
+					      	<i class="fa fa-search"></i>
+					      	<input type="search" placeholder="Search for setting" />
+					      </div>
 					  </div>
 					</div>
 				</div>

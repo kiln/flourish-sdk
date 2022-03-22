@@ -55,59 +55,48 @@ process.on("unhandledRejection", function(reason, p) {
 	throw reason;
 });
 
+const COMMANDS = [
+	"help",
+	"version",
+	"new",
+	"build",
+	"run",
+	"register",
+	"login",
+	"logout",
+	"whoami",
+	"assign-version-number",
+	"publish",
+	"delete",
+	"upgrade",
+	"list",
+	"history"
+];
+
 function main() {
 	const args = minimist(process.argv.slice(2), OPTS);
 
+	if (args._[0] === "is" && args._[1] === "the") {
+		return log.victory("Word!");
+	}
+
 	// minimist unhelpfully treats numeric strings as numbers;
 	// which means we have to turn them back into strings.
-	args._ = args._.map(x => "" + x);
+	args._ = args._.map(String);
 
-	let command = args._[0];
-
-	const server_opts = {
-		host: args.host,
-		user: args.user,
-		password: args.password,
-	};
-
+	let [command] = args._;
 	if (args.version) command = "version";
 	else if (args.help) command = "help";
 
-	switch (command) {
-		case "help":
-		case "version":
-
-		case "new":
-		case "build":
-		case "run":
-
-		case "register":
-		case "login":
-		case "logout":
-
-		case "whoami":
-
-		case "assign-version-number":
-		case "publish":
-		case "delete":
-		case "upgrade":
-		case "list":
-		case "history":
-			require("../lib/cmd/" + command)(args, server_opts);
-			break;
-
-		case "is":
-			if (args._[1] === "the") {
-				log.victory("Word!");
-				break;
-			}
-
-		default:
-			log.die("Unknown command '" + command + "'. Type 'flourish help' for help.");
-
-		case undefined:
-			log.die("No command specified. Type ‘flourish help’ for help.");
+	if (!command) {
+		return log.die("No command specified. Type ‘flourish help’ for help.");
 	}
+
+	if (!COMMANDS.includes(command)) {
+		return log.die(`Unknown command '${command}'. Type 'flourish help' for help.`);
+	}
+
+	require("../lib/cmd/" + command).command(args);
 }
 
 main();

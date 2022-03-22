@@ -1,3 +1,9 @@
+# 3.19.0
+* Add the `is_premium` top level property in template.yml to indicate that this is a premium template
+
+# 3.18.1
+* Addresses some technical debt.
+
 # 3.18.0
 * Support `tag` property in setting
 

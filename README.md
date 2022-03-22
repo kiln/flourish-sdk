@@ -52,6 +52,7 @@ The main Flourish configuration file for your template. The top-level properties
 * `credits` Optional credits for data sources, map tiles, etc, in Markdown format
 * `image_download` Flag to indicate whether image snapshots work for the template (default is `true`)
 * `svg_download` Flag to indicate whether downloading a snapshot of template as SVG will work (default is `true`)
+* `is_premium` Flag to indicate that this is a premium template, meaning only particular feature bundles give access to it (default is `false`)
 
 Other properties are [settings](#settings), [data](#data), [build](#build), and [tour](#tour), which are described below.
 

@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "3.18.0",
+  "version": "3.19.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "audit:resolve": "resolve-audit"
   },
   "bin": {
-    "flourish": "bin/flourish"
+    "flourish": "bin/flourish.js"
   },
   "author": "Kiln Enterprises Ltd",
   "license": "SEE LICENSE IN LICENSE.md",
