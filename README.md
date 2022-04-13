@@ -168,6 +168,22 @@ document.body.style.fontFamily = state.body_font.url;
 #### `hidden`
 This type is for documenting state properties which should not be editable from the settings panel in the visualisation editor. Any property with a `hidden` type will not be editable within the visualisation editor interface.
 
+#### Text editor settings
+For `html` type settings, text editing functionality will automatically be added, such as making text bold or italic, adding a link, or referring to column headers from the data. You can add the `editor` property to override which editor functionalities to show. It accepts an object like this:
+
+```yaml
+- property: popup_text
+  name: Popup text
+  type: html
+  editor: # An object specifying the different text editor functions (omitting `editor` will only load style, url and flourish_embed settings)
+    style: true # bold/italic/title buttons
+    url: true # "Add a link" button
+    flourish_embed: true # Add flourish iframe
+    bindings: [ data.name, data.values ] # Adds buttons for column headers from dataset. Use `true` to add all data bindings
+    bindings_custom: # A list of custom bindings that don't appear in the columns (e.g. {{VALUE}} for dynamic values)
+      - ["Current value", "VALUE"] # The first item in array is display label, the second item is what is added to the text
+```
+
 #### Conditional settings
 Sometimes you might want to simplify the user experience for Flourish users by hiding some settings depending on whether they are needed or not. You can use the `show_if` and `hide_if` properties to control whether or not a setting should be displayed based on another setting’s value.
 

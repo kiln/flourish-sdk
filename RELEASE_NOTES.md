@@ -1,3 +1,6 @@
+# 3.20.0
+* Add the `html` setting type, which gives you a rich text editor for a settings value
+
 # 3.19.0
 * Add the `is_premium` top level property in template.yml to indicate that this is a premium template
 
