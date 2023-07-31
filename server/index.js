@@ -25,7 +25,7 @@ const crypto = require("crypto"),
 const { allowInsecurePrototypeAccess } = require("@handlebars/allow-prototype-access");
 const handlebars = allowInsecurePrototypeAccess(require("handlebars"));
 
-const TA = require("parse5/lib/tree-adapters/default.js");
+const { defaultTreeAdapter: TA } = require("parse5");
 
 // Generate a static prefix randomly
 //

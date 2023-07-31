@@ -1,7 +1,7 @@
+"use strict";
 const BEFORE = `
 window.addEventListener("message", function(event) {
 `;
-
 const CHECK_ORIGIN = `
 	var a = document.createElement("a");
 	a.href = event.origin;
@@ -12,8 +12,9 @@ const CHECK_ORIGIN = `
 		|| (a.hostname.match(/\\.flourish\\.rocks$/) && window.location.hostname.match(/\\.flourish\\.rocks$/))
 		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/))
 		|| (a.hostname == "app.flourish.studio" && window.location.hostname == "flourish-user-templates.com")
+		|| (a.hostname == "flourish-user-preview.com" && window.location.hostname == "flourish-user-templates.com")
 		|| (${"" /* Cope with previously-published stories, that are still on the old domain,
-			     that have been republished (hence rerendered to use the new template URLs) */}
+         that have been republished (hence rerendered to use the new template URLs) */}
 			(a.hostname == "public.flourish.studio" && window.location.hostname == "flo.uri.sh")
 			|| (a.hostname == "public.flourish.rocks" && window.location.hostname == "staging-flo.uri.sh")
 			|| (a.hostname == "public.dev.flourish.rocks" && window.location.hostname == "dev-flo.uri.sh")
@@ -21,7 +22,6 @@ const CHECK_ORIGIN = `
 
 	if (!origin_okay) return;
 `;
-
 const AFTER = `
 	var message = event.data;
 	var port = event.ports[0];
@@ -122,7 +122,6 @@ const AFTER = `
 	}
 }, false);
 `;
-
 const VALIDATE = `
 if (template && template.draw && template.draw.length != 0) {
 	console.warn("The draw() function should be declared with no parameters");
@@ -131,7 +130,7 @@ if (template && template.update && template.update.length != 0) {
 	console.warn("The update() function should be declared with no parameters");
 }
 `;
-
 exports.withOriginCheck = BEFORE + CHECK_ORIGIN + AFTER;
 exports.withoutOriginCheck = BEFORE + AFTER;
 exports.validate = VALIDATE;
+//# sourceMappingURL=comms_js.js.map

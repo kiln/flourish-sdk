@@ -1,3 +1,16 @@
+# 4.1.0
+* Allow SDK CLI token based authentication.
+
+# 4.0.0
+* This is purely a Node.js compatibility break; it’s a major version change, because the SDK is
+  no longer compatible with old versions of Node.js: it now requires at least version 13.2.
+  There are no functional changes in this release.
+
+# 3.20.1
+* Use version 1.7.3 of the shell-quote package, to avoid a security issue that doesn’t
+  really affect us in this context, but could trigger spurious security warnings
+  (https://snyk.io/test/npm/shell-quote/1.6.1)
+
 # 3.20.0
 * Add the `html` setting type, which gives you a rich text editor for a settings value
 

@@ -3,13 +3,25 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-	<title>Flourish | Data Visualisation &amp; Storytelling</title>
+
+	<script type="text/javascript">
+		function OptanonWrapper() {
+			OneTrust.OnConsentChanged(() => {
+				document.cookie = `OptanonAlertBoxClosed=${new Date().toISOString()};`
+					+ "SameSite=None;"
+					+ "Secure;"
+					+ `expires=${new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString()};`;
+			});
+		}
+	</script>
+
+	<title>Flourish | Data Visualization &amp; Storytelling</title>
 
 	<script>if ("ontouchstart" in window) { document.documentElement.classList.add("is-touch"); }</script>
 
 
 	<link rel="stylesheet" type="text/css" href="/sdk.css">
-	<script src="/script.js" charset="utf-8"></script>
+	<script data-ot-ignore src="/script.js" charset="utf-8"></script>
 </head>
 <body class="sdk">
 	<div class="row header no-select" style="padding-left:10px">
@@ -17,10 +29,9 @@
 	</div>
 	<div class="row editor-bar">
 	<div id="preview-menu" class="row-menu left no-select">
-		
-		<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window" aria-label="Full preview in new window">
-			<i class="fa fa-expand"></i>
-		</a>
+			<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window" aria-label="Full preview in new window">
+				<i class="fa fa-expand"></i>
+			</a>
 		<div id="editor-previews">
 			<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable selected popup" data-popup-head="Preview using available width">
 				<i class="fa fa-tv"></i>
@@ -55,7 +66,7 @@
 								<p class="empty-label"></p>
 								<p class="empty-details"></p>
 							</div>
-							<iframe id="preview" sandbox="allow-same-origin allow-scripts allow-downloads" src="about:blank" data-testid="visualisation-iframe" aria-label="Visualisation preview"></iframe>
+							<iframe id="preview" sandbox="allow-same-origin allow-scripts allow-downloads" src="about:blank" data-testid="visualisation-iframe" aria-label="Visualization preview"></iframe>
 							<div id="resize-overlay"></div>
 							<div id="resize-handle-container">
 								<div id="resize-handle"></div>

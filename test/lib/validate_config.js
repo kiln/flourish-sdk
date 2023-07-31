@@ -2,15 +2,15 @@ const assert = require("assert"),
       fs = require("fs"),
       nodeResolve = require("resolve"),
       path = require("path"),
-      sinon = require("sinon"),
-      tempy = require("tempy");
+      sinon = require("sinon");
 
 const validateConfig = require("../../lib/validate_config");
 
 describe("validate_config", function() {
 	let temp_directory;
-	before(function() {
-		temp_directory = tempy.directory();
+	before(async function() {
+		const { temporaryDirectory } = await import("tempy");
+		temp_directory = temporaryDirectory();
 		fs.mkdirSync(path.join(temp_directory, "data"));
 		fs.openSync(path.join(temp_directory, "data", "Foo.csv"), "w");
 	});

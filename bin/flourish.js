@@ -20,6 +20,9 @@ const OPTS = {
 
 		// Only relevant for admin users
 		"as",
+
+		// Login option
+		"token",
 	],
 
 	default: {

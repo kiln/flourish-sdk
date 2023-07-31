@@ -6,11 +6,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var createInterpreter = require('@flourish/interpreter');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var createInterpreter__default = /*#__PURE__*/_interopDefaultLegacy(createInterpreter);
+var interpreter$1 = require('@flourish/interpreter');
 
 // Polyfills for IE11 and Edge
 
@@ -61,7 +57,7 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
 
 	function getInterpreter(data_table_id, column_index) {
 		const { type_id } = getInterpretationIds(data_table_id, column_index);
-		if (type_id) return createInterpreter__default["default"].getInterpretation(type_id);
+		if (type_id) return interpreter$1.createInterpreter.getInterpretation(type_id);
 	}
 
 	for (var data_table_id in column_types_by_id) {
@@ -143,6 +139,7 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
 	function parse(b, column_index, string_value) {
 		if (!b.template_data_binding.data_type) return string_value;
 		var interpreter = getInterpreter(b.data_table_id, column_index);
+		if (interpreter && interpreter.type == "number") string_value = stripCommonFixes(string_value);
 		var result = interpreter ? interpreter.parse(string_value) : string_value;
 
 		// We require our marshalled data to be JSON-serialisable,
@@ -246,7 +243,7 @@ function trimWhitespace(data) {
 
 
 var ERROR_STRINGS = ["#DIV/0", "#N/A", "#NAME?", "#NULL!", "#NUM!", "#REF!", "#VALUE!", "#ERROR!"];
-var interpreter = createInterpreter__default["default"]().nMax(Infinity).nFailingValues(8).failureFraction(0.1);
+var interpreter = interpreter$1.createInterpreter().nMax(Infinity).nFailingValues(8).failureFraction(0.1);
 
 
 function stripCommonFixes(str) {
@@ -257,7 +254,7 @@ function stripCommonFixes(str) {
 
 function transposeNestedArray(nested_array) {
 	var n_inner = nested_array.length;
-	var n_outer = nested_array[0].length;
+	var n_outer = n_inner > 0 ? nested_array[0].length : 0;
 	var transposed_array = [];
 
 	for (var i = 0; i < n_outer; i++) {
@@ -299,6 +296,7 @@ exports.getRandomSeededSample = getRandomSeededSample;
 exports.getSlicedData = getSlicedData;
 exports.interpretColumn = interpretColumn;
 exports.mulberry32 = mulberry32;
+exports.stripCommonFixes = stripCommonFixes;
 exports.transposeNestedArray = transposeNestedArray;
 exports.trimTrailingEmptyRows = trimTrailingEmptyRows;
 exports.trimWhitespace = trimWhitespace;

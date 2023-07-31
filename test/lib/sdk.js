@@ -1,16 +1,16 @@
 const assert = require("assert"),
       fs = require("fs"),
-      path = require("path"),
-      tempy = require("tempy");
+      path = require("path");
 
 const { readConfig, readAndValidateConfig } = require("../../lib/sdk.js");
 
 
 describe("readConfig", () => {
-	before(function() {
+	before(async function() {
+		const { temporaryDirectory } = await import("tempy");
 		this.temporary_directories_created = [];
 		this.tryReadConfig = function(template_yaml_string, package_json_string) {
-			const d = tempy.directory();
+			const d = temporaryDirectory();
 			this.temporary_directories_created.push(d);
 			fs.writeFileSync(path.join(d, "template.yml"), template_yaml_string);
 			fs.writeFileSync(path.join(d, "package.json"), package_json_string);
@@ -63,10 +63,11 @@ describe("readConfig", () => {
 });
 
 describe("readAndValidateConfig", () => {
-	before(function() {
+	before(async function() {
+		const { temporaryDirectory } = await import("tempy");
 		this.temporary_directories_created = [];
 		this.tryReadConfig = function(template_yaml_string, package_json_string) {
-			const d = tempy.directory();
+			const d = temporaryDirectory();
 			this.temporary_directories_created.push(d);
 			fs.writeFileSync(path.join(d, "template.yml"), template_yaml_string);
 			fs.writeFileSync(path.join(d, "package.json"), package_json_string);

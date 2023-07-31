@@ -487,3 +487,24 @@ Called whenever the user changes a data table or setting in the visualisation ed
 An object into which Flourish will put the data from user-editable data tables. Usually your code will initialise `data` as an empty object `{}`, and read from it in the `draw()` and `update()` functions.
 
 Each property is a `dataset`: an array containing an object for each row in the relevant data table. The structure of each `dataset` is defined in the [data bindings of the `template.yml`](#data-bindings), and the data is loaded from the tables in the [`data/`](#data) directory.
+
+### `.screenshot(opts, takeScreenshot)`
+Called whenever the user has clicked "Download image" in the visualisation editor. This function gets called just before the image is downloaded and allows you to prepare the visualisation to be downloaded as an image. This is useful for example for disabling a template's animation, or converting HTML elements to SVG elements for SVG export.
+
+The method has 2 arguments:
+- `opts` – an object with information about the image to be downloaded
+```js
+{
+  download: true
+  filename: ""
+  format: "png" // can be png, svg or jpeg
+  height: "575"
+  scale: 1
+  width: "796"
+}
+```
+- `takeScreenshot` – the Flourish screenshot function. This can be called after you've made amendments to your visualisation. Returns a promise which gets fired when the screenshot is finished, the callback takes two arguments for when the screenshot has succeeded or failed respectively, which can be used to undo any changes you made for the screenshot.
+
+```js
+takeScreenshot().then(onSuccess, onFail)
+```
