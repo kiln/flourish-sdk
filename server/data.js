@@ -232,12 +232,37 @@ function dropReturnCharacters(data) {
 	return data;
 }
 
-function trimWhitespace(data) {
-	data.forEach(function(row) {
-		for (var i=0; i < row.length; i++) {
-			if (row[i] && typeof row[i] == "string") row[i] = row[i].trim();
+/**
+ * Takes an array of arrays (typically tabular data) and rewrites
+ * it so that:
+ *   - Any trailing empty rows are removed
+ *   - Any cell that was not a string is stringified
+ *   - Any leading or trailing whitespace of a cell is removed
+ *
+ * (The potentially modified table is returned to match the convention
+ * used by functions this is replacing, although (TODO) I think it
+ * would be more obvious that this function has side-effects if it
+ * did not return the table and the calling code was changed.)
+ *
+ * @param {any[][]} data
+ * @returns {string[][]}
+ */
+function tidyTable(data) {
+	trimTrailingEmptyRows(data);
+	for (let row of data) {
+		for (let i = 0; i < row.length; i++) {
+			let value = row[i];
+			// Convert null or undefined values to the empty string
+			if (value == null) value = "";
+			// If the value is not a string, convert it to one
+			if (typeof value !== "string") {
+				value = "" + value;
+			}
+			// Now value is a definitely a string, strip any leading
+			// or trailing whitespace.
+			row[i] = value.trim();
 		}
-	});
+	}
 	return data;
 }
 
@@ -297,6 +322,6 @@ exports.getSlicedData = getSlicedData;
 exports.interpretColumn = interpretColumn;
 exports.mulberry32 = mulberry32;
 exports.stripCommonFixes = stripCommonFixes;
+exports.tidyTable = tidyTable;
 exports.transposeNestedArray = transposeNestedArray;
 exports.trimTrailingEmptyRows = trimTrailingEmptyRows;
-exports.trimWhitespace = trimWhitespace;

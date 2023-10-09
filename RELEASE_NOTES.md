@@ -1,3 +1,6 @@
+# 4.1.1
+* Fixes the reporting of server errors by the CLI
+
 # 4.1.0
 * Allow SDK CLI token based authentication.
 
