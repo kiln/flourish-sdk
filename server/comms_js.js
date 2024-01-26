@@ -12,6 +12,7 @@ const CHECK_ORIGIN = `
 		|| (a.hostname.match(/\\.flourish\\.rocks$/) && window.location.hostname.match(/\\.flourish\\.rocks$/))
 		|| (a.hostname.match(/\\.flourish\\.studio$/) && window.location.hostname.match(/\\.flourish\\.studio$/))
 		|| (a.hostname == "app.flourish.studio" && window.location.hostname == "flourish-user-templates.com")
+		|| (a.hostname == "app.flourish.studio" && window.location.hostname == "flourish-user-preview.com")
 		|| (a.hostname == "flourish-user-preview.com" && window.location.hostname == "flourish-user-templates.com")
 		|| (${"" /* Cope with previously-published stories, that are still on the old domain,
          that have been republished (hence rerendered to use the new template URLs) */}

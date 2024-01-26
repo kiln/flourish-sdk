@@ -1,0 +1,8 @@
+{
+    "name": "@flourish/common",
+    "description": "Common shared utilities",
+    "dependencies": {
+        "@flourish/interpreter": "^8.4.0",
+        "@adobe/css-tools": "^4.3.1"
+    }
+}

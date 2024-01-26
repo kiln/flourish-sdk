@@ -1,3 +1,6 @@
+# 4.2.0
+* Add support for OR conditions in `show_if` and `hide_if`
+
 # 4.1.1
 * Fixes the reporting of server errors by the CLI
 

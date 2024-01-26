@@ -821,14 +821,57 @@ describe("validate_config", function() {
 				expectFailure(settingPlus({ show_if: false }),
 					"template.yml setting “foo” has a “show_if” value that is not a string or object");
 			});
-			it("should permit arrays", function() {
+			it("should forbid empty arrays", function() {
 				expectFailure(settingPlus({ show_if: [] }),
-					"template.yml setting “foo” has a “show_if” value that is not a string or object");
+					"template.yml setting “foo” “show_if” property must specify a setting to test against");
 			});
+
+			it("should accept an array containing an object with multiple string values", function() {
+				const blah = { name: "Blah", property: "blah", type: "string" };
+				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }]}, undefined, [blah]));
+			});
+
+			it("should accept an array containing an object with multiple array values", function() {
+				const blah = { name: "Blah", property: "blah", type: "string" };
+				expectSuccess(settingPlus({ show_if: [ { "bar": ["xxx"], "blah": ["xxx"] }]}, undefined, [blah]));
+			});
+
+			it("should reject an array containing any objects with empty array values", function() {
+				const blah = { name: "Blah", property: "blah", type: "string" };
+				expectFailure(settingPlus({ show_if: [ { "bar": [], "blah": "xxx" }]}, undefined, [blah]),
+					"template.yml setting “foo” “show_if” property: condition for bar is empty");
+			});
+
+			it("should reject an array containing any objects referring to non-existent settings", function() {
+				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "baz": "xxx" }]}),
+					"template.yml: “show_if” or “hide_if” property refers to non-existent setting “baz”");
+			});
+
+			it("should accept an array containing an object with a string value and a valid data binding", function() {
+				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }]}, { data: [ binding ] }));
+			});
+
+			it("should reject an array with a data reference when there are no data bindings", function() {
+				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }]}),
+					"template.yml: “show_if” or “hide_if” property refers to data binding “data.dataset.key” when none are defined");
+			});
+
+			it("should reject an array with a reference to a non-existent data binding", function() {
+				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.nosuchkey": true }]}, { data: [ binding ] }),
+					"template.yml: “show_if” or “hide_if” property refers to non-existent data binding “data.dataset.nosuchkey”");
+			});
+
+			it("should accept an array containing multiple objects of including string and boolean values", function() {
+				const blah = { name: "Blah", property: "blah", type: "string" };
+				const bool = { name: "Bool", property: "bool", type: "boolean" };
+				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }, { "bool": true }]}, undefined, [blah, bool]));
+			});
+
 			it("should forbid empty objects", function() {
 				expectFailure(settingPlus({ show_if: {} }),
 					"template.yml setting “foo” “show_if” property must specify a setting to test against");
 			});
+
 			it("should accept an object with a string value", function() {
 				expectSuccess(settingPlus({ show_if: { "bar": "xxx" } }));
 			});

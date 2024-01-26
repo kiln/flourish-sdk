@@ -214,12 +214,23 @@ show_if:
   color_mode: [diverging, continuous]
 ```
 
-You can specify multiple conditions. All of these tests must pass for the setting to be displayed. For example:
+You can specify multiple conditions. Where _all_ conditions should pass for the setting to be displayed, use an object syntax. For example, the setting below will be shown if `show_x_axis` is enabled **AND** `color_mode` is set to "diverging".
 
 ```yaml
 show_if:
   show_x_axis: true
   color_mode: diverging
+```
+
+Where _any_ one combination of conditions should pass for the setting to be displayed, use an array syntax where conditions **within** an array (elements separated with `-`) operate as **OR** and conditions within an object still operate as **AND**.
+
+For example, the setting below will be shown if `chart_mode` is "line", **OR** if `chart_mode` is "bar" **AND** the "labels" data binding contains numeric data.
+
+```yaml
+show_if:
+  - chart_mode: line
+  - chart_mode: bar
+    data.data.labels.type: numeric
 ```
 
 The `hide_if` option works in exactly the same way, except that the setting is hidden if the conditional test passes.
@@ -245,7 +256,7 @@ The `template.yml` file may also include a `data` section. This section consists
 
 Once your template is published, Flourish users can change the data in the Flourish editor, and also change which columns are linked to each binding. But in your code you don’t need to worry about this because you just refer to the `key` rather than referencing the column header or index.
 
-There are two types of data binding: `column` is used when the number of columns is and must always be one; `columns` supports any number of columns, including none. 
+There are two types of data binding: `column` is used when the number of columns is and must always be one; `columns` supports any number of columns, including none.
 
 A default value must be supplied for each data binding, unless you have specified `optional: true` (only supported for single `column` bindings). The example below shows how this is done.
 
@@ -266,7 +277,7 @@ data:
   key: values
   type: columns # This binding can take any number of columns
   columns: By Decade::B-D,F # The default values are arrays drawing from columns B-D and F of `By Decade.csv`
-- name: Flag image 
+- name: Flag image
   dataset: country_scores
   key: flag_pic
   type: column

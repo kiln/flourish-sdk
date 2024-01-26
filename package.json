@@ -1,13 +1,11 @@
 {
   "name": "@flourish/sdk",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
     "prepare": "cd .. && make sdk_clean sdk",
-    "test": "mocha --recursive",
-    "audit": "check-audit",
-    "audit:resolve": "resolve-audit"
+    "test": "mocha --recursive"
   },
   "bin": {
     "flourish": "bin/flourish.js"
@@ -16,7 +14,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": "kiln/flourish-sdk",
   "dependencies": {
-    "@flourish/interpreter": "^8.4.0",
+    "@flourish/interpreter": "^8.5.0",
     "@flourish/semver": "^1.0.1",
     "@flourish/transform-data": "^2.1.0",
     "@handlebars/allow-prototype-access": "^1.0.3",
@@ -46,7 +44,6 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "d3-request": "^1.0.6",
     "mocha": "^10.0.0",
-    "npm-audit-resolver": "^3.0.0-7",
     "rollup": "^2.32.1",
     "sinon": "^9.2.0",
     "tempy": "^3.0.0"
