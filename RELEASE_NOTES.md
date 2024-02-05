@@ -1,3 +1,6 @@
+# 4.2.1
+* Fix bug with OR conditions for imported module settings
+
 # 4.2.0
 * Add support for OR conditions in `show_if` and `hide_if`
 
