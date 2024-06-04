@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "common/*": ["../common/*"],
+    }
+  },
+  "references": [
+    { "path": "../common/tsconfig.sdk.json" }
+  ]
+}

@@ -1,3 +1,7 @@
+# 5.0.0
+* Add automatic SDK local settings restore on template reload
+* Upgrade node-fetch dependency to avoid annoying deprecation warning. #91
+
 # 4.2.1
 * Fix bug with OR conditions for imported module settings
 

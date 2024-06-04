@@ -447,12 +447,25 @@ Builds the template and runs the SDK viewer in your web browser. If `dir_name` i
 
 While it’s running it watches the template directory for changes:
 * if you edit any static template files (`index.html`, `template.yml`, `data/*`, `static/*`) the SDK will refresh the page in the browser;
-* if you edit a file that is the source for a [build rule](#build-configuration), the SDK will run that build rule and then refresh the page.
+* if you edit a file that is the source for a [build rule](#build-configuration), the SDK will run that build rule and then refresh the page;
+* when the page has been refreshed, your previously applied settings in the same tab will be automatically restored (see below for more details).
 
 Options:
 * `--open` or `-o` Try to open the SDK in your web browser once the server is running. At present this only works on macOS.
 * `--port` Specify a particular port; defaults to [1685](https://en.wikipedia.org/wiki/Johann_Sebastian_Bach)
 * `--no-build` Skip the build process
+
+### Settings restore and reset
+
+Your previously applied settings in your SDK browser tab will be automatically restored by the SDK on each page refresh (from version `5.0.0`). 
+
+Template settings when using the SDK are therefore:
+
+- stored locally in your browser's session storage per window
+- are restored on page load before the template `draw` call
+- do not include restore of template state other than settings
+
+You can click the "Reset" button on the top right hand side of the SDK interface to refresh the tab and start from template default settings, or alternatively you can close and open a new SDK browser tab.
 
 ### Publish a template
 ```sh

@@ -13,11 +13,11 @@ const crypto = require("crypto"),
       ws = require("ws"),
       yaml = require("js-yaml"),
 
-      columns = require("./columns"),
+      columns = require("../common/utils/columns"),
       comms_js = require("./comms_js"),
-      data_utils = require("./data"),
+      data_utils = require("../common/utils/data"),
       index_html = require("./index_html"),
-      json = require("./json"),
+      json = require("../common/utils/json"),
 
       log = require("../lib/log"),
       sdk = require("../lib/sdk");
@@ -66,7 +66,7 @@ function loadFile(path_parts, options) {
 					}
 
 				case "yaml":
-					try { return succeed(yaml.safeLoad(loaded_text)); }
+					try { return succeed(yaml.load(loaded_text)); }
 					catch (error) {
 						return fail(`Uh-oh! There's a problem with your ${filename} file.`, error);
 					}
@@ -219,6 +219,7 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 			visualisation_js: "new Flourish.Visualisation('1', 0," + json.safeStringify({
 				data_bindings: data_bindings,
 				data_tables: data_tables,
+				template_store_key: settings.name.toLowerCase().replace(" ", "") + "@" + settings.version
 			}) + ")",
 			settings: json.safeStringify(settings.settings || []),
 			data_bindings: json.safeStringify(settings.data || []),

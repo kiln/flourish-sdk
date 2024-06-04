@@ -1,0 +1,9 @@
+{
+    "name": "@flourish/common",
+    "description": "Common shared utilities",
+    "dependencies": {
+        "@adobe/css-tools": "^4.3.3",
+        "@flourish/interpreter": "^8.4.0",
+        "dompurify": "^3.1.4"
+    }
+}

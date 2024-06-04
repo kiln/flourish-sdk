@@ -1,0 +1,25 @@
+export default initEmbedding;
+declare function initEmbedding(): {
+    createEmbedIframe: typeof createEmbedIframe;
+    isFixedHeight: typeof isFixedHeight;
+    getHeightForBreakpoint: typeof getHeightForBreakpoint;
+    startEventListeners: typeof startEventListeners;
+    notifyParentWindow: typeof notifyParentWindow;
+    initScrolly: typeof initScrolly;
+    createScrolly: typeof createScrolly;
+    isSafari: typeof isSafari;
+    initCustomerAnalytics: typeof initCustomerAnalytics;
+    addAnalyticsListener: typeof addAnalyticsListener;
+    sendCustomerAnalyticsMessage: typeof sendCustomerAnalyticsMessage;
+};
+declare function createEmbedIframe(embed_url: any, container: any, width: any, height: any, play_on_load: any): any;
+declare function isFixedHeight(): any;
+declare function getHeightForBreakpoint(width: any): 650 | 575 | 400;
+declare function startEventListeners(callback: any, allowed_methods: any, embed_domain: any): void;
+declare function notifyParentWindow(height: any, opts: any): void;
+declare function initScrolly(opts: any): void;
+declare function createScrolly(iframe: any, captions: any): void;
+declare function isSafari(): boolean;
+import { initCustomerAnalytics } from "./customer_analytics";
+import { addAnalyticsListener } from "./customer_analytics";
+import { sendCustomerAnalyticsMessage } from "./customer_analytics";
