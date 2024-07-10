@@ -1,3 +1,7 @@
+# 5.1.0
+* Revoke SDK token on logout
+  this improves on the previous behaviour where logging out would only purge tokens locally.
+
 # 5.0.0
 * Add automatic SDK local settings restore on template reload
 * Upgrade node-fetch dependency to avoid annoying deprecation warning. #91

@@ -1,11 +1,16 @@
 "use strict";
 /* This file is used by the story player, and must be IE-compatible */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStateChanges = exports.deepEqual = exports.deepCopyObject = exports.merge = exports.unflatten = exports.flatten = exports.isObject = void 0;
+exports.isObject = isObject;
+exports.flatten = flatten;
+exports.unflatten = unflatten;
+exports.merge = merge;
+exports.deepCopyObject = deepCopyObject;
+exports.deepEqual = deepEqual;
+exports.getStateChanges = getStateChanges;
 function isObject(x) {
     return !Array.isArray(x) && typeof x === "object" && x != null;
 }
-exports.isObject = isObject;
 /* Example: { a: { b: { c: 2, d: 3 } } } ↦
    {
     "a": { b: { c: 2, d: 3 }  },
@@ -29,7 +34,6 @@ function flatten(o, keys, result) {
     }
     return result;
 }
-exports.flatten = flatten;
 // { "a.b.c": 2, "a.b.d":3 } → { a: { b: { c: 2, d: 3 } } }
 function unflatten(o) {
     var r = {};
@@ -45,7 +49,6 @@ function unflatten(o) {
     }
     return r;
 }
-exports.unflatten = unflatten;
 function merge(dest, source) {
     for (var prop in source) {
         if (isObject(dest[prop]) && isObject(source[prop])) {
@@ -57,7 +60,6 @@ function merge(dest, source) {
     }
     return dest;
 }
-exports.merge = merge;
 function deepCopyObject(obj) {
     if (obj == null)
         return obj;
@@ -75,7 +77,6 @@ function deepCopyObject(obj) {
     }
     return copy;
 }
-exports.deepCopyObject = deepCopyObject;
 // Simple deep equality test for JSON-definable objects
 // The idea is that two objects test equal if they would
 // JSON.stringify to the same thing, modulo key ordering.
@@ -126,7 +127,6 @@ function deepEqual(a, b) {
             return typeof b === "undefined";
     }
 }
-exports.deepEqual = deepEqual;
 function getStateChanges(state1, state2) {
     var diff = {};
     for (var name in state2) {
@@ -141,4 +141,3 @@ function getStateChanges(state1, state2) {
     }
     return diff;
 }
-exports.getStateChanges = getStateChanges;

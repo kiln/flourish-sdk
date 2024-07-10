@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLocalizedCreditTextAndUrl = exports.createFlourishCredit = void 0;
+exports.createFlourishCredit = createFlourishCredit;
+exports.getLocalizedCreditTextAndUrl = getLocalizedCreditTextAndUrl;
 const localizations_1 = __importDefault(require("./localizations"));
 function createFlourishCredit(credit_url, query_string, public_url, credit_text) {
     credit_url = credit_url || "https://flourish.studio",
@@ -29,7 +30,6 @@ function createFlourishCredit(credit_url, query_string, public_url, credit_text)
     a.appendChild(span);
     return credit;
 }
-exports.createFlourishCredit = createFlourishCredit;
 function getLocalizedCreditTextAndUrl(lang, credit_key) {
     var credit_text, credit_url;
     lang = lang || "en", credit_key = credit_key || "";
@@ -44,4 +44,3 @@ function getLocalizedCreditTextAndUrl(lang, credit_key) {
         credit_url: credit_url
     };
 }
-exports.getLocalizedCreditTextAndUrl = getLocalizedCreditTextAndUrl;

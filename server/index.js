@@ -120,27 +120,37 @@ function listDataTables(template_dir) {
 }
 
 function getData(template_dir, data_tables) {
-	return Promise.all(data_tables.map((data_table) => getDataTable(template_dir, data_table)))
-		.then((data_array) => {
+	return Promise.all(data_tables.map((data_table_id) => getDataTable(template_dir, data_table_id)))
+		.then((data_and_timestamps) => {
 			const data_by_name = {};
 			const column_types_by_name = {};
+			const timestamps_by_name = {};
 			for (var i = 0; i < data_tables.length; i++) {
-				data_by_name[data_tables[i]] = data_array[i];
+				data_by_name[data_tables[i]] = data_and_timestamps[i].data;
+				timestamps_by_name[data_tables[i]] = data_and_timestamps[i].timestamps;
 			}
 			for (const data_table in data_by_name) {
 				const data = data_by_name[data_table];
 				column_types_by_name[data_table] = data_utils.getColumnTypesForData(data);
 			}
-			return { data: data_by_name, column_types_by_name };
+			return { data: data_by_name, column_types_by_name, timestamps_by_name };
 		});
 }
 
 function getDataTable(template_dir, data_table) {
 	return new Promise(function(resolve, reject) {
-		fs.readFile(path.join(template_dir, "data", data_table + ".csv"), "utf8", function(error, csv_text) {
+		const filename = path.join(template_dir, "data", data_table + ".csv");
+		const { mtime: last_updated } = fs.statSync(filename);
+		const timestamps = {
+			last_updated: new Date(last_updated),
+		};
+		fs.readFile(filename, "utf8", function(error, csv_text) {
 			if (error) return reject(error);
 			if (csv_text.charAt(0) === "\uFEFF") csv_text = csv_text.substr(1);
-			resolve(d3_dsv.csvParseRows(csv_text));
+			resolve({
+				data: d3_dsv.csvParseRows(csv_text),
+				timestamps,
+			});
 		});
 	});
 }
@@ -272,31 +282,36 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 	}));
 }
 
-function previewInitJs(template_dir, template_data_bindings, data_bindings, data_tables) {
-	return getData(template_dir, data_tables).then(({data, column_types_by_name}) => {
+function previewInitJs(template_dir, template_data_bindings, data_bindings, data_table_names) {
+	return getData(template_dir, data_table_names).then(({data, column_types_by_name, timestamps_by_name }) => {
 		const prepared_data = {};
 		for (let dataset in data_bindings) {
 			prepared_data[dataset] = data_utils.extractData(
 				data_bindings[dataset], data, column_types_by_name,
 				template_data_bindings[dataset],
+				{ per_data_table: timestamps_by_name },
 			);
 		}
 
 		const column_names = {};
 		const metadata = {};
+		const timestamps = {};
 		for (let dataset in prepared_data) {
 			column_names[dataset] = prepared_data[dataset].column_names;
 			metadata[dataset] = prepared_data[dataset].metadata;
+			timestamps[dataset] = prepared_data[dataset].timestamps;
 		}
 
 		return `
 		var _Flourish_data_column_names = ${json.safeStringify(column_names)},
 		    _Flourish_data_metadata = ${json.safeStringify(metadata)},
+		    _Flourish_data_timestamps = ${json.javaScriptStringify(timestamps)},
 		    _Flourish_data = ${json.javaScriptStringify(prepared_data)};
 		for (var _Flourish_dataset in _Flourish_data) {
 			window.template.data[_Flourish_dataset] = _Flourish_data[_Flourish_dataset];
 			window.template.data[_Flourish_dataset].column_names = _Flourish_data_column_names[_Flourish_dataset];
 			window.template.data[_Flourish_dataset].metadata = _Flourish_data_metadata[_Flourish_dataset];
+			window.template.data[_Flourish_dataset].timestamps = _Flourish_data_timestamps[_Flourish_dataset];
 		}
 		window.template.draw();
 		`;
@@ -387,8 +402,11 @@ module.exports = function(template_dir, options) {
 
 	// API for accessing data tables
 	app.get("/api/data_table/:id/csv", function(req, res) {
+		const filename = path.resolve(template_dir, "data", req.params.id + ".csv");
+		const { mtime: last_updated } = fs.statSync(filename);
 		res.status(200).header("Content-Type", "text/csv")
-			.sendFile(path.resolve(template_dir, "data", req.params.id + ".csv"));
+			.header("Last-Modified", last_updated) // Send last modified time
+			.sendFile(filename);
 	});
 
 	// Preview not in an iframe

@@ -1,12 +1,12 @@
 declare namespace _default {
     namespace de {
         namespace credits {
-            const _default: string;
+            let _default: string;
             export { _default as default };
         }
     }
     namespace en {
-        const credits_1: {
+        let credits_1: {
             default: {
                 text: string;
                 url: string;
@@ -159,7 +159,7 @@ declare namespace _default {
         export { credits_1 as credits };
     }
     namespace es {
-        const credits_2: {
+        let credits_2: {
             default: string;
             bar_race: {
                 text: string;
@@ -173,7 +173,7 @@ declare namespace _default {
         export { credits_2 as credits };
     }
     namespace fr {
-        const credits_3: {
+        let credits_3: {
             default: string;
             bar_race: {
                 text: string;
@@ -187,7 +187,7 @@ declare namespace _default {
         export { credits_3 as credits };
     }
     namespace it {
-        const credits_4: {
+        let credits_4: {
             default: string;
             bar_race: {
                 text: string;
@@ -201,7 +201,7 @@ declare namespace _default {
         export { credits_4 as credits };
     }
     namespace mi {
-        const credits_5: {
+        let credits_5: {
             default: string;
             bar_race: {
                 text: string;
@@ -215,7 +215,7 @@ declare namespace _default {
         export { credits_5 as credits };
     }
     namespace nl {
-        const credits_6: {
+        let credits_6: {
             default: string;
             bar_race: {
                 text: string;
@@ -228,7 +228,7 @@ declare namespace _default {
         };
         export { credits_6 as credits };
     }
-    const pt: {
+    let pt: {
         default: string;
         bar_race: {
             text: string;

@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stringifyPreparedData = exports.javaScriptStringify = exports.safeStringify = void 0;
+exports.safeStringify = safeStringify;
+exports.javaScriptStringify = javaScriptStringify;
+exports.stringifyPreparedData = stringifyPreparedData;
 function escapeChar(c) {
     var hex = c.charCodeAt(0).toString(16);
     while (hex.length < 4)
@@ -15,7 +17,6 @@ function safeStringify(obj) {
         return undefined;
     return raw.replace(/[\u2028\u2029<]/g, escapeChar);
 }
-exports.safeStringify = safeStringify;
 function javaScriptStringify(v) {
     var type = typeof v;
     if (v == null) {
@@ -40,9 +41,8 @@ function javaScriptStringify(v) {
         throw new Error("javaScriptStringify couldn't handle " + type + " object: " + v);
     }
 }
-exports.javaScriptStringify = javaScriptStringify;
 function stringifyDataset(dataset) {
-    return "(function(array, column_names, metadata){ array.column_names = column_names; array.metadata = metadata; return array; })(" + javaScriptStringify(dataset) + ", " + safeStringify(dataset.column_names) + ", " + safeStringify(dataset.metadata) + ")";
+    return "(function(array, column_names, metadata, timestamps){ array.column_names = column_names; array.metadata = metadata; array.timestamps = timestamps; return array; })(" + javaScriptStringify(dataset) + ", " + safeStringify(dataset.column_names) + ", " + safeStringify(dataset.metadata) + ", " + javaScriptStringify(dataset.timestamps) + ")";
 }
 function stringifyPreparedData(data) {
     var s = "{";
@@ -57,4 +57,3 @@ function stringifyPreparedData(data) {
     s += "}";
     return s;
 }
-exports.stringifyPreparedData = stringifyPreparedData;

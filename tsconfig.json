@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "common/*": ["../common/*"],
+      "@flourish/common/*": ["../common/*"],
     }
   },
   "references": [

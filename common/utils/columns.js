@@ -1,6 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.printDataBinding = exports.parseDataBinding = exports.printColumns = exports.parseColumns = exports.parseRange = exports.printColumn = exports.parseColumn = void 0;
+exports.parseColumn = parseColumn;
+exports.printColumn = printColumn;
+exports.parseRange = parseRange;
+exports.parseColumns = parseColumns;
+exports.printColumns = printColumns;
+exports.parseDataBinding = parseDataBinding;
+exports.printDataBinding = printDataBinding;
 const MAX_INTEGER = Math.pow(2, 31) - 1;
 const MAX_RANGE_LENGTH = Math.pow(2, 15);
 // Attempt to parse col_spec as a columns spec;
@@ -37,7 +43,6 @@ function parseColumn(col_spec, is_optional) {
         console.warn("Column index out of range");
     return Math.min(col_ix - 1, MAX_INTEGER);
 }
-exports.parseColumn = parseColumn;
 function printColumn(col_ix) {
     col_ix += 1;
     var col_spec = "";
@@ -52,7 +57,6 @@ function printColumn(col_ix) {
     }
     return col_spec;
 }
-exports.printColumn = printColumn;
 function parseRange(col_range) {
     var dash_mo = col_range.match(/\s*(?:[-–—:]|\.\.)\s*/);
     if (!dash_mo)
@@ -71,7 +75,6 @@ function parseRange(col_range) {
     }
     return r;
 }
-exports.parseRange = parseRange;
 function printRange(start, end) {
     return printColumn(start) + "-" + printColumn(end);
 }
@@ -92,7 +95,6 @@ function parseColumns(cols_spec) {
     }
     return indexes;
 }
-exports.parseColumns = parseColumns;
 function splitIntoRanges(indexes) {
     if (!indexes.length) {
         return [];
@@ -136,7 +138,6 @@ function printColumns(indexes) {
     }
     return r.join(",");
 }
-exports.printColumns = printColumns;
 function parseDataBinding(d, data_table_ids) {
     var r = {};
     if (!(d.type in d)) {
@@ -158,7 +159,6 @@ function parseDataBinding(d, data_table_ids) {
         throw new Error("Unknown data binding type: " + d.type);
     return r;
 }
-exports.parseDataBinding = parseDataBinding;
 function printDataBinding(r, data_table_names, print_data_table_name, optional) {
     var data_table_name = print_data_table_name ? data_table_names[r.data_table_id] + "::" : "";
     if ("column" in r) {
@@ -172,4 +172,3 @@ function printDataBinding(r, data_table_names, print_data_table_name, optional) 
     }
     throw new Error("Data binding must have .column or .columns");
 }
-exports.printDataBinding = printDataBinding;

@@ -1,13 +1,29 @@
-export function extractData(data_binding: any, data_by_id: any, column_types_by_id: any, template_data_binding: any): {}[];
-export function getColumnTypesForData(data: any): {
-    type_id: any;
-    index: number;
-    output_format_id: any;
-}[];
-export function getRandomSeededSample(column: any, sample_size: any): any;
-export function mulberry32(seed: any): () => number;
-export function trimTrailingEmptyRows(data: any): any;
-export function dropReturnCharacters(data: any): any;
+import "./polyfills";
+import { ColumnType, NullableColumnTypesById, DataBinding, DatasetType, TemplateDataBinding, KeyToTemplateDataBinding } from "./types";
+export { createInterpreter } from "@flourish/interpreter";
+type AugmentedDataBinding = DataBinding & {
+    key?: string;
+    template_data_binding?: TemplateDataBinding;
+};
+type KeyToAugmentedDataBinding = {
+    [key: string]: AugmentedDataBinding;
+};
+export type Timestamps = {
+    last_updated?: Date;
+};
+export type DatasheetsTimestamps = {
+    per_data_table: {
+        [dt_id: string]: Timestamps;
+    };
+};
+export declare function extractData(data_binding: KeyToAugmentedDataBinding, data_by_id: {
+    [data_table_id: string]: string[][] | undefined;
+}, column_types_by_id: NullableColumnTypesById, template_data_bindings: KeyToTemplateDataBinding, timestamps: DatasheetsTimestamps): DatasetType;
+export declare function getColumnTypesForData(data: string[][]): ColumnType[];
+export declare function getRandomSeededSample(column: string[], sample_size: number): string[];
+export declare function mulberry32(seed: number): () => number;
+export declare function trimTrailingEmptyRows(data: unknown[][]): unknown[][];
+export declare function dropReturnCharacters(data: string[][]): string[][];
 /**
  * Takes an array of arrays (typically tabular data) and rewrites
  * it so that:
@@ -23,8 +39,13 @@ export function dropReturnCharacters(data: any): any;
  * @param {any[][]} data
  * @returns {string[][]}
  */
-export function tidyTable(data: any[][]): string[][];
-export function stripCommonFixes(str: any): any;
-export function transposeNestedArray(nested_array: any): any[][];
-export function getSlicedData(arr: any): any;
-export function interpretColumn(arr: any): any;
+export declare function tidyTable(data: unknown[][]): string[][];
+export declare function stripCommonFixes(str: string): string;
+export declare function transposeNestedArray(nested_array: string[][]): string[][];
+export declare function getSlicedData(arr: string[]): string[];
+export declare function interpretColumn(arr: string[]): any;
+export declare function sortDataTables(data_tables: {
+    name: string;
+}[], data_bindings: (string | TemplateDataBinding)[] | undefined): {
+    name: string;
+}[] | undefined;

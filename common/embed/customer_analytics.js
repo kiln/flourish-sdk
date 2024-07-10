@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initCustomerAnalytics = exports.dispatchAnalyticsEvent = exports.removeAnalyticsListener = exports.addAnalyticsListener = exports.sendCustomerAnalyticsMessage = void 0;
+exports.sendCustomerAnalyticsMessage = sendCustomerAnalyticsMessage;
+exports.addAnalyticsListener = addAnalyticsListener;
+exports.removeAnalyticsListener = removeAnalyticsListener;
+exports.dispatchAnalyticsEvent = dispatchAnalyticsEvent;
+exports.initCustomerAnalytics = initCustomerAnalytics;
 // Embedded code - must work in IE
 var enabled = false;
 function getLocationData() {
@@ -52,14 +56,12 @@ function sendCustomerAnalyticsMessage(message) {
     }
     embedded_window.parent.postMessage(JSON.stringify(message_with_metadata), "*");
 }
-exports.sendCustomerAnalyticsMessage = sendCustomerAnalyticsMessage;
 function addAnalyticsListener(callback) {
     if (typeof callback !== "function") {
         throw new Error("Analytics callback is not a function");
     }
     window.Flourish._analytics_listeners.push(callback);
 }
-exports.addAnalyticsListener = addAnalyticsListener;
 function removeAnalyticsListener(callback) {
     if (typeof callback !== "function") {
         throw new Error("Analytics callback is not a function");
@@ -68,7 +70,6 @@ function removeAnalyticsListener(callback) {
         return callback !== listener;
     });
 }
-exports.removeAnalyticsListener = removeAnalyticsListener;
 function dispatchAnalyticsEvent(message) {
     // If the window.Flourish object hasn't been created by the customer, they
     // can't be listening for analytics events
@@ -78,7 +79,6 @@ function dispatchAnalyticsEvent(message) {
         listener(message);
     });
 }
-exports.dispatchAnalyticsEvent = dispatchAnalyticsEvent;
 function initCustomerAnalytics() {
     enabled = true;
     var events = [
@@ -111,4 +111,3 @@ function initCustomerAnalytics() {
         }, event.use_capture);
     });
 }
-exports.initCustomerAnalytics = initCustomerAnalytics;

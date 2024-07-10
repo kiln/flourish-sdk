@@ -63,7 +63,7 @@ function notifyParentWindow(height, opts) {
     var message = {
         sender: "Flourish",
         context: "iframe.resize",
-        method: "resize",
+        method: "resize", // backwards compatibility
         height: height,
         src: embedded_window.location.toString(),
     };
@@ -295,7 +295,7 @@ function createScrolly(iframe, captions) {
         step.style.marginLeft = "auto";
         step.style.marginRight = "auto";
         var caption = document.createElement("div");
-        caption.innerHTML = dompurify_1.default.sanitize(d);
+        caption.innerHTML = dompurify_1.default.sanitize(d, { ADD_ATTR: ["target"] });
         caption.style.visibility = has_content ? "" : "hidden";
         caption.style.display = "inline-block";
         caption.style.paddingTop = "1.25em";
