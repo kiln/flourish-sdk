@@ -6,8 +6,9 @@ function parseQueryParams() {
     var location = window.location;
     // We use srcdoc to load the decrypted content for password-protected projects,
     // which creates a nested window.
-    if (location.href == "about:srcdoc")
+    if (location.href == "about:srcdoc") {
         location = window.parent.location;
+    }
     var params = {};
     (function (query, re, match) {
         while (match = re.exec(query)) {

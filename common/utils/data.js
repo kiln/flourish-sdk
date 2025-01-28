@@ -33,11 +33,13 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
     var dataset = Object.assign([], { column_names: {}, metadata: {}, timestamps: {} });
     var interpreters_by_id = {};
     function getInterpretationIds(data_table_id, column_index) {
-        if (!interpreters_by_id[data_table_id])
+        if (!interpreters_by_id[data_table_id]) {
             return {};
+        }
         var by_column_index = interpreters_by_id[data_table_id];
-        if (!by_column_index[column_index])
+        if (!by_column_index[column_index]) {
             return {};
+        }
         return by_column_index[column_index];
     }
     function getInterpreter(data_table_id, column_index) {
@@ -49,8 +51,9 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
     for (var data_table_id in column_types_by_id) {
         var lookup = {};
         var column_types = column_types_by_id[data_table_id];
-        if (!column_types)
+        if (!column_types) {
             continue;
+        }
         for (let i = 0; i < column_types.length; i++) {
             const type_id = column_types[i].type_id;
             const of_id = column_types[i].output_format_id;
@@ -60,17 +63,20 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
         interpreters_by_id[data_table_id] = lookup;
     }
     for (var key in data_binding) {
-        if (data_binding[key] === null)
+        if (data_binding[key] === null) {
             continue;
-        if (data_binding[key].columns === undefined && data_binding[key].column === undefined)
+        }
+        if (data_binding[key].columns === undefined && data_binding[key].column === undefined) {
             continue;
+        }
         var b = data_binding[key];
         b.template_data_binding = template_data_bindings[key];
         b.key = key;
         if (!(b.data_table_id in data_by_id)) {
             var data_by_id_keys = [];
-            for (var k in data_by_id)
+            for (var k in data_by_id) {
                 data_by_id_keys.push(k);
+            }
             console.error("Data table id " + b.data_table_id + " not in " + JSON.stringify(data_by_id_keys));
             continue;
         }
@@ -95,7 +101,7 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
                     return {
                         type: type_id.split("$")[0],
                         type_id,
-                        output_format_id: output_format_id
+                        output_format_id: output_format_id,
                     };
                 }
                 return null;
@@ -109,7 +115,7 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
                 dataset.metadata[key] = {
                     type: type_id.split("$")[0],
                     type_id,
-                    output_format_id: output_format_id
+                    output_format_id: output_format_id,
                 };
             }
         }
@@ -126,16 +132,19 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
     // (this is typically only a single data table)\
     dataset.timestamps = getLatestDataTimestamps(data_table_ids.map(id => timestamps.per_data_table[id]));
     function parse(b, column_index, string_value) {
-        if (!b.template_data_binding?.data_type)
+        if (!b.template_data_binding?.data_type) {
             return string_value;
+        }
         var interpreter = getInterpreter(b.data_table_id, column_index);
-        if (interpreter && interpreter.type == "number")
+        if (interpreter && interpreter.type == "number") {
             string_value = stripCommonFixes(string_value);
+        }
         var result = interpreter ? interpreter.parse(string_value) : string_value;
         // We require our marshalled data to be JSON-serialisable,
         // therefore we convert NaNs to null here.
-        if (Number.isNaN(result))
+        if (Number.isNaN(result)) {
             result = null;
+        }
         return result;
     }
     for (var i = 0; i < num_rows; i++) {
@@ -146,20 +155,24 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
             if (table == null) {
                 throw new Error(`[BUG] The data from the data table with ID ${b.data_table_id} was missing`);
             }
-            if (i + 1 >= table.length)
+            if (i + 1 >= table.length) {
                 continue;
-            if (b.key == null)
+            }
+            if (b.key == null) {
                 throw new Error(`BUG: 'key' was ${b.key} in ${b}`);
+            }
             if ("columns" in b && b.columns != null) {
                 o[b.key] = b.columns
                     .filter(function (c) { return c < table[i + 1].length; })
                     .map(function (c) { return parse(b, c, table[i + 1][c]); });
             }
             else if ("column" in b && b.column != null) {
-                if (b.column >= table[i + 1].length)
+                if (b.column >= table[i + 1].length) {
                     o[b.key] = parse(b, b.column, "");
-                else
+                }
+                else {
                     o[b.key] = parse(b, b.column, table[i + 1][b.column]);
+                }
             }
         }
         dataset.push(o);
@@ -172,10 +185,12 @@ function getColumnTypesForData(data) {
         const sliced_column = getSlicedData(column);
         const sample_size = 1000;
         let sample_data;
-        if (sliced_column.length > (sample_size * 2))
+        if (sliced_column.length > (sample_size * 2)) {
             sample_data = getRandomSeededSample(sliced_column, sample_size);
-        else
+        }
+        else {
             sample_data = sliced_column;
+        }
         const type_id = interpretColumn(sample_data)[0].id;
         return { type_id: type_id, index: i, output_format_id: type_id };
     });
@@ -183,8 +198,9 @@ function getColumnTypesForData(data) {
 // Returns a random seeded sample of column values based on the column length.
 // The sample is consistent and will update if the length of column changes.
 function getRandomSeededSample(column, sample_size) {
-    if (column.length <= sample_size * 2)
+    if (column.length <= sample_size * 2) {
         return column;
+    }
     const rng = mulberry32(column.length);
     while (column.length > sample_size) {
         const random_index = Math.floor(rng() * column.length);
@@ -208,8 +224,9 @@ function trimTrailingEmptyRows(data) {
         if (!data[i] || !data[i].length || (Array.isArray(data[i]) && data[i].findIndex(function (col) { return col !== null && col !== ""; }) == -1)) {
             data.splice(i, 1);
         }
-        else
+        else {
             break;
+        }
     }
     return data;
 }
@@ -246,8 +263,9 @@ function tidyTable(data) {
         for (let i = 0; i < row.length; i++) {
             let value = row[i];
             // Convert null or undefined values to the empty string
-            if (value == null)
+            if (value == null) {
                 value = "";
+            }
             // If the value is not a string, convert it to one
             if (typeof value !== "string") {
                 value = "" + value;
@@ -285,18 +303,24 @@ function transposeNestedArray(nested_array) {
 }
 function getSlicedData(arr) {
     const n = arr.length;
-    if (n > 100)
+    if (n > 100) {
         return arr.slice(10, n - 10);
-    if (n > 50)
+    }
+    if (n > 50) {
         return arr.slice(5, n - 5);
-    if (n > 30)
+    }
+    if (n > 30) {
         return arr.slice(4, n - 4);
-    if (n > 20)
+    }
+    if (n > 20) {
         return arr.slice(3, n - 3);
-    if (n > 10)
+    }
+    if (n > 10) {
         return arr.slice(2, n - 2);
-    if (n > 1)
+    }
+    if (n > 1) {
         return arr.slice(1, n);
+    }
     return arr.slice(0, 1);
 }
 function interpretColumn(arr) {
@@ -308,14 +332,17 @@ function interpretColumn(arr) {
 }
 function sortDataTables(data_tables, data_bindings) {
     // Sort data tables to match order in the template data bindings
-    if (!data_bindings || !data_bindings.length)
+    if (!data_bindings || !data_bindings.length) {
         return;
-    if (!data_tables || !data_tables.length)
+    }
+    if (!data_tables || !data_tables.length) {
         return;
+    }
     var table_names = [];
     data_bindings.forEach(function (data_binding) {
-        if (typeof data_binding === "string")
+        if (typeof data_binding === "string") {
             return;
+        }
         let column;
         if ("column" in data_binding) {
             column = data_binding.column;
@@ -325,8 +352,9 @@ function sortDataTables(data_tables, data_bindings) {
         }
         if (column) {
             var table_name = column.match(/^(?:[^:]|:[^:])*/);
-            if (table_name && table_names.indexOf(table_name[0]) == -1)
+            if (table_name && table_names.indexOf(table_name[0]) == -1) {
                 table_names.push(table_name[0]);
+            }
         }
     });
     return data_tables.sort(function (dt1, dt2) {

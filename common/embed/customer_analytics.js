@@ -32,17 +32,20 @@ function getLocationData() {
     return data;
 }
 function sendCustomerAnalyticsMessage(message) {
-    if (!enabled)
+    if (!enabled) {
         return;
-    if (window.top === window.self)
+    }
+    if (window.top === window.self) {
         return;
+    }
     var embedded_window = window;
-    if (embedded_window.location.pathname === "srcdoc")
+    if (embedded_window.location.pathname === "srcdoc") {
         embedded_window = embedded_window.parent;
+    }
     var location_data = getLocationData();
     var message_with_metadata = {
         sender: "Flourish",
-        method: "customerAnalytics"
+        method: "customerAnalytics",
     };
     for (var key in location_data) {
         if (location_data.hasOwnProperty(key)) {
@@ -73,8 +76,9 @@ function removeAnalyticsListener(callback) {
 function dispatchAnalyticsEvent(message) {
     // If the window.Flourish object hasn't been created by the customer, they
     // can't be listening for analytics events
-    if (!window.Flourish)
+    if (!window.Flourish) {
         return;
+    }
     window.Flourish._analytics_listeners.forEach(function (listener) {
         listener(message);
     });
@@ -85,28 +89,28 @@ function initCustomerAnalytics() {
         {
             event_name: "click",
             action_name: "click",
-            use_capture: true
+            use_capture: true,
         },
         {
             event_name: "keydown",
             action_name: "key_down",
-            use_capture: true
+            use_capture: true,
         },
         {
             event_name: "mouseenter",
             action_name: "mouse_enter",
-            use_capture: false
+            use_capture: false,
         },
         {
             event_name: "mouseleave",
             action_name: "mouse_leave",
-            use_capture: false
-        }
+            use_capture: false,
+        },
     ];
     events.forEach(function (event) {
         document.body.addEventListener(event.event_name, function () {
             sendCustomerAnalyticsMessage({
-                action: event.action_name
+                action: event.action_name,
             });
         }, event.use_capture);
     });

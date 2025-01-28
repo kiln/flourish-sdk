@@ -35,12 +35,13 @@ function getLocalizedCreditTextAndUrl(lang, credit_key) {
     lang = lang || "en", credit_key = credit_key || "";
     credit_text = localizations_1.default[lang].credits[credit_key] || localizations_1.default.en.credits[credit_key] || localizations_1.default.en.credits.default;
     if (typeof credit_text == "object") {
-        if (credit_text.url)
+        if (credit_text.url) {
             credit_url = credit_text.url;
+        }
         credit_text = credit_text.text;
     }
     return {
         credit_text: credit_text,
-        credit_url: credit_url
+        credit_url: credit_url,
     };
 }

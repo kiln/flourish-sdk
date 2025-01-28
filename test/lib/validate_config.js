@@ -56,42 +56,42 @@ describe("validate_config", function() {
 		return function() {
 			it(`should accept ${name}=true`, function() {
 				expectSuccess(
-					metadataPlus({ [name]: true })
+					metadataPlus({ [name]: true }),
 				);
 			});
 			it(`should accept ${name}=false`, function() {
 				expectSuccess(
-					metadataPlus({ [name]: false })
+					metadataPlus({ [name]: false }),
 				);
 			});
 			it(`should reject ${name}=null`, function() {
 				expectFailure(
 					metadataPlus({ [name]: null }),
-					`template.yml: Bad ${name} setting; must be either true or false`
+					`template.yml: Bad ${name} setting; must be either true or false`,
 				);
 			});
 			it(`should reject ${name}=undefined`, function() {
 				expectFailure(
 					metadataPlus({ [name]: undefined }),
-					`template.yml: Bad ${name} setting; must be either true or false`
+					`template.yml: Bad ${name} setting; must be either true or false`,
 				);
 			});
 			it(`should reject strings for ${name}`, function() {
 				expectFailure(
 					metadataPlus({ [name]: "false" }),
-					`template.yml: Bad ${name} setting; must be either true or false`
+					`template.yml: Bad ${name} setting; must be either true or false`,
 				);
 			});
 			it(`should reject numbers for ${name}`, function() {
 				expectFailure(
 					metadataPlus({ [name]: 1 }),
-					`template.yml: Bad ${name} setting; must be either true or false`
+					`template.yml: Bad ${name} setting; must be either true or false`,
 				);
 			});
 			it(`should reject objects for ${name}`, function() {
 				expectFailure(
 					metadataPlus({ [name]: {} }),
-					`template.yml: Bad ${name} setting; must be either true or false`
+					`template.yml: Bad ${name} setting; must be either true or false`,
 				);
 			});
 		};
@@ -102,42 +102,42 @@ describe("validate_config", function() {
 			it(`should reject ${name}=true`, function() {
 				expectFailure(
 					metadataPlus({ [name]: true }),
-					expected_error_message
+					expected_error_message,
 				);
 			});
 			it(`should reject ${name}=false`, function() {
 				expectFailure(
 					metadataPlus({ [name]: false }),
-					expected_error_message
+					expected_error_message,
 				);
 			});
 			it(`should reject ${name}=null`, function() {
 				expectFailure(
 					metadataPlus({ [name]: null }),
-					expected_error_message
+					expected_error_message,
 				);
 			});
 			it(`should reject ${name}=undefined`, function() {
 				expectFailure(
 					metadataPlus({ [name]: undefined }),
-					expected_error_message
+					expected_error_message,
 				);
 			});
 			it(`should reject strings for ${name}`, function() {
 				expectFailure(
 					metadataPlus({ [name]: "false" }),
-					expected_error_message
+					expected_error_message,
 				);
 			});
 			it(`should reject numbers for ${name}`, function() {
 				expectFailure(
 					metadataPlus({ [name]: 1 }),
-					expected_error_message
+					expected_error_message,
 				);
 			});
 			it(`should accept objects for ${name}`, function() {
 				expectSuccess(
-					metadataPlus({ [name]: {} })
+					metadataPlus({ [name]: {} }),
 				);
 			});
 		};
@@ -171,28 +171,28 @@ describe("validate_config", function() {
 		it("should require id", function() {
 			expectFailure(
 				{ name, author, sdk_version },
-				"template.yml must specify an id:"
+				"template.yml must specify an id:",
 			);
 		});
 
 		it("should require name", function() {
 			expectFailure(
 				{ id, author, sdk_version },
-				"template.yml must specify a name:"
+				"template.yml must specify a name:",
 			);
 		});
 
 		it("should require author", function() {
 			expectFailure(
 				{ id, name, sdk_version },
-				"template.yml must specify an author:"
+				"template.yml must specify an author:",
 			);
 		});
 
 		it("should require sdk_version", function() {
 			expectFailure(
 				{ id, name, author },
-				"template.yml must specify an sdk_version:"
+				"template.yml must specify an sdk_version:",
 			);
 		});
 
@@ -533,12 +533,12 @@ describe("validate_config", function() {
 		});
 
 		it("should reject duplicates", function() {
-			expectFailure(metadataPlus({ data: [ binding, binding ]}),
+			expectFailure(metadataPlus({ data: [ binding, binding ] }),
 				"template.yml: there is more than one data binding with dataset “dataset” and key “key”");
 		});
 
 		it("should ignore headings", function() {
-			expectSuccess(metadataPlus({ data: [ "Heading", binding ]}));
+			expectSuccess(metadataPlus({ data: [ "Heading", binding ] }));
 		});
 	});
 
@@ -679,14 +679,14 @@ describe("validate_config", function() {
 				expectSuccess(settingPlus({ choices: [
 					["A", "a"],
 					["A", "b"],
-					["A", "c"]
+					["A", "c"],
 				] }));
 			});
 			it("should reject singletons", function() {
 				expectFailure(settingPlus({ choices: [
 					["A", "a"],
 					["b"],
-					["A", "c"]
+					["A", "c"],
 				] }),
 				"template.yml setting “foo”: element 1 of “choices” field has 1 elements (should be 2)");
 			});
@@ -694,7 +694,7 @@ describe("validate_config", function() {
 				expectFailure(settingPlus({ choices: [
 					["A", "a"],
 					["B", 23],
-					["A", "c"]
+					["A", "c"],
 				] }),
 				"template.yml setting “foo”: second entry of element 1 of “choices” field is not a string");
 			});
@@ -702,7 +702,7 @@ describe("validate_config", function() {
 				expectFailure(settingPlus({ choices: [
 					["A", "a"],
 					["B", true],
-					["A", "c"]
+					["A", "c"],
 				] }),
 				"template.yml setting “foo”: second entry of element 1 of “choices” field is not a string");
 			});
@@ -710,7 +710,7 @@ describe("validate_config", function() {
 				expectFailure(settingPlus({ choices: [
 					["A", "a"],
 					["B", false],
-					["A", "c"]
+					["A", "c"],
 				] }),
 				"template.yml setting “foo”: second entry of element 1 of “choices” field is not a string");
 			});
@@ -718,7 +718,7 @@ describe("validate_config", function() {
 				expectFailure(settingPlus({ choices: [
 					["A", "a"],
 					["B", null],
-					["A", "c"]
+					["A", "c"],
 				] }),
 				"template.yml setting “foo”: second entry of element 1 of “choices” field is not a string");
 			});
@@ -726,20 +726,20 @@ describe("validate_config", function() {
 				expectSuccess(settingPlus({ choices: [
 					["A", "a"],
 					["A", "b", "b_image.png"],
-					["A", "c"]
+					["A", "c"],
 				] }));
 			});
 			describe("boolean choices", function() {
 				it("should support boolean pairs", function() {
 					expectSuccess(settingPlus({ type: "boolean", choices: [
 						["A", true],
-						["A", false]
+						["A", false],
 					] }));
 				});
 				it("should support boolean pairs the other way round", function() {
 					expectSuccess(settingPlus({ type: "boolean", choices: [
 						["A", false],
-						["A", true]
+						["A", true],
 					] }));
 				});
 				it("should reject an empty list", function() {
@@ -762,7 +762,7 @@ describe("validate_config", function() {
 					expectFailure(settingPlus({ type: "boolean", choices: [
 						["A", true],
 						["B", true],
-						["C", false]
+						["C", false],
 					] }),
 					"template.yml setting “foo”: “choices” field for boolean property can only contain one “false” and one “true” option");
 				});
@@ -787,11 +787,11 @@ describe("validate_config", function() {
 			});
 
 			it("should forbid a reference to itself (show_if)", function() {
-				expectFailure(settingPlus({ show_if: { "foo": true }}),
+				expectFailure(settingPlus({ show_if: { "foo": true } }),
 					"template.yml setting “foo” cannot be conditional on itself");
 			});
 			it("should forbid a reference to itself (hide_if)", function() {
-				expectFailure(settingPlus({ hide_if: { "foo": true }}),
+				expectFailure(settingPlus({ hide_if: { "foo": true } }),
 					"template.yml setting “foo” cannot be conditional on itself");
 			});
 
@@ -828,43 +828,43 @@ describe("validate_config", function() {
 
 			it("should accept an array containing an object with multiple string values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
-				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }]}, undefined, [blah]));
+				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }] }, undefined, [blah]));
 			});
 
 			it("should accept an array containing an object with multiple array values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
-				expectSuccess(settingPlus({ show_if: [ { "bar": ["xxx"], "blah": ["xxx"] }]}, undefined, [blah]));
+				expectSuccess(settingPlus({ show_if: [ { "bar": ["xxx"], "blah": ["xxx"] }] }, undefined, [blah]));
 			});
 
 			it("should reject an array containing any objects with empty array values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
-				expectFailure(settingPlus({ show_if: [ { "bar": [], "blah": "xxx" }]}, undefined, [blah]),
+				expectFailure(settingPlus({ show_if: [ { "bar": [], "blah": "xxx" }] }, undefined, [blah]),
 					"template.yml setting “foo” “show_if” property: condition for bar is empty");
 			});
 
 			it("should reject an array containing any objects referring to non-existent settings", function() {
-				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "baz": "xxx" }]}),
+				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "baz": "xxx" }] }),
 					"template.yml: “show_if” or “hide_if” property refers to non-existent setting “baz”");
 			});
 
 			it("should accept an array containing an object with a string value and a valid data binding", function() {
-				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }]}, { data: [ binding ] }));
+				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }] }, { data: [ binding ] }));
 			});
 
 			it("should reject an array with a data reference when there are no data bindings", function() {
-				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }]}),
+				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }] }),
 					"template.yml: “show_if” or “hide_if” property refers to data binding “data.dataset.key” when none are defined");
 			});
 
 			it("should reject an array with a reference to a non-existent data binding", function() {
-				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.nosuchkey": true }]}, { data: [ binding ] }),
+				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.nosuchkey": true }] }, { data: [ binding ] }),
 					"template.yml: “show_if” or “hide_if” property refers to non-existent data binding “data.dataset.nosuchkey”");
 			});
 
 			it("should accept an array containing multiple objects of including string and boolean values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
 				const bool = { name: "Bool", property: "bool", type: "boolean" };
-				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }, { "bool": true }]}, undefined, [blah, bool]));
+				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }, { "bool": true }] }, undefined, [blah, bool]));
 			});
 
 			it("should forbid empty objects", function() {
@@ -901,7 +901,7 @@ describe("validate_config", function() {
 			// This test is skipped because it doesn’t pass, and looks like it would be
 			// complicated to fix.
 			it.skip("should reject a string value when referencing a data binding", function() {
-				expectFailure(settingPlus({ show_if: {"data.dataset.key": "foo"} }, { data: [ binding ] }));
+				expectFailure(settingPlus({ show_if: { "data.dataset.key": "foo" } }, { data: [ binding ] }));
 			});
 
 			it("should reject a reference to a data binding that has no key", function() {
@@ -930,63 +930,63 @@ describe("validate_config", function() {
 					fs.unlinkSync(imported_settings_filename);
 				});
 				it("should permit the import of a component", function() {
-					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout" }]}));
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout" }] }));
 				});
 				it("should allow for a show_if condition for an imported component", function() {
-					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", show_if: true }]}));
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", show_if: true }] }));
 				});
 				it("should allow for a hide_if condition for an imported component", function() {
-					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", hide_if: true }]}));
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", hide_if: true }] }));
 				});
 				it("should not allow for a name property (for example) for an imported component", function() {
 					expectFailure(
-						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", name: "Flourish" }]}),
-						"template.yml: Unexpected property 'name' in import"
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", name: "Flourish" }] }),
+						"template.yml: Unexpected property 'name' in import",
 					);
 				});
 				it("should allow for an overrides array for an imported component", function() {
-					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [] }]}));
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [] }] }));
 				});
 				it("should throw if overrides is a string", function() {
 					expectFailure(
-						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: "Hello Mark!" }]}),
-						"template.yml Setting import overrides must be an array"
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: "Hello Mark!" }] }),
+						"template.yml Setting import overrides must be an array",
 					);
 				});
 				it("should throw if overrides is an object", function() {
 					expectFailure(
-						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: {} }]}),
-						"template.yml Setting import overrides must be an array"
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: {} }] }),
+						"template.yml Setting import overrides must be an array",
 					);
 				});
 				it("should throw if an override is missing the 'property' or 'tag' property", function() {
 					expectFailure(
-						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{}] }]}),
-						`template.yml Setting import overrides must each specify overridden “property” or “tag”`
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{}] }] }),
+						`template.yml Setting import overrides must each specify overridden “property” or “tag”`,
 					);
 				});
 				it("should throw if an override has both 'property' and 'tag' property", function () {
 					expectFailure(
-						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", tag: "categorical"}] }] }),
-						`template.yml Setting import overrides cannot contain both “property” and “tag” property`
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{ property: "bg_color", tag: "categorical" }] }] }),
+						`template.yml Setting import overrides cannot contain both “property” and “tag” property`,
 					);
 				});
 				it("should allow for an override to have 'tag' in place of 'property'", function () {
 					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{ tag: "categorical" }] }] }));
 				});
 				it("should allow for an override without a 'method' property", function() {
-					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color"}] }]}));
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{ property: "bg_color" }] }] }));
 				});
 				it("should allow for an override with a 'method' property equal to 'replace'", function() {
-					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", method: "replace"}] }]}));
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{ property: "bg_color", method: "replace" }] }] }));
 				});
 				it("should allow for an override with a 'method' property equal to 'extend'", function() {
-					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", method: "extend"}] }]}));
+					expectSuccess(metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{ property: "bg_color", method: "extend" }] }] }));
 				});
 				it("should throw if an override has a 'method' property of (eg) 'delete'", function() {
 					expectFailure(
-						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{property: "bg_color", method: "delete"}] }]}),
-						`template.yml Setting import override “method” method must be either “replace” or “extend”`
+						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout", overrides: [{ property: "bg_color", method: "delete" }] }] }),
+						`template.yml Setting import override “method” method must be either “replace” or “extend”`,
 					);
 				});
 			});
@@ -996,7 +996,7 @@ describe("validate_config", function() {
 					const expected_error = `Cannot find module '@flourish/layout/settings.yml' from '${temp_directory}'`;
 					expectFailure(
 						metadataPlus({ settings: [{ property: "imported_prop", import: "@flourish/layout" }] }),
-						expected_error
+						expected_error,
 					);
 				});
 			});

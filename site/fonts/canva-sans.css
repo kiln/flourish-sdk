@@ -1,0 +1,53 @@
+@font-face {
+	font-family: "Canva Sans";
+	src: url("canva-sans/WOFF/CanvaSans-Regular.woff2") format("woff2"),
+	  url("canva-sans/WOFF/CanvaSans-Regular.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+  
+@font-face {
+	font-family: "Canva Sans";
+	src: url("canva-sans/WOFF/CanvaSans-Bold.woff2") format("woff2"),
+	  url("canva-sans/WOFF/CanvaSans-Bold.woff") format("woff");
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
+  
+@font-face {
+	font-family: "Canva Sans Display";
+	src: url("canva-sans/WOFF/CanvaSansDisplay-Regular.woff2") format("woff2"),
+	  url("canva-sans/WOFF/CanvaSansDisplay-Regular.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+  
+@font-face {
+	font-family: "Canva Sans Display";
+	src: url("canva-sans/WOFF/CanvaSansDisplay-Bold.woff2") format("woff2"),
+	  url("canva-sans/WOFF/CanvaSansDisplay-Bold.woff") format("woff");
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Canva Sans Variable";
+	font-weight: 200 700;
+	src: url("canva-sans-variable/WOFF/CanvaSans-VF.woff")
+		format("woff"),
+	  url("canva-sans-variable/TTF/CanvaSans-VF.ttf")
+		format("truetype");
+}
+
+@font-face {
+	font-family: "Canva Sans Display Variable";
+	font-weight: 200 700;
+	src: url("canva-sans-variable/WOFF/CanvaSansDisplay-VF.woff")
+		format("woff"),
+	  url("canva-sans-variable/TTF/CanvaSansDisplay-VF.ttf")
+		format("truetype");
+}

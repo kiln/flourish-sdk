@@ -20,10 +20,13 @@ function isObject(x) {
   }
  */
 function flatten(o, keys, result) {
-    if (!keys)
+    if (!keys) {
         keys = [];
-    if (!result)
-        result = {};
+    }
+    // Create a new object with no prototype to avoid prototype pollution attacks
+    if (!result) {
+        result = Object.create(null);
+    }
     for (var k in o) {
         keys.push(k);
         if (typeof o[k] === "object") {
@@ -36,13 +39,15 @@ function flatten(o, keys, result) {
 }
 // { "a.b.c": 2, "a.b.d":3 } → { a: { b: { c: 2, d: 3 } } }
 function unflatten(o) {
-    var r = {};
+    // Create a new object with no prototype to avoid prototype pollution attacks
+    var r = Object.create(null);
     for (var k in o) {
         var t = r;
         for (var i = k.indexOf("."), p = 0; i >= 0; i = k.indexOf(".", p = i + 1)) {
             var s = k.substring(p, i);
-            if (!(s in t))
-                t[s] = {};
+            if (!(s in t)) {
+                t[s] = Object.create(null);
+            }
             t = t[s];
         }
         t[k.substring(p)] = o[k]; // Assign the actual value to the appropriate nested object
@@ -61,9 +66,11 @@ function merge(dest, source) {
     return dest;
 }
 function deepCopyObject(obj) {
-    if (obj == null)
+    if (obj == null) {
         return obj;
-    var copy = {};
+    }
+    // Create a new object with no prototype to avoid prototype pollution attacks
+    var copy = Object.create(null);
     for (var k in obj) {
         if (Array.isArray(obj[k])) {
             copy[k] = obj[k].slice();
@@ -87,40 +94,49 @@ function deepCopyObject(obj) {
 // This is used to compare the slide state to the preview
 // state, to see if the state has been changed by user interaction.
 function deepEqual(a, b) {
-    if (typeof a !== typeof b)
+    if (typeof a !== typeof b) {
         return false;
+    }
     switch (typeof a) {
         case "string":
         case "boolean":
             return a === b;
         case "number":
-            if (isNaN(a) && isNaN(b))
+            if (isNaN(a) && isNaN(b)) {
                 return true;
+            }
             return a === b;
         case "object":
-            if (a === null)
+            if (a === null) {
                 return (b === null);
+            }
             if (Array.isArray(a)) {
-                if (!Array.isArray(b))
+                if (!Array.isArray(b)) {
                     return false;
-                if (a.length != b.length)
+                }
+                if (a.length != b.length) {
                     return false;
+                }
                 for (var i = 0; i < a.length; i++) {
-                    if (!deepEqual(a[i], b[i]))
+                    if (!deepEqual(a[i], b[i])) {
                         return false;
+                    }
                 }
                 return true;
             }
-            if (b === null)
+            if (b === null) {
                 return false;
+            }
             var k;
             for (k in a) {
-                if (!deepEqual(a[k], b[k]))
+                if (!deepEqual(a[k], b[k])) {
                     return false;
+                }
             }
             for (k in b) {
-                if (!(k in a) && typeof b[k] !== "undefined")
+                if (!(k in a) && typeof b[k] !== "undefined") {
                     return false;
+                }
             }
             return true;
         case "undefined":
@@ -128,9 +144,10 @@ function deepEqual(a, b) {
     }
 }
 function getStateChanges(state1, state2) {
-    var diff = {};
+    // Create a new object with no prototype to avoid prototype pollution attacks
+    var diff = Object.create(null);
     for (var name in state2) {
-        if (!state1.hasOwnProperty(name) || !deepEqual(state1[name], state2[name])) {
+        if (!Object.prototype.hasOwnProperty.call(state1, name) || !deepEqual(state1[name], state2[name])) {
             if (isObject(state1[name]) && isObject(state2[name])) {
                 diff[name] = getStateChanges(state1[name], state2[name]);
             }

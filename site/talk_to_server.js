@@ -4,13 +4,15 @@ var _Flourish_talkToServer = (function () {
 	var error_element;
 
 	function serverIsDown() {
-		if (error_element) setTimeout(function() {
-			error_element.classList.add("shown");
-		}, 1000);
+		if (error_element) {
+			setTimeout(function() {
+				error_element.classList.add("shown");
+			}, 1000);
+		}
 	}
 
 	function serverIsUp() {
-		if (error_element) error_element.classList.remove("shown");
+		if (error_element) { error_element.classList.remove("shown"); }
 	}
 
 	var socket_url;

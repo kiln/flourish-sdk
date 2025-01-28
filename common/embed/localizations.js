@@ -45,7 +45,7 @@ exports.default = {
             "text-annotator": { text: "Interactive content by Flourish", url: "https://flourish.studio/blog/text-annotator-template/" },
             "tournament": { text: "Interactive content by Flourish", url: "https://flourish.studio/visualisations/tournament-chart/" },
             "word-cloud": { text: "A Flourish data visualization", url: "https://flourish.studio/blog/online-wordcloud-custom-fonts/" },
-        }
+        },
     },
     "es": {
         credits: {
@@ -66,7 +66,7 @@ exports.default = {
             "default": "Creato con Flourish",
             "bar_race": { text: "Creato con Flourish", url: "https://flourish.studio/visualisations/bar-chart-race/" },
             "bar-chart-race": { text: "Creato con Flourish", url: "https://flourish.studio/visualisations/bar-chart-race/" },
-        }
+        },
     },
     "mi": {
         credits: {
@@ -85,6 +85,6 @@ exports.default = {
     "pt": {
         "default": "Feito com Flourish",
         "bar_race": { text: "Feito com Flourish", url: "https://flourish.studio/visualisations/bar-chart-race/" },
-        "bar-chart-race": { text: "Feito com Flourish", url: "https://flourish.studio/visualisations/bar-chart-race/" }
-    }
+        "bar-chart-race": { text: "Feito com Flourish", url: "https://flourish.studio/visualisations/bar-chart-race/" },
+    },
 };

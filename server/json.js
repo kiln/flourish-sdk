@@ -21,7 +21,6 @@ function safeStringify(obj) {
 }
 
 function javaScriptStringify(v) {
-	console.log("javaScriptStringify", v);
 	var type = typeof v;
 	if (v == null) {
 		// Catches both null and undefined

@@ -11,7 +11,7 @@ const OPTS = {
 		"help", "build", "open", "debug", "full", "force",
 
 		// Options for 'publish'
-		"prerelease", "patch", "release", "local-testing"
+		"prerelease", "patch", "release", "local-testing",
 	],
 	string: [
 		"host", "listen", "port", "user", "password",
@@ -35,7 +35,7 @@ const OPTS = {
 		build: true,
 		open: false,
 
-		env: "development"
+		env: "development",
 	},
 
 	alias: {
@@ -48,7 +48,7 @@ const OPTS = {
 		if (unknown_option.startsWith("-")) {
 			log.die("Unknown option: " + unknown_option);
 		}
-	}
+	},
 };
 
 // Unhandled rejections indicate an error in the app
@@ -73,7 +73,7 @@ const COMMANDS = [
 	"delete",
 	"upgrade",
 	"list",
-	"history"
+	"history",
 ];
 
 function main() {
@@ -88,8 +88,8 @@ function main() {
 	args._ = args._.map(String);
 
 	let [command] = args._;
-	if (args.version) command = "version";
-	else if (args.help) command = "help";
+	if (args.version) { command = "version"; }
+	else if (args.help) { command = "help"; }
 
 	if (!command) {
 		return log.die("No command specified. Type ‘flourish help’ for help.");

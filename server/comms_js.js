@@ -31,12 +31,12 @@ const AFTER = `
 	var result = null;
 	function assign(target, source) {
 		for (var k in source) {
-			if (source.hasOwnProperty(k)) target[k] = source[k];
+			if (Object.prototype.hasOwnProperty.call(source, k)) target[k] = source[k];
 		}
 	}
 	function deepAssign(target, source, is_destructive) {
 		for (var k in source) {
-			if (!source.hasOwnProperty(k)) continue;
+			if (!Object.prototype.hasOwnProperty.call(source, k)) continue;
 			if (
 				typeof target[k] === "object" && target[k] != null && !Array.isArray(target[k])
 				&& typeof source[k] === "object" && source[k] != null && !Array.isArray(source[k])
@@ -47,7 +47,7 @@ const AFTER = `
 		}
 		if (is_destructive) {
 			for (var k in target) {
-				if (target.hasOwnProperty(k) && !source.hasOwnProperty(k)) delete target[k];
+				if (Object.prototype.hasOwnProperty.call(target, k) && !Object.prototype.hasOwnProperty.call(source, k)) delete target[k];
 			}
 		}
 	}

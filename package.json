@@ -1,11 +1,12 @@
 {
   "name": "@flourish/sdk",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
     "prepare": "cd .. && make sdk_clean sdk",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "test:ci": "mocha --recursive --reporter json --reporter-option output=../test_reports/sdk.json"
   },
   "bin": {
     "flourish": "bin/flourish.js"
@@ -14,7 +15,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": "kiln/flourish-sdk",
   "dependencies": {
-    "@flourish/interpreter": "^8.5.0",
+    "@flourish/interpreter": "^9.1.1",
     "@flourish/semver": "^1.0.2",
     "@flourish/transform-data": "^2.1.0",
     "@rollup/plugin-commonjs": "^25.0.7",

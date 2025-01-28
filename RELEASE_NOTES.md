@@ -1,3 +1,7 @@
+# 5.2.0
+* Fixes issue publishing templates with complex settings
+* Improves html sanitation in template publishing workflow
+
 # 5.1.0
 * Revoke SDK token on logout
   this improves on the previous behaviour where logging out would only purge tokens locally.

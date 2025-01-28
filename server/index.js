@@ -52,12 +52,12 @@ function loadFile(path_parts, options) {
 		}
 
 		function succeed(result) {
-			if (!options.silentSuccess) log.success(`Loaded ${filename}`);
+			if (!options.silentSuccess) { log.success(`Loaded ${filename}`); }
 			resolve(result);
 		}
 
 		fs.readFile(file_path, "utf8", function(error, loaded_text) {
-			if (error) return fail(`Failed to load ${file_path}`, error);
+			if (error) { return fail(`Failed to load ${file_path}`, error); }
 			switch (options.type) {
 				case "json":
 					try { return succeed(JSON.parse(loaded_text)); }
@@ -86,8 +86,8 @@ function loadSDKTemplate() {
 function loadTemplateText(template_dir) {
 	return loadFile([template_dir, "index.html"], {
 		default: () => loadFile([__dirname, "views", "default_template_index.html"], {
-			silentSuccess: true
-		})
+			silentSuccess: true,
+		}),
 	});
 }
 
@@ -96,20 +96,20 @@ function loadJavaScript(template_dir) {
 }
 
 function loadSettings(template_dir) {
-	return sdk.readAndValidateConfig(template_dir).then(({config}) => config);
+	return sdk.readAndValidateConfig(template_dir).then(({ config }) => config);
 }
 
 function listDataTables(template_dir) {
 	return new Promise(function(resolve, reject) {
 		fs.readdir(path.join(template_dir, "data"), function(error, filenames) {
 			if (error) {
-				if (error.code === "ENOENT") return resolve([]);
+				if (error.code === "ENOENT") { return resolve([]); }
 				return reject(error);
 			}
 
 			const data_files = [];
 			for (let filename of filenames) {
-				if (!filename.endsWith(".csv")) continue;
+				if (!filename.endsWith(".csv")) { continue; }
 
 				var name = filename.substr(0, filename.length - 4);
 				data_files.push(name);
@@ -145,8 +145,8 @@ function getDataTable(template_dir, data_table) {
 			last_updated: new Date(last_updated),
 		};
 		fs.readFile(filename, "utf8", function(error, csv_text) {
-			if (error) return reject(error);
-			if (csv_text.charAt(0) === "\uFEFF") csv_text = csv_text.substr(1);
+			if (error) { return reject(error); }
+			if (csv_text.charAt(0) === "\uFEFF") { csv_text = csv_text.substr(1); }
 			resolve({
 				data: d3_dsv.csvParseRows(csv_text),
 				timestamps,
@@ -158,30 +158,30 @@ function getDataTable(template_dir, data_table) {
 function parseDataBindings(data_bindings, data_tables) {
 	if (!data_bindings) {
 		return {
-			data_bindings: {1: {}},
-			template_data_bindings: {1: {}}
+			data_bindings: { 1: {} },
+			template_data_bindings: { 1: {} },
 		};
 	}
 
 	// Use the names as ids
 	const name_by_id = {};
-	for (let name of data_tables) name_by_id[name] = name;
+	for (let name of data_tables) { name_by_id[name] = name; }
 
 	// Collect parsed bindings by dataset
 	const data_bindings_by_dataset = {};
 	const template_data_bindings_by_dataset = {};
 	for (let binding of data_bindings) {
 		let dataset = binding.dataset;
-		if (!dataset) continue;
+		if (!dataset) { continue; }
 
-		if (!data_bindings_by_dataset[dataset]) data_bindings_by_dataset[dataset] = {};
-		if (!template_data_bindings_by_dataset[dataset]) template_data_bindings_by_dataset[dataset] = {};
+		if (!data_bindings_by_dataset[dataset]) { data_bindings_by_dataset[dataset] = {}; }
+		if (!template_data_bindings_by_dataset[dataset]) { template_data_bindings_by_dataset[dataset] = {}; }
 		template_data_bindings_by_dataset[dataset][binding.key] = binding;
 		data_bindings_by_dataset[dataset][binding.key] = columns.parseDataBinding(binding, name_by_id);
 	}
 	return {
 		data_bindings: { 1: data_bindings_by_dataset },
-		template_data_bindings: { 1: template_data_bindings_by_dataset }
+		template_data_bindings: { 1: template_data_bindings_by_dataset },
 	};
 }
 
@@ -216,12 +216,12 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 			previewInitJs(template_dir, template_data_bindings["1"], data_bindings["1"], data_tables),
 			loadTemplateText(template_dir),
 			loadJavaScript(template_dir),
-			getPublicUrlPrefix(options)
+			getPublicUrlPrefix(options),
 		]);
 	})
 	.then(([
 		settings, data_bindings, data_tables,
-		preview_init_js, template_text, template_js, public_url_prefix
+		preview_init_js, template_text, template_js, public_url_prefix,
 	]) => {
 		const page_params = {
 			// Always use ID of 1 for SDK
@@ -229,7 +229,7 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 			visualisation_js: "new Flourish.Visualisation('1', 0," + json.safeStringify({
 				data_bindings: data_bindings,
 				data_tables: data_tables,
-				template_store_key: settings.name.toLowerCase().replace(" ", "") + "@" + settings.version
+				template_store_key: settings.name.toLowerCase().replace(" ", "") + "@" + settings.version,
 			}) + ")",
 			settings: json.safeStringify(settings.settings || []),
 			data_bindings: json.safeStringify(settings.data || []),
@@ -237,12 +237,12 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 			template_version: settings.version,
 			template_author: settings.author || "",
 			build_failed: build_failed && build_failed.size > 0,
-			public_url_prefix
+			public_url_prefix,
 		};
 
 		const script = documentFragment([
 			scriptElementInline("window.Flourish = " + json.safeStringify({
-				static_prefix, environment: "sdk", is_read_only: false
+				static_prefix, environment: "sdk", is_read_only: false,
 			}) + ";"),
 			scriptElementExternal("/template.js"),
 			scriptElementExternal("/comms.js"),
@@ -251,7 +251,7 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 
 		const preview_script = documentFragment([
 			scriptElementInline("window.Flourish = " + json.safeStringify({
-				static_prefix: preview_static_prefix, environment: "preview", is_read_only: true
+				static_prefix: preview_static_prefix, environment: "preview", is_read_only: true,
 			}) + ";"),
 			scriptElementExternal("/template.js"),
 			scriptElementExternal("/comms.js"),
@@ -266,7 +266,7 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 			index_html.render(template_text, {
 				title: "Flourish SDK template preview",
 				static: static_prefix,
-				parsed_script: script
+				parsed_script: script,
 			}),
 			index_html.render(template_text, {
 				title: "Flourish SDK template preview",
@@ -278,12 +278,12 @@ function loadTemplate(template_dir, sdk_template, build_failed, options) {
 		]);
 	})
 	.then(([sdk_rendered, template_rendered, preview_rendered, template_js, build_rules]) => ({
-		sdk_rendered, template_rendered, preview_rendered, template_js, build_rules
+		sdk_rendered, template_rendered, preview_rendered, template_js, build_rules,
 	}));
 }
 
 function previewInitJs(template_dir, template_data_bindings, data_bindings, data_table_names) {
-	return getData(template_dir, data_table_names).then(({data, column_types_by_name, timestamps_by_name }) => {
+	return getData(template_dir, data_table_names).then(({ data, column_types_by_name, timestamps_by_name }) => {
 		const prepared_data = {};
 		for (let dataset in data_bindings) {
 			prepared_data[dataset] = data_utils.extractData(
@@ -341,9 +341,9 @@ function tryToOpen(url) {
 }
 
 function isPrefix(a, b) {
-	if (a.length > b.length) return false;
+	if (a.length > b.length) { return false; }
 	for (let i = 0; i < a.length; i++) {
-		if (a[i] !== b[i]) return false;
+		if (a[i] !== b[i]) { return false; }
 	}
 	return true;
 }
@@ -438,11 +438,11 @@ module.exports = function(template_dir, options) {
 				socket.on("close", function() { sockets.delete(socket); });
 			});
 			reloadPreview = function() {
-				for (let socket of sockets) socket.close();
+				for (let socket of sockets) { socket.close(); }
 			};
 
 			watchForChanges(sdk_template);
-			if (options.open) tryToOpen(url);
+			if (options.open) { tryToOpen(url); }
 		})
 		.on("error", function(error) {
 			if (error.code === "EADDRINUSE") {
@@ -509,7 +509,7 @@ module.exports = function(template_dir, options) {
 
 			let should_reload = false;
 			if (sdk.TEMPLATE_SPECIAL.has(path_parts[0])) {
-				if (rebuilding.size > 0) return log.warn(`Rebuild in progress, ignoring change to ${filename}`);
+				if (rebuilding.size > 0) { return log.warn(`Rebuild in progress, ignoring change to ${filename}`); }
 				log.info("Detected change to file: " + filename);
 				should_reload = true;
 			}
@@ -528,7 +528,7 @@ module.exports = function(template_dir, options) {
 			if (build_commands.size > 0) {
 				const build_commands_to_run = [];
 				for (const [key, command] of build_commands) {
-					if (rebuilding.has(key)) continue;
+					if (rebuilding.has(key)) { continue; }
 					rebuilding.add(key);
 					if (reload_timer) {
 						clearTimeout(reload_timer);
@@ -544,7 +544,7 @@ module.exports = function(template_dir, options) {
 								rebuilding.delete(key);
 								build_failed.add(key);
 								throw error;
-							})
+							}),
 					);
 				}
 
@@ -561,21 +561,21 @@ module.exports = function(template_dir, options) {
 						}
 					});
 			}
-			else if (should_reload) reloadTemplate();
+			else if (should_reload) { reloadTemplate(); }
 		});
 	}
 
 	loadSDKTemplate()
 		.then((sdk_template) => {
 			return Promise.all([
-				sdk_template, loadTemplate(template_dir, sdk_template, undefined, options)
+				sdk_template, loadTemplate(template_dir, sdk_template, undefined, options),
 			]);
 		})
 		.then(([sdk_template, template]) => {
 			startServer(sdk_template, template);
 		})
 		.catch((error) => {
-			if (options.debug) log.problem("Failed to start server", error.message, error.stack);
-			else log.problem("Failed to start server", error.message);
+			if (options.debug) { log.problem("Failed to start server", error.message, error.stack); }
+			else { log.problem("Failed to start server", error.message); }
 		});
 };

@@ -25,6 +25,6 @@ if (!Array.prototype.findIndex) {
             return -1;
         },
         configurable: true,
-        writable: true
+        writable: true,
     });
 }

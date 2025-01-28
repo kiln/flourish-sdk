@@ -14,42 +14,51 @@ function isFixedHeight() {
         var params = (0, parse_query_params_1.default)();
         // "referrer" in params implies this is an Embedly embed
         // Check whether embedding site is known to support dynamic resizing
-        if ("referrer" in params)
+        if ("referrer" in params) {
             is_fixed_height = /^https:\/\/medium.com\//.test(params.referrer);
-        else
+        }
+        else {
             is_fixed_height = !("auto" in params);
+        }
     }
     return is_fixed_height;
 }
 function getHeightForBreakpoint(width) {
     var breakpoint_width = width || window.innerWidth;
-    if (breakpoint_width > 999)
+    if (breakpoint_width > 999) {
         return 650;
-    if (breakpoint_width > 599)
+    }
+    if (breakpoint_width > 599) {
         return 575;
+    }
     return 400;
 }
 function initScrolly(opts) {
-    if (!opts)
+    if (!opts) {
         return;
-    if (window.top === window.self)
+    }
+    if (window.top === window.self) {
         return;
+    }
     var embedded_window = window;
-    if (embedded_window.location.pathname == "srcdoc")
+    if (embedded_window.location.pathname == "srcdoc") {
         embedded_window = embedded_window.parent;
+    }
     var message = {
         sender: "Flourish",
         method: "scrolly",
-        captions: opts.captions
+        captions: opts.captions,
     };
     embedded_window.parent.postMessage(JSON.stringify(message), "*");
 }
 function notifyParentWindow(height, opts) {
-    if (window.top === window.self)
+    if (window.top === window.self) {
         return;
+    }
     var embedded_window = window;
-    if (embedded_window.location.pathname == "srcdoc")
+    if (embedded_window.location.pathname == "srcdoc") {
         embedded_window = embedded_window.parent;
+    }
     if (is_amp) {
         // Message is not stringified for AMP
         height = parseInt(height, 10);
@@ -68,8 +77,9 @@ function notifyParentWindow(height, opts) {
         src: embedded_window.location.toString(),
     };
     if (opts) {
-        for (var name in opts)
+        for (var name in opts) {
             message[name] = opts[name];
+        }
     }
     embedded_window.parent.postMessage(JSON.stringify(message), "*");
 }
@@ -100,10 +110,12 @@ function validateWarnMessage(message) {
         console.warn("BUG: validateWarnMessage called for method" + message.method);
         return false;
     }
-    if ((message.message != null) && !isString(message.message))
+    if ((message.message != null) && !isString(message.message)) {
         return false;
-    if ((message.explanation != null) && !isString(message.explanation))
+    }
+    if ((message.explanation != null) && !isString(message.explanation)) {
         return false;
+    }
     return true;
 }
 function validateResizeMessage(message) {
@@ -111,12 +123,15 @@ function validateResizeMessage(message) {
         console.warn("BUG: validateResizeMessage called for method" + message.method);
         return false;
     }
-    if (!isString(message.src))
+    if (!isString(message.src)) {
         return false;
-    if (!isString(message.context))
+    }
+    if (!isString(message.context)) {
         return false;
-    if (!isPossibleHeight(message.height))
+    }
+    if (!isPossibleHeight(message.height)) {
         return false;
+    }
     return true;
 }
 function validateSetSettingMessage(_message) {
@@ -127,8 +142,9 @@ function validateScrolly(message) {
         console.warn("BUG: validateScrolly called for method" + message.method);
         return false;
     }
-    if (!Array.isArray(message.captions))
+    if (!Array.isArray(message.captions)) {
         return false;
+    }
     return true;
 }
 function validateCustomerAnalyticsMessage(message) {
@@ -148,10 +164,12 @@ function validateRequestUpload(message) {
     }
     // FIXME: when adding validation for setSetting (see above) we should
     // also validate that this is a valid setting name of appropriate type
-    if (!isString(message.name))
+    if (!isString(message.name)) {
         return false;
-    if (!(message.accept == null || isString(message.accept)))
+    }
+    if (!(message.accept == null || isString(message.accept))) {
         return false;
+    }
     return true;
 }
 function getMessageValidators(methods) {
@@ -161,7 +179,7 @@ function getMessageValidators(methods) {
         "setSetting": validateSetSettingMessage,
         "customerAnalytics": validateCustomerAnalyticsMessage,
         "request-upload": validateRequestUpload,
-        "scrolly": validateScrolly
+        "scrolly": validateScrolly,
     };
     var validators = {};
     for (var i = 0; i < methods.length; i++) {
@@ -187,11 +205,13 @@ function startEventListeners(callback, allowed_methods, embed_domain) {
                 const origin = event.origin.toLowerCase();
                 embed_domain = embed_domain.toLowerCase();
                 // Allow the domain itself…
-                if (origin.endsWith("//" + embed_domain))
+                if (origin.endsWith("//" + embed_domain)) {
                     return true;
+                }
                 // and subdomains
-                if (origin.endsWith("." + embed_domain))
+                if (origin.endsWith("." + embed_domain)) {
                     return true;
+                }
             }
             if (event.origin.match(/\/\/localhost:\d+$|\/\/(?:public|app)\.flourish.devlocal$|\/\/flourish-api\.com$|\.flourish\.(?:local(:\d+)?|net|rocks|studio)$|\.uri\.sh$|\/\/flourish-user-templates\.com$/)) {
                 return true;
@@ -200,10 +220,12 @@ function startEventListeners(callback, allowed_methods, embed_domain) {
         })();
         // event.source is null when the message is sent by an extension
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#Using_window.postMessage_in_extensions
-        if (event.source == null)
+        if (event.source == null) {
             return;
-        if (!is_accepted_event_origin)
+        }
+        if (!is_accepted_event_origin) {
             return;
+        }
         var message;
         try {
             message = typeof event.data === "object" ? event.data : JSON.parse(event.data);
@@ -212,8 +234,9 @@ function startEventListeners(callback, allowed_methods, embed_domain) {
             console.warn("Unexpected non-JSON message: " + JSON.stringify(event.data));
             return;
         }
-        if (message.sender !== "Flourish")
+        if (message.sender !== "Flourish") {
             return;
+        }
         if (!message.method) {
             console.warn("The 'method' property was missing from message", message);
             return;
@@ -245,13 +268,15 @@ function onSafariWindowResize() {
     var containers = document.querySelectorAll(".flourish-embed");
     for (var i = 0; i < containers.length; i++) {
         var container = containers[i];
-        if (container.getAttribute("data-width"))
+        if (container.getAttribute("data-width")) {
             continue;
+        }
         var iframe = container.querySelector("iframe");
         // When embeds are dynamically loaded, we might have a container without a
         // loaded iframe yet
-        if (!iframe)
+        if (!iframe) {
             continue;
+        }
         var computed_style = window.getComputedStyle(container);
         var width = container.offsetWidth - parseFloat(computed_style.paddingLeft) - parseFloat(computed_style.paddingRight);
         iframe.style.width = width + "px";
@@ -295,6 +320,7 @@ function createScrolly(iframe, captions) {
         step.style.marginLeft = "auto";
         step.style.marginRight = "auto";
         var caption = document.createElement("div");
+        // eslint-disable-next-line flourish-security/dompurify
         caption.innerHTML = dompurify_1.default.sanitize(d, { ADD_ATTR: ["target"] });
         caption.style.visibility = has_content ? "" : "hidden";
         caption.style.display = "inline-block";
@@ -320,8 +346,9 @@ function initIntersection(container) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
                 var iframe = container.querySelector("iframe");
-                if (iframe)
+                if (iframe) {
                     iframe.src = iframe.src.replace(/#slide-.*/, "") + "#slide-" + entry.target.getAttribute("data-slide");
+                }
             }
         });
     }, { rootMargin: "0px 0px -" + t + " 0px" });
@@ -361,7 +388,7 @@ function createEmbedIframe(embed_url, container, width, height, play_on_load) {
             iframe: iframe,
             width: width,
             height: height,
-            play_on_load: play_on_load
+            play_on_load: play_on_load,
         };
         // If this is the first embed on the page which is isn't displayed, set up a
         // list of hidden iframes to poll
@@ -411,22 +438,28 @@ function setIframeContent(embed_url, container, iframe, width, height, play_on_l
     else if (width && width.match(/^[ \t\r\n\f]*([+-]?\d+|\d*\.\d+(?:[eE][+-]?\d+)?)(?:\\?[Pp]|\\0{0,4}[57]0(?:\r\n|[ \t\r\n\f])?)(?:\\?[Xx]|\\0{0,4}[57]8(?:\r\n|[ \t\r\n\f])?)[ \t\r\n\f]*$/)) {
         width_in_px = parseFloat(width);
     }
-    if (height && typeof height === "number")
+    if (height && typeof height === "number") {
         height = "" + height + "px";
+    }
     // Odd design decision in Safari means need to set fixed width rather than %
     // as will try and size iframe to content otherwise. Must also set scrolling=no
-    if (width)
+    if (width) {
         iframe.style.width = width;
-    else if (isSafari())
+    }
+    else if (isSafari()) {
         iframe.style.width = container.offsetWidth + "px";
-    else
+    }
+    else {
         iframe.style.width = "100%";
+    }
     var fixed_height = !!height;
     if (!fixed_height) {
-        if (embed_url.match(/\?/))
+        if (embed_url.match(/\?/)) {
             embed_url += "&auto=1";
-        else
+        }
+        else {
             embed_url += "?auto=1";
+        }
         // For initial height, use our standard breakpoints, based on the explicit
         // pixel width if we know it, or the iframe's measured width if not.
         height = getHeightForBreakpoint(width_in_px || iframe.offsetWidth) + "px";
@@ -453,7 +486,7 @@ function initEmbedding() {
         isSafari: isSafari,
         initCustomerAnalytics: customer_analytics_1.initCustomerAnalytics,
         addAnalyticsListener: customer_analytics_1.addAnalyticsListener,
-        sendCustomerAnalyticsMessage: customer_analytics_1.sendCustomerAnalyticsMessage
+        sendCustomerAnalyticsMessage: customer_analytics_1.sendCustomerAnalyticsMessage,
     };
 }
 exports.default = initEmbedding;

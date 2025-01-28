@@ -31,14 +31,14 @@ describe("readConfig", () => {
 			it(`should use the template.yml value for “${param_to_check}” if it's present in both`, async function() {
 				const config = await this.tryReadConfig(
 					`${param_to_check}: "sample value"`,
-					`{"${param_to_check}": "value that should be ignored"}`
+					`{"${param_to_check}": "value that should be ignored"}`,
 				);
 				assert.equal(config[param_to_check], "sample value");
 			});
 			it(`should use the package.json value for “${param_to_check}” if it's not in template.yml`, async function() {
 				const config = await this.tryReadConfig(
 					`{}`,
-					`{"${param_to_check}": "value that should be used"}`
+					`{"${param_to_check}": "value that should be used"}`,
 				);
 				assert.equal(config[param_to_check], "value that should be used");
 			});
@@ -48,14 +48,14 @@ describe("readConfig", () => {
 		it(`should use the template.yml value for “id” even if “name” is present in package.json`, async function() {
 			const config = await this.tryReadConfig(
 				`id: "sample value"`,
-				`{"name": "value that should be ignored"}`
+				`{"name": "value that should be ignored"}`,
 			);
 			assert.equal(config.id, "sample value");
 		});
 		it(`should use the package.json value for “name” if “id" is not in template.yml`, async function() {
 			const config = await this.tryReadConfig(
 				`{}`,
-				`{"name": "value that should be used"}`
+				`{"name": "value that should be used"}`,
 			);
 			assert.equal(config.id, "value that should be used");
 		});
@@ -86,63 +86,63 @@ describe("readAndValidateConfig", () => {
 	it(`should reject a config with no id`, async function() {
 		await assert.rejects(this.tryReadConfig(
 			`name: the name\nauthor: Mr Brock\nsdk_version: 3`,
-			`{}`
+			`{}`,
 		));
 	});
 
 	it(`should reject a config with no name`, async function() {
 		await assert.rejects(this.tryReadConfig(
 			`id: "sample value"\nauthor: Mr Brock\nsdk_version: 3`,
-			`{}`
+			`{}`,
 		));
 	});
 
 	it(`should reject a config with no author`, async function() {
 		await assert.rejects(this.tryReadConfig(
 			`id: "sample value"\nname: the name\nsdk_version: 3`,
-			`{}`
+			`{}`,
 		));
 	});
 
 	it(`should reject a config with no sdk_version`, async function() {
 		await assert.rejects(this.tryReadConfig(
 			`id: "sample value"\nname: the name\nauthor: Mr Brock`,
-			`{}`
+			`{}`,
 		));
 	});
 
 	it(`should accept a config with the wrong sdk_version`, async function() {
 		await this.tryReadConfig(
 			`id: "sample value"\nname: the name\nauthor: Mr Brock\nsdk_version: 1`,
-			`{}`
+			`{}`,
 		);
 	});
 
 	it(`should accept a config with author specified in package.json`, async function() {
 		await this.tryReadConfig(
 			`id: "sample value"\nname: the name\nsdk_version: 3`,
-			`{"author": "Mr Brock"}`
+			`{"author": "Mr Brock"}`,
 		);
 	});
 
 	it(`should accept a config with author and id specified in package.json`, async function() {
 		await this.tryReadConfig(
 			`name: the name\nsdk_version: 3`,
-			`{"author": "Mr Brock", "name": "sample value"}`
+			`{"author": "Mr Brock", "name": "sample value"}`,
 		);
 	});
 
 	it(`should accept a config with no settings or data`, async function() {
 		await this.tryReadConfig(
 			`id: "sample value"\nname: the name\nauthor: Mr Brock\nsdk_version: 3`,
-			`{}`
+			`{}`,
 		);
 	});
 
 	it(`should return an object containing "config" and "warnings" keys`, async function() {
 		const config = await this.tryReadConfig(
 			`id: "sample value"\nname: the name\nauthor: Mr Brock\nsdk_version: 3`,
-			`{"author": "Mr Brock", "name": "sample value"}`
+			`{"author": "Mr Brock", "name": "sample value"}`,
 		);
 		const result = Object.keys(config).includes("config", "warnings");
 		assert.strictEqual(result, true);
