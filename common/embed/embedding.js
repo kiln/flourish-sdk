@@ -48,6 +48,7 @@ function initScrolly(opts) {
         sender: "Flourish",
         method: "scrolly",
         captions: opts.captions,
+        hasScrollyTransformFix: opts.hasScrollyTransformFix,
     };
     embedded_window.parent.postMessage(JSON.stringify(message), "*");
 }
@@ -282,7 +283,7 @@ function onSafariWindowResize() {
         iframe.style.width = width + "px";
     }
 }
-function createScrolly(iframe, captions) {
+function createScrolly(iframe, captions, hasScrollyTransformFix) {
     var parent = iframe.parentNode;
     // Fallback to avoid any situation where the scrolly gets initialised twice
     if (parent.classList.contains("fl-scrolly-wrapper")) {
@@ -293,6 +294,27 @@ function createScrolly(iframe, captions) {
     parent.style.position = "relative";
     parent.style.paddingBottom = "1px";
     parent.style.transform = "translate3d(0, 0, 0)"; // Workaround for Safari https://stackoverflow.com/questions/50224855/not-respecting-z-index-on-safari-with-position-sticky
+    // On Windows + Chromium, there is a bug where dropdowns open in the wrong
+    // place in scrollies that is related to the sticky position of the iframe.
+    // This workaround retriggers the transform to fix the dropdown positioning
+    // (specifically, the transform is toggled between 0 and 1).
+    // More context here: https://canvadev.atlassian.net/browse/FLOURISH-2379
+    const is_windows = navigator.platform.indexOf("Win") > -1;
+    const is_chromium = !!window.chrome &&
+        (navigator.userAgent.indexOf("Chrome") > -1 ||
+            navigator.userAgent.indexOf("Edg") > -1 ||
+            navigator.userAgent.indexOf("OPR") > -1);
+    if (is_windows && is_chromium && hasScrollyTransformFix) {
+        let scroll_timeout;
+        let transform = 0;
+        window.addEventListener("scroll", function () {
+            clearTimeout(scroll_timeout);
+            scroll_timeout = setTimeout(() => {
+                transform = transform === 0 ? 1 : 0;
+                parent.style.transform = `translateZ(${transform}px)`;
+            }, 100);
+        });
+    }
     iframe.style.position = "sticky";
     var h = parent.getAttribute("data-height") || null;
     if (!h) { // Scrollies require fixed height to work well, so if not height set …

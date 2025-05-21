@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -50,6 +50,7 @@
     "tempy": "^3.1.0"
   },
   "engines": {
-    "node": ">=13.2"
+    "node": "20.19.x",
+    "npm": "10.8.2"
   }
 }

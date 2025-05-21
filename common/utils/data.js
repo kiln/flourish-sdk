@@ -32,6 +32,12 @@ function extractData(data_binding, data_by_id, column_types_by_id, template_data
     var num_rows = 0;
     var dataset = Object.assign([], { column_names: {}, metadata: {}, timestamps: {} });
     var interpreters_by_id = {};
+    // It's possible that a data_binding is for a dataset that is not in a
+    // template_data_binding. In that case, we just return an empty dataset
+    // to avoid an exception below.
+    if (!template_data_bindings) {
+        return dataset;
+    }
     function getInterpretationIds(data_table_id, column_index) {
         if (!interpreters_by_id[data_table_id]) {
             return {};

@@ -18,7 +18,7 @@ export type DatasheetsTimestamps = {
 };
 export declare function extractData(data_binding: KeyToAugmentedDataBinding, data_by_id: {
     [data_table_id: string]: string[][] | undefined;
-}, column_types_by_id: NullableColumnTypesById, template_data_bindings: KeyToTemplateDataBinding, timestamps: DatasheetsTimestamps): DatasetType;
+}, column_types_by_id: NullableColumnTypesById, template_data_bindings: KeyToTemplateDataBinding | undefined, timestamps: DatasheetsTimestamps): DatasetType;
 export declare function getColumnTypesForData(data: string[][]): ColumnType[];
 export declare function getRandomSeededSample(column: string[], sample_size: number): string[];
 export declare function mulberry32(seed: number): () => number;

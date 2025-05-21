@@ -1,3 +1,7 @@
+# 5.2.1
+* Fixes crash in SDK dev-server when locale contains non-ASCII characters.
+  `Last-Modified` header is now sent as RFC-1123 ASCII.
+
 # 5.2.0
 * Fixes issue publishing templates with complex settings
 * Improves html sanitation in template publishing workflow

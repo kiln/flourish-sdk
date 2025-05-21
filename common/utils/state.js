@@ -19,21 +19,16 @@ function isObject(x) {
     "a.b.d": 3
   }
  */
-function flatten(o, keys, result) {
-    if (!keys) {
-        keys = [];
-    }
-    // Create a new object with no prototype to avoid prototype pollution attacks
-    if (!result) {
-        result = Object.create(null);
-    }
+function flatten(o, keys = [], result = Object.create(null)) {
+    const keys_array = [...keys];
     for (var k in o) {
-        keys.push(k);
-        if (typeof o[k] === "object") {
-            flatten(o[k], keys, result);
+        keys_array.push(k);
+        const value = o[k];
+        if (typeof value === "object") {
+            flatten(value, keys_array, result);
         }
-        result[keys.join(".")] = o[k];
-        keys.pop();
+        result[keys_array.join(".")] = o[k];
+        keys_array.pop();
     }
     return result;
 }
@@ -55,7 +50,7 @@ function unflatten(o) {
     return r;
 }
 function merge(dest, source) {
-    for (var prop in source) {
+    for (const prop in source) {
         if (isObject(dest[prop]) && isObject(source[prop])) {
             merge(dest[prop], source[prop]);
         }
@@ -72,8 +67,9 @@ function deepCopyObject(obj) {
     // Create a new object with no prototype to avoid prototype pollution attacks
     var copy = Object.create(null);
     for (var k in obj) {
-        if (Array.isArray(obj[k])) {
-            copy[k] = obj[k].slice();
+        const value = obj[k];
+        if (Array.isArray(value)) {
+            copy[k] = value.slice();
         }
         else if (isObject(obj[k])) {
             copy[k] = deepCopyObject(obj[k]);
@@ -141,6 +137,8 @@ function deepEqual(a, b) {
             return true;
         case "undefined":
             return typeof b === "undefined";
+        default:
+            return false;
     }
 }
 function getStateChanges(state1, state2) {

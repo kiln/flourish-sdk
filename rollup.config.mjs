@@ -20,7 +20,7 @@ export default {
 
 	// d3 relies on the node-resolve plugin
 	plugins: [
-		nodeResolve(),
+		nodeResolve({ browser: true }),
 		typescript({
 			tsconfig: "./tsconfig.json",
 			tsconfigOverride: {

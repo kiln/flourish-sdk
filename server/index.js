@@ -203,7 +203,6 @@ function scriptElementExternal(url) {
 	return TA.createElement("script", "http://www.w3.org/1999/xhtml", [{ name: "src", value: url }]);
 }
 
-
 function loadTemplate(template_dir, sdk_template, build_failed, options) {
 	return Promise.all([
 		listDataTables(template_dir),
@@ -405,7 +404,7 @@ module.exports = function(template_dir, options) {
 		const filename = path.resolve(template_dir, "data", req.params.id + ".csv");
 		const { mtime: last_updated } = fs.statSync(filename);
 		res.status(200).header("Content-Type", "text/csv")
-			.header("Last-Modified", last_updated) // Send last modified time
+			.header("Last-Modified", new Date(last_updated).toUTCString()) // Send last modified time
 			.sendFile(filename);
 	});
 
@@ -419,7 +418,6 @@ module.exports = function(template_dir, options) {
 	// Static files
 	app.use("/", express.static(path.join(__dirname, "..", "site")));
 	app.use(`/template/1/embed/${static_prefix}/`, express.static(path.join(template_dir, "static")));
-
 
 	function startServer(sdk_template, template_) {
 		template = template_;

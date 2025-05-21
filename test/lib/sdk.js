@@ -4,7 +4,6 @@ const assert = require("assert"),
 
 const { readConfig, readAndValidateConfig } = require("../../lib/sdk.js");
 
-
 describe("readConfig", () => {
 	before(async function() {
 		const { temporaryDirectory } = await import("tempy");

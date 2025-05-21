@@ -2,16 +2,32 @@
 <html lang="en-GB">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<script type="text/javascript">
+		// Create a global state object to track OneTrust status
+		window.flourishOneTrust = window.flourishOneTrust || {
+			ready: false
+		};
+
 		function OptanonWrapper() {
+			// Set up consent change listener once
 			OneTrust.OnConsentChanged(() => {
 				document.cookie = `OptanonAlertBoxClosed=${new Date().toISOString()};`
 					+ "SameSite=None;"
 					+ "Secure;"
 					+ `expires=${new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString()};`;
+					
+				// Set flag and dispatch event for consent change
+				window.flourishOneTrust.ready = true;
+				const oneTrustConsentChangedEvent = new CustomEvent('onetrustconsentchanged');
+				window.dispatchEvent(oneTrustConsentChangedEvent);
 			});
+			
+			// Set flag and dispatch event for OneTrust loaded
+			window.flourishOneTrust.ready = true;
+			const oneTrustLoadedEvent = new CustomEvent('onetrustloaded');
+			window.dispatchEvent(oneTrustLoadedEvent);
 		}
 	</script>
 

@@ -45,11 +45,11 @@ describe("validate_config", function() {
 	}
 
 	function bindingPlus(o) {
-		return metadataPlus({ data: [ Object.assign({}, binding, o) ] });
+		return metadataPlus({ data: [Object.assign({}, binding, o)] });
 	}
 
 	function settingPlus(o, other, more_settings=[]) {
-		return metadataPlus(Object.assign({ settings: [ Object.assign({}, setting_foo, o), setting_bar ].concat(more_settings) }, other));
+		return metadataPlus(Object.assign({ settings: [Object.assign({}, setting_foo, o), setting_bar].concat(more_settings) }, other));
 	}
 
 	function testBoolean(name) {
@@ -325,30 +325,30 @@ describe("validate_config", function() {
 				"template.yml: “build.foo.files” must be an array");
 		});
 		it("should reject a null file", function() {
-			expectFailure(metadataPlus({ build: { foo: { script: "", files: [ null ] } } }),
+			expectFailure(metadataPlus({ build: { foo: { script: "", files: [null] } } }),
 				"template.yml: the entries of “build.foo.files” must be strings");
 		});
 		it("should reject an undefined file", function() {
-			expectFailure(metadataPlus({ build: { foo: { script: "", files: [ undefined ] } } }),
+			expectFailure(metadataPlus({ build: { foo: { script: "", files: [undefined] } } }),
 				"template.yml: the entries of “build.foo.files” must be strings");
 		});
 		it("should reject a numeric file", function() {
-			expectFailure(metadataPlus({ build: { foo: { script: "", files: [ 23 ] } } }),
+			expectFailure(metadataPlus({ build: { foo: { script: "", files: [23] } } }),
 				"template.yml: the entries of “build.foo.files” must be strings");
 		});
 		it("should reject a true file", function() {
-			expectFailure(metadataPlus({ build: { foo: { script: "", files: [ true ] } } }),
+			expectFailure(metadataPlus({ build: { foo: { script: "", files: [true] } } }),
 				"template.yml: the entries of “build.foo.files” must be strings");
 		});
 		it("should reject a false file", function() {
-			expectFailure(metadataPlus({ build: { foo: { script: "", files: [ false ] } } }),
+			expectFailure(metadataPlus({ build: { foo: { script: "", files: [false] } } }),
 				"template.yml: the entries of “build.foo.files” must be strings");
 		});
 		it("should accept a string file", function() {
-			expectSuccess(metadataPlus({ build: { foo: { script: "", files: [ "" ] } } }));
+			expectSuccess(metadataPlus({ build: { foo: { script: "", files: [""] } } }));
 		});
 		it("should accept two strings", function() {
-			expectSuccess(metadataPlus({ build: { foo: { script: "", files: [ "one", "two" ] } } }));
+			expectSuccess(metadataPlus({ build: { foo: { script: "", files: ["one", "two"] } } }));
 		});
 
 		it("should reject a null directory", function() {
@@ -410,23 +410,23 @@ describe("validate_config", function() {
 		      type = binding.type;
 
 		it("should require name", function() {
-			expectFailure(metadataPlus({ data: [ { dataset, key, type } ] }),
+			expectFailure(metadataPlus({ data: [{ dataset, key, type }] }),
 				"template.yml data binding must specify a name");
 		});
 		it("should require dataset", function() {
-			expectFailure(metadataPlus({ data: [ { name, key, type } ] }),
+			expectFailure(metadataPlus({ data: [{ name, key, type }] }),
 				"template.yml data binding “My binding” must specify a dataset");
 		});
 		it("should require key", function() {
-			expectFailure(metadataPlus({ data: [ { name, dataset, type } ] }),
+			expectFailure(metadataPlus({ data: [{ name, dataset, type }] }),
 				"template.yml data binding “My binding” must specify a key");
 		});
 		it("should require type", function() {
-			expectFailure(metadataPlus({ data: [ { name, dataset, key } ] }),
+			expectFailure(metadataPlus({ data: [{ name, dataset, key }] }),
 				"template.yml data binding “My binding” must specify a type");
 		});
 		it("should require column for non-optional column bindings", function() {
-			expectFailure(metadataPlus({ data: [ { name, dataset, key, type } ] }),
+			expectFailure(metadataPlus({ data: [{ name, dataset, key, type }] }),
 				"template.yml non-optional data binding “My binding” must specify column");
 		});
 		it("should accept name/dataset/key/type=column/column", function() {
@@ -528,17 +528,17 @@ describe("validate_config", function() {
 			expectSuccess(bindingPlus({ optional: false }));
 		});
 		it("should require column if optional is false", function() {
-			expectFailure(metadataPlus({ data: [ { name, dataset, key, type, optional: false } ] }),
+			expectFailure(metadataPlus({ data: [{ name, dataset, key, type, optional: false }] }),
 				"template.yml non-optional data binding “My binding” must specify column");
 		});
 
 		it("should reject duplicates", function() {
-			expectFailure(metadataPlus({ data: [ binding, binding ] }),
+			expectFailure(metadataPlus({ data: [binding, binding] }),
 				"template.yml: there is more than one data binding with dataset “dataset” and key “key”");
 		});
 
 		it("should ignore headings", function() {
-			expectSuccess(metadataPlus({ data: [ "Heading", binding ] }));
+			expectSuccess(metadataPlus({ data: ["Heading", binding] }));
 		});
 	});
 
@@ -571,19 +571,19 @@ describe("validate_config", function() {
 		});
 
 		it("should require property", function() {
-			expectFailure(metadataPlus({ settings: [ { name: "Foo", type: "string" } ] }),
+			expectFailure(metadataPlus({ settings: [{ name: "Foo", type: "string" }] }),
 				"template.yml setting must specify a property:");
 		});
 		it("should require type", function() {
-			expectFailure(metadataPlus({ settings: [ { name: "Foo", property: "foo" } ] }),
+			expectFailure(metadataPlus({ settings: [{ name: "Foo", property: "foo" }] }),
 				"template.yml setting “foo” must specify a type:");
 		});
 		it("should require name", function() {
-			expectFailure(metadataPlus({ settings: [ { property: "foo", type: "string" } ] }),
+			expectFailure(metadataPlus({ settings: [{ property: "foo", type: "string" }] }),
 				"template.yml setting “foo” must specify a name:");
 		});
 		it("should not require name if choices are specified", function() {
-			expectSuccess(metadataPlus({ settings: [ { property: "foo", type: "string", choices: [] } ] }));
+			expectSuccess(metadataPlus({ settings: [{ property: "foo", type: "string", choices: [] }] }));
 		});
 
 		describe("optional settings", function() {
@@ -828,43 +828,43 @@ describe("validate_config", function() {
 
 			it("should accept an array containing an object with multiple string values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
-				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }] }, undefined, [blah]));
+				expectSuccess(settingPlus({ show_if: [{ "bar": "xxx", "blah": "xxx" }] }, undefined, [blah]));
 			});
 
 			it("should accept an array containing an object with multiple array values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
-				expectSuccess(settingPlus({ show_if: [ { "bar": ["xxx"], "blah": ["xxx"] }] }, undefined, [blah]));
+				expectSuccess(settingPlus({ show_if: [{ "bar": ["xxx"], "blah": ["xxx"] }] }, undefined, [blah]));
 			});
 
 			it("should reject an array containing any objects with empty array values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
-				expectFailure(settingPlus({ show_if: [ { "bar": [], "blah": "xxx" }] }, undefined, [blah]),
+				expectFailure(settingPlus({ show_if: [{ "bar": [], "blah": "xxx" }] }, undefined, [blah]),
 					"template.yml setting “foo” “show_if” property: condition for bar is empty");
 			});
 
 			it("should reject an array containing any objects referring to non-existent settings", function() {
-				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "baz": "xxx" }] }),
+				expectFailure(settingPlus({ show_if: [{ "bar": "xxx", "baz": "xxx" }] }),
 					"template.yml: “show_if” or “hide_if” property refers to non-existent setting “baz”");
 			});
 
 			it("should accept an array containing an object with a string value and a valid data binding", function() {
-				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }] }, { data: [ binding ] }));
+				expectSuccess(settingPlus({ show_if: [{ "bar": "xxx", "data.dataset.key": true }] }, { data: [binding] }));
 			});
 
 			it("should reject an array with a data reference when there are no data bindings", function() {
-				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.key": true }] }),
+				expectFailure(settingPlus({ show_if: [{ "bar": "xxx", "data.dataset.key": true }] }),
 					"template.yml: “show_if” or “hide_if” property refers to data binding “data.dataset.key” when none are defined");
 			});
 
 			it("should reject an array with a reference to a non-existent data binding", function() {
-				expectFailure(settingPlus({ show_if: [ { "bar": "xxx", "data.dataset.nosuchkey": true }] }, { data: [ binding ] }),
+				expectFailure(settingPlus({ show_if: [{ "bar": "xxx", "data.dataset.nosuchkey": true }] }, { data: [binding] }),
 					"template.yml: “show_if” or “hide_if” property refers to non-existent data binding “data.dataset.nosuchkey”");
 			});
 
 			it("should accept an array containing multiple objects of including string and boolean values", function() {
 				const blah = { name: "Blah", property: "blah", type: "string" };
 				const bool = { name: "Bool", property: "bool", type: "boolean" };
-				expectSuccess(settingPlus({ show_if: [ { "bar": "xxx", "blah": "xxx" }, { "bool": true }] }, undefined, [blah, bool]));
+				expectSuccess(settingPlus({ show_if: [{ "bar": "xxx", "blah": "xxx" }, { "bool": true }] }, undefined, [blah, bool]));
 			});
 
 			it("should forbid empty objects", function() {
@@ -887,26 +887,26 @@ describe("validate_config", function() {
 					"template.yml: “show_if” or “hide_if” property refers to non-existent setting “baz”");
 			});
 			it("should accept a reference to a data binding", function() {
-				expectSuccess(settingPlus({ show_if: "data.dataset.key" }, { data: [ binding ] }));
+				expectSuccess(settingPlus({ show_if: "data.dataset.key" }, { data: [binding] }));
 			});
 			it("should reject a data reference when there are no data bindings", function() {
 				expectFailure(settingPlus({ show_if: "data.dataset.key" }),
 					"template.yml: “show_if” or “hide_if” property refers to data binding “data.dataset.key” when none are defined");
 			});
 			it("should reject a reference to a non-existent data binding", function() {
-				expectFailure(settingPlus({ show_if: "data.dataset.nosuchkey" }, { data: [ binding ] }),
+				expectFailure(settingPlus({ show_if: "data.dataset.nosuchkey" }, { data: [binding] }),
 					"template.yml: “show_if” or “hide_if” property refers to non-existent data binding “data.dataset.nosuchkey”");
 			});
 
 			// This test is skipped because it doesn’t pass, and looks like it would be
 			// complicated to fix.
 			it.skip("should reject a string value when referencing a data binding", function() {
-				expectFailure(settingPlus({ show_if: { "data.dataset.key": "foo" } }, { data: [ binding ] }));
+				expectFailure(settingPlus({ show_if: { "data.dataset.key": "foo" } }, { data: [binding] }));
 			});
 
 			it("should reject a reference to a data binding that has no key", function() {
 				const binding_undef_key = { name: "No-key binding", dataset: "dataset", key: undefined, type: "column", column: "Foo::A" };
-				expectFailure(settingPlus({ show_if: "data.dataset" }, { data: [ binding_undef_key ] }),
+				expectFailure(settingPlus({ show_if: "data.dataset" }, { data: [binding_undef_key] }),
 					"template.yml: “show_if” or “hide_if” property specifies invalid data binding or column type “data.dataset”");
 			});
 			it("should accept settings whose names start with /data./ [kiln/flourish-sdk#45]", function() {

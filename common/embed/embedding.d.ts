@@ -18,7 +18,7 @@ declare function getHeightForBreakpoint(width: any): 650 | 575 | 400;
 declare function startEventListeners(callback: any, allowed_methods: any, embed_domain: any): void;
 declare function notifyParentWindow(height: any, opts: any): void;
 declare function initScrolly(opts: any): void;
-declare function createScrolly(iframe: any, captions: any): void;
+declare function createScrolly(iframe: any, captions: any, hasScrollyTransformFix: any): void;
 declare function isSafari(): boolean;
 import { initCustomerAnalytics } from "./customer_analytics";
 import { addAnalyticsListener } from "./customer_analytics";
