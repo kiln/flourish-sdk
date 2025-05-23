@@ -1,3 +1,6 @@
+# 5.2.2
+* Addresses some technical debt.
+
 # 5.2.1
 * Fixes crash in SDK dev-server when locale contains non-ASCII characters.
   `Last-Modified` header is now sent as RFC-1123 ASCII.
