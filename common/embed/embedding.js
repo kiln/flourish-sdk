@@ -298,7 +298,6 @@ function createScrolly(iframe, captions, hasScrollyTransformFix) {
     // place in scrollies that is related to the sticky position of the iframe.
     // This workaround retriggers the transform to fix the dropdown positioning
     // (specifically, the transform is toggled between 0 and 1).
-    // More context here: https://canvadev.atlassian.net/browse/FLOURISH-2379
     const is_windows = navigator.platform.indexOf("Win") > -1;
     const is_chromium = !!window.chrome &&
         (navigator.userAgent.indexOf("Chrome") > -1 ||
