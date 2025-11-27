@@ -11,7 +11,23 @@ declare namespace _default {
                 text: string;
                 url: string;
             };
+            "3d-arc-map": {
+                text: string;
+                url: string;
+            };
+            "3d-map": {
+                text: string;
+                url: string;
+            };
+            "3d-marker-map": {
+                text: string;
+                url: string;
+            };
             annotator: {
+                text: string;
+                url: string;
+            };
+            audio: {
                 text: string;
                 url: string;
             };
@@ -20,6 +36,14 @@ declare namespace _default {
                 url: string;
             };
             "bubble-chart": {
+                text: string;
+                url: string;
+            };
+            calculator: {
+                text: string;
+                url: string;
+            };
+            calendar: {
                 text: string;
                 url: string;
             };
@@ -32,6 +56,10 @@ declare namespace _default {
                 url: string;
             };
             chord: {
+                text: string;
+                url: string;
+            };
+            "connections-globe": {
                 text: string;
                 url: string;
             };
@@ -71,6 +99,10 @@ declare namespace _default {
                 text: string;
                 url: string;
             };
+            "interactive-diagram": {
+                text: string;
+                url: string;
+            };
             map: {
                 text: string;
                 url: string;
@@ -103,6 +135,10 @@ declare namespace _default {
                 text: string;
                 url: string;
             };
+            "projection-map": {
+                text: string;
+                url: string;
+            };
             quiz: {
                 text: string;
                 url: string;
@@ -131,6 +167,10 @@ declare namespace _default {
                 text: string;
                 url: string;
             };
+            story: {
+                text: string;
+                url: string;
+            };
             survey: {
                 text: string;
                 url: string;
@@ -139,15 +179,19 @@ declare namespace _default {
                 text: string;
                 url: string;
             };
-            timeline: {
-                text: string;
-                url: string;
-            };
             "text-annotator": {
                 text: string;
                 url: string;
             };
+            timeline: {
+                text: string;
+                url: string;
+            };
             tournament: {
+                text: string;
+                url: string;
+            };
+            webgl: {
                 text: string;
                 url: string;
             };

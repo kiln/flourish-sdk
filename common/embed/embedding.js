@@ -214,7 +214,7 @@ function startEventListeners(callback, allowed_methods, embed_domain) {
                     return true;
                 }
             }
-            if (event.origin.match(/\/\/localhost:\d+$|\/\/(?:public|app)\.flourish.devlocal$|\/\/flourish-api\.com$|\.flourish\.(?:local(:\d+)?|net|rocks|studio)$|\.uri\.sh$|\/\/flourish-user-templates\.com$/)) {
+            if (event.origin.match(/\/\/localhost:\d+$|\/\/(?:public|app)\.local\.flourish-internal\.com$|\/\/flourish-api\.com$|\.flourish\.(?:local(:\d+)?|net|rocks|studio)$|\.uri\.sh$|\/\/flourish-user-templates\.com$/)) {
                 return true;
             }
             return false;

@@ -364,7 +364,8 @@ function sortDataTables(data_tables, data_bindings) {
         }
     });
     return data_tables.sort(function (dt1, dt2) {
-        var i = table_names.indexOf(dt1.name), j = table_names.indexOf(dt2.name);
+        const i = dt1.name ? table_names.indexOf(dt1.name) : -1;
+        const j = dt2.name ? table_names.indexOf(dt2.name) : -1;
         return (i == -1 ? Infinity : i) < (j == -1 ? Infinity : j) ? -1 : 1;
     });
 }

@@ -1,4 +1,4 @@
-type ColumnTypeInMetadata = {
+export type ColumnTypeInMetadata = {
     type: string;
     type_id: string;
     output_format_id: string;
@@ -60,4 +60,3 @@ export type ColumnTypesById = {
 export type NullableColumnTypesById = {
     [data_table_id: string]: ColumnType[] | null;
 };
-export {};

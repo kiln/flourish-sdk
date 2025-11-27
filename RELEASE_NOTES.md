@@ -1,3 +1,15 @@
+# 5.2.4
+* Add new properties to support standalone HTML downloads. The first is
+  `allowed_standalone_download_origins` at the top level, so that
+  you can whitelist origins that the template should be able to
+  contact (e.g. map tile servers). You can also use
+  `cacheable_for_standalone_downloads: true` on settings and
+  data bindings to indicate that their URL values can fetched and
+  cached for HTML downloads.
+
+# 5.2.3
+* Update version of @flourish/interpreter
+
 # 5.2.2
 * Addresses some technical debt.
 

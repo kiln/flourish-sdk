@@ -1,12 +1,12 @@
 {
   "name": "@flourish/sdk",
-  "version": "5.2.2",
+  "version": "5.2.4",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
     "prepare": "cd .. && make sdk_clean sdk",
     "test": "mocha --recursive",
-    "test:ci": "mocha --recursive --reporter json --reporter-option output=../test_reports/sdk.json"
+    "test:ci": "c8 -o coverage-sdk mocha --recursive --reporter json --reporter-option output=../test_reports/sdk.json"
   },
   "bin": {
     "flourish": "bin/flourish.js"
@@ -15,13 +15,14 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": "kiln/flourish-sdk",
   "dependencies": {
-    "@flourish/interpreter": "^9.1.1",
+    "@flourish/interpreter": "^9.2.0",
     "@flourish/semver": "^1.0.2",
     "@flourish/transform-data": "^2.1.0",
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-terser": "^0.4.4",
-    "@handlebars/allow-prototype-access": "^1.0.5",
     "archiver": "^7.0.1",
+    "c8": "^10.1.3",
     "chokidar": "^3.6.0",
     "cross-spawn": "^7.0.3",
     "d3-dsv": "^2.0.0",
@@ -42,10 +43,10 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "rollup-plugin-typescript2": "^0.36.0",
     "d3-request": "^1.0.6",
-    "rollup": "^4.17.2",
     "mocha": "^10.4.0",
+    "rollup": "^4.17.2",
+    "rollup-plugin-typescript2": "^0.36.0",
     "sinon": "^18.0.0",
     "tempy": "^3.1.0"
   },

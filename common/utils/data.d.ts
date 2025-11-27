@@ -45,7 +45,7 @@ export declare function transposeNestedArray(nested_array: string[][]): string[]
 export declare function getSlicedData(arr: string[]): string[];
 export declare function interpretColumn(arr: string[]): any;
 export declare function sortDataTables(data_tables: {
-    name: string;
+    name?: string;
 }[], data_bindings: (string | TemplateDataBinding)[] | undefined): {
-    name: string;
+    name?: string;
 }[] | undefined;

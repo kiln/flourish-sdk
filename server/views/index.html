@@ -4,32 +4,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<script type="text/javascript">
-		// Create a global state object to track OneTrust status
-		window.flourishOneTrust = window.flourishOneTrust || {
-			ready: false
-		};
-
-		function OptanonWrapper() {
-			// Set up consent change listener once
-			OneTrust.OnConsentChanged(() => {
-				document.cookie = `OptanonAlertBoxClosed=${new Date().toISOString()};`
-					+ "SameSite=None;"
-					+ "Secure;"
-					+ `expires=${new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString()};`;
-					
-				// Set flag and dispatch event for consent change
-				window.flourishOneTrust.ready = true;
-				const oneTrustConsentChangedEvent = new CustomEvent('onetrustconsentchanged');
-				window.dispatchEvent(oneTrustConsentChangedEvent);
-			});
-			
-			// Set flag and dispatch event for OneTrust loaded
-			window.flourishOneTrust.ready = true;
-			const oneTrustLoadedEvent = new CustomEvent('onetrustloaded');
-			window.dispatchEvent(oneTrustLoadedEvent);
-		}
-	</script>
 
 	<title>Flourish | Data Visualization &amp; Storytelling</title>
 
@@ -45,9 +19,9 @@
 	</div>
 	<div class="row editor-bar">
 	<div id="preview-menu" class="row-menu left no-select">
-			<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window" aria-label="Full preview in new window">
-				<i class="fa fa-expand"></i>
-			</a>
+				<a id="full-preview" href="preview" target="_blank" class="menu-item clickable popup" data-popup-head="Full preview in new window" aria-label="Full preview in new window">
+					<i class="fa fa-expand"></i>
+				</a>
 		<div id="editor-previews">
 			<span id="editor-auto" data-target="auto" class="menu-item preview-mode clickable selected popup" data-popup-head="Preview using available width">
 				<i class="fa fa-tv"></i>
@@ -67,6 +41,16 @@
 			</span>
 		</div>
 	</div>
+	
+	<script>
+			document.querySelector('#full-preview')?.addEventListener('click', () => {
+				window.sp.trackInteraction({
+					section: 'editor_toolbar',
+					component: 'full_preview',
+					interaction_type: 'click'
+				});
+			});
+	</script>
 		<span class="sdk-status-label"></span>
 		<button class="sdk-session-reset-button" title="Resets the development session.">Reset</button>
 		<div class="confirm-saved saved" data-testid="saving-indicator"><i class="fa fa-check"></i> <span class="label"></span></div>

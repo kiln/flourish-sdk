@@ -77,6 +77,15 @@ const AFTER = `
 			result = window.template.data;
 			break;
 
+			case "setMetadata":
+			if (!window.template.metadata) window.template.metadata = {};
+			assign(window.template.metadata, message.argument);
+			break;
+
+			case "getMetadata":
+			result = window.template.metadata;
+			break;
+
 			case "draw":
 			window.template.draw();
 			break;
@@ -101,6 +110,10 @@ const AFTER = `
 			var spec = message.argument;
 			if (spec.data) {
 				assign(window.template.data, spec.data);
+			}
+			if (spec.metadata) {
+				if (!window.template.metadata) window.template.metadata = {};
+				assign(window.template.metadata, spec.metadata);
 			}
 			if (spec.state) {
 				deepAssign(window.template.state, spec.state, spec.overwrite_state);

@@ -235,6 +235,54 @@ describe("validate_config", function() {
 
 	describe("svg_download", testBoolean("svg_download"));
 
+	describe("allowed_standalone_download_origins", function() {
+		it("should accept an empty array", function() {
+			expectSuccess(metadataPlus({ allowed_standalone_download_origins: [] }));
+		});
+		it("should accept a single URL", function() {
+			expectSuccess(metadataPlus({ allowed_standalone_download_origins: ["https://example.com"] }));
+		});
+		it("should accept multiple URLs", function() {
+			expectSuccess(metadataPlus({ allowed_standalone_download_origins: [
+				"https://tiles.flourish.studio",
+				"https://icons.flourish.studio",
+				"http://legacy-api.example.com",
+			] }));
+		});
+		it("should reject null", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: null }),
+				"template.yml: “allowed_standalone_download_origins” must be an array");
+		});
+		it("should reject undefined", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: undefined }),
+				"template.yml: “allowed_standalone_download_origins” must be an array");
+		});
+		it("should reject a string", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: "https://example.com" }),
+				"template.yml: “allowed_standalone_download_origins” must be an array");
+		});
+		it("should reject a number", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: 23 }),
+				"template.yml: “allowed_standalone_download_origins” must be an array");
+		});
+		it("should reject an object", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: {} }),
+				"template.yml: “allowed_standalone_download_origins” must be an array");
+		});
+		it("should reject array with non-string entry", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: ["https://example.com", 123] }),
+				"template.yml: allowed_standalone_download_origins entry “123” is not a string");
+		});
+		it("should reject URL without http:// or https://", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: ["example.com"] }),
+				"template.yml: allowed_standalone_download_origins entry “example.com” must be a valid HTTP(S) URL");
+		});
+		it("should reject URL with invalid protocol", function() {
+			expectFailure(metadataPlus({ allowed_standalone_download_origins: ["ftp://example.com"] }),
+				"template.yml: allowed_standalone_download_origins entry “ftp://example.com” must be a valid HTTP(S) URL");
+		});
+	});
+
 	describe("build rules", function() {
 		testObject("build_rules", "template.yml “build” must be a mapping");
 		it("should reject null", function() {
@@ -539,6 +587,39 @@ describe("validate_config", function() {
 
 		it("should ignore headings", function() {
 			expectSuccess(metadataPlus({ data: ["Heading", binding] }));
+		});
+
+		describe("cacheable_for_standalone_downloads", function() {
+			it("should accept true", function() {
+				expectSuccess(bindingPlus({ cacheable_for_standalone_downloads: true }));
+			});
+			it("should accept false", function() {
+				expectSuccess(bindingPlus({ cacheable_for_standalone_downloads: false }));
+			});
+			it("should reject null", function() {
+				expectFailure(bindingPlus({ cacheable_for_standalone_downloads: null }),
+					"template.yml “cacheable_for_standalone_downloads” property of data binding “My binding” must be a boolean");
+			});
+			it("should reject undefined", function() {
+				expectFailure(bindingPlus({ cacheable_for_standalone_downloads: undefined }),
+					"template.yml “cacheable_for_standalone_downloads” property of data binding “My binding” must be a boolean");
+			});
+			it("should reject strings", function() {
+				expectFailure(bindingPlus({ cacheable_for_standalone_downloads: "true" }),
+					"template.yml “cacheable_for_standalone_downloads” property of data binding “My binding” must be a boolean");
+			});
+			it("should reject numbers", function() {
+				expectFailure(bindingPlus({ cacheable_for_standalone_downloads: 123 }),
+					"template.yml “cacheable_for_standalone_downloads” property of data binding “My binding” must be a boolean");
+			});
+			it("should reject arrays", function() {
+				expectFailure(bindingPlus({ cacheable_for_standalone_downloads: [] }),
+					"template.yml “cacheable_for_standalone_downloads” property of data binding “My binding” must be a boolean");
+			});
+			it("should reject objects", function() {
+				expectFailure(bindingPlus({ cacheable_for_standalone_downloads: {} }),
+					"template.yml “cacheable_for_standalone_downloads” property of data binding “My binding” must be a boolean");
+			});
 		});
 	});
 
@@ -1027,6 +1108,51 @@ describe("validate_config", function() {
 			it("should reject objects", function() {
 				expectFailure(settingPlus({ new_section: {} }),
 					"template.yml setting “foo” new_section property must be a boolean or string, not object");
+			});
+		});
+
+		describe("cacheable_for_standalone_downloads", function() {
+			it("should accept true for url type", function() {
+				expectSuccess(settingPlus({ type: "url", cacheable_for_standalone_downloads: true }));
+			});
+			it("should accept false for url type", function() {
+				expectSuccess(settingPlus({ type: "url", cacheable_for_standalone_downloads: false }));
+			});
+			it("should reject it for string type", function() {
+				expectFailure(settingPlus({ type: "string", cacheable_for_standalone_downloads: true }),
+					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url”");
+			});
+			it("should reject it for number type", function() {
+				expectFailure(settingPlus({ type: "number", cacheable_for_standalone_downloads: true }),
+					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url”");
+			});
+			it("should reject it for boolean type", function() {
+				expectFailure(settingPlus({ type: "boolean", cacheable_for_standalone_downloads: true }),
+					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url”");
+			});
+			it("should reject null", function() {
+				expectFailure(settingPlus({ type: "url", cacheable_for_standalone_downloads: null }),
+					"template.yml setting “foo” has an invalid value for “cacheable_for_standalone_downloads”: should be true or false");
+			});
+			it("should reject undefined", function() {
+				expectFailure(settingPlus({ type: "url", cacheable_for_standalone_downloads: undefined }),
+					"template.yml setting “foo” has an invalid value for “cacheable_for_standalone_downloads”: should be true or false");
+			});
+			it("should reject strings", function() {
+				expectFailure(settingPlus({ type: "url", cacheable_for_standalone_downloads: "true" }),
+					"template.yml setting “foo” has an invalid value for “cacheable_for_standalone_downloads”: should be true or false");
+			});
+			it("should reject numbers", function() {
+				expectFailure(settingPlus({ type: "url", cacheable_for_standalone_downloads: 1 }),
+					"template.yml setting “foo” has an invalid value for “cacheable_for_standalone_downloads”: should be true or false");
+			});
+			it("should reject arrays", function() {
+				expectFailure(settingPlus({ type: "url", cacheable_for_standalone_downloads: [] }),
+					"template.yml setting “foo” has an invalid value for “cacheable_for_standalone_downloads”: should be true or false");
+			});
+			it("should reject objects", function() {
+				expectFailure(settingPlus({ type: "url", cacheable_for_standalone_downloads: {} }),
+					"template.yml setting “foo” has an invalid value for “cacheable_for_standalone_downloads”: should be true or false");
 			});
 		});
 

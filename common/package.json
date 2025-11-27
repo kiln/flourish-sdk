@@ -3,11 +3,11 @@
     "description": "Common shared utilities",
     "scripts": {
         "test": "jest",
-        "test:ci": "jest --config jest.config.ci.mjs"
+        "test:ci": "jest --config jest.config.ci.mjs --coverage"
     },
     "dependencies": {
         "@adobe/css-tools": "^4.3.3",
-        "@flourish/interpreter": "^9.1.1",
+        "@flourish/interpreter": "^9.2.0",
         "dompurify": "^3.2.4"
     },
     "devDependencies": {
