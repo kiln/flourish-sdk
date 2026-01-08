@@ -1,3 +1,6 @@
+# 5.2.5
+* Update version of node to 24.12
+
 # 5.2.4
 * Add new properties to support standalone HTML downloads. The first is
   `allowed_standalone_download_origins` at the top level, so that

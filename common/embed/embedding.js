@@ -341,7 +341,7 @@ function createScrolly(iframe, captions, hasScrollyTransformFix) {
         step.style.marginLeft = "auto";
         step.style.marginRight = "auto";
         var caption = document.createElement("div");
-        // eslint-disable-next-line flourish-security/dompurify
+        // eslint-disable-next-line flourish/dompurify
         caption.innerHTML = dompurify_1.default.sanitize(d, { ADD_ATTR: ["target"] });
         caption.style.visibility = has_content ? "" : "hidden";
         caption.style.display = "inline-block";
@@ -492,6 +492,21 @@ function setIframeContent(embed_url, container, iframe, width, height, play_on_l
         iframe.style.height = height;
     }
     iframe.setAttribute("src", embed_url + (play_on_load ? "#play-on-load" : ""));
+    // Send postMessage after iframe loads to notify it that credit is handled externally
+    iframe.addEventListener("load", function () {
+        try {
+            iframe.contentWindow.postMessage({
+                sender: "Flourish",
+                method: "flourish:creditHandledExternally",
+            }, "*");
+        }
+        catch (e) {
+            // Silently fail if postMessage is blocked
+            if (console && console.warn) {
+                console.warn("Could not send credit postMessage:", e);
+            }
+        }
+    }, { once: true });
     return iframe;
 }
 function initEmbedding() {

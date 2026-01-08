@@ -20,7 +20,7 @@
     "rollup-plugin-uglify": "^6.0.2"
   },
   "engines": {
-    "node": "20.19.x",
-    "npm": "10.8.2"
+    "node": "24.12.x",
+    "npm": "11.x"
   }
 }
