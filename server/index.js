@@ -16,7 +16,7 @@ const crypto = require("crypto"),
       columns = require("../common/utils/columns"),
       comms_js = require("./comms_js"),
       data_utils = require("../common/utils/data"),
-      index_html = require("./index_html"),
+      index_html = require("./index_html").default,
       json = require("../common/utils/json"),
 
       log = require("../lib/log"),
