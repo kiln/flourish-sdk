@@ -1118,17 +1118,23 @@ describe("validate_config", function() {
 			it("should accept false for url type", function() {
 				expectSuccess(settingPlus({ type: "url", cacheable_for_standalone_downloads: false }));
 			});
+			it("should accept true for font type", function() {
+				expectSuccess(settingPlus({ type: "font", cacheable_for_standalone_downloads: true }));
+			});
+			it("should accept false for font type", function() {
+				expectSuccess(settingPlus({ type: "font", cacheable_for_standalone_downloads: false }));
+			});
 			it("should reject it for string type", function() {
 				expectFailure(settingPlus({ type: "string", cacheable_for_standalone_downloads: true }),
-					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url”");
+					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url” or “font”");
 			});
 			it("should reject it for number type", function() {
 				expectFailure(settingPlus({ type: "number", cacheable_for_standalone_downloads: true }),
-					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url”");
+					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url” or “font”");
 			});
 			it("should reject it for boolean type", function() {
 				expectFailure(settingPlus({ type: "boolean", cacheable_for_standalone_downloads: true }),
-					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url”");
+					"template.yml setting “foo” has “cacheable_for_standalone_downloads” property, but is not of type “url” or “font”");
 			});
 			it("should reject null", function() {
 				expectFailure(settingPlus({ type: "url", cacheable_for_standalone_downloads: null }),

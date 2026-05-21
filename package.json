@@ -1,6 +1,6 @@
 {
   "name": "@flourish/sdk",
-  "version": "5.2.7",
+  "version": "5.2.9",
   "description": "The Flourish SDK",
   "module": "src/index.js",
   "scripts": {
@@ -42,13 +42,21 @@
     "ws": "^8.17.0"
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^6.0.3",
+    "d3-request": "^1.0.6",
+    "mobx": "^6.13.5",
+    "mobx-react-lite": "^4.1.1",
+    "mocha": "^10.4.0",
     "mocha-junit-reporter": "^2.2.1",
     "mocha-multi-reporters": "^1.5.1",
-    "d3-request": "^1.0.6",
-    "mocha": "^10.4.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "rollup": "^4.17.2",
+    "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.36.0",
+    "sass": "^1.77.0",
     "sinon": "^18.0.0",
     "tempy": "^3.1.0"
   },

@@ -1,3 +1,9 @@
+# 5.2.9
+* Re-publish of 5.2.8. Allow `cacheable_for_standalone_downloads: true` on settings of `type: font` (previously only permitted on `type: url`). This unblocks templates from caching font files into standalone HTML downloads.
+
+# 5.2.8
+* Allow `cacheable_for_standalone_downloads: true` on settings of `type: font` (previously only permitted on `type: url`). This unblocks templates from caching font files into standalone HTML downloads.
+
 # 5.2.7
 * Fix CommonJS/ESM interop issue causing `index_html.render is not a function` error when running `flourish run` on templates
 

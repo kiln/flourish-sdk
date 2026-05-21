@@ -15,11 +15,17 @@ function getLocationData() {
     if (window.Flourish && window.Flourish.app && window.Flourish.app.loaded_template_id) {
         data.template_id = window.Flourish.app.loaded_template_id;
     }
+    if (window.Flourish && window.Flourish.app && window.Flourish.app.template_id) {
+        data.template_id = window.Flourish.app.template_id;
+    }
     if (window._Flourish_visualisation_id) {
         data.visualisation_id = window._Flourish_visualisation_id;
     }
     if (window.Flourish && window.Flourish.app && window.Flourish.app.loaded_visualisation) {
         data.visualisation_id = window.Flourish.app.loaded_visualisation.id;
+    }
+    if (window.Flourish && window.Flourish.app && window.Flourish.app.current_slide && window.Flourish.app.current_slide.visualisation_id) {
+        data.visualisation_id = window.Flourish.app.current_slide.visualisation_id;
     }
     if (window.Flourish && window.Flourish.app && window.Flourish.app.story) {
         data.story_id = window.Flourish.app.story.id;

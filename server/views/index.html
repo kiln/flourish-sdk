@@ -79,6 +79,13 @@
 					</div>
 					<div class="side-panel">
 					  <div class="side-panel-inner">
+					    <div class="mobile-panel-header">
+					      <img src="/images/icon-settings-toggles.svg" alt="" aria-hidden="true" class="mobile-panel-header-icon">
+					      <span class="mobile-panel-header-title">Settings</span>
+					      <button class="mobile-panel-close-btn" aria-label="Close settings" onclick="document.dispatchEvent(new CustomEvent('mobile-panel:close'))">
+					        <img src="/images/icon-close-ui.svg" width="20" height="20" alt="">
+					      </button>
+					    </div>
 					      <div class="current-template popup" data-popup-head="Template details" data-popup-body="Add or edit thumbnail.jpg and template.yml to change">
 					      	<div class="current-template-title">
 					      		<!-- <div class="current-template-thumbnail"></div> -->
