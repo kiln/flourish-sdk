@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const customer_analytics_1 = require("./customer_analytics");
 const dompurify_1 = __importDefault(require("dompurify"));
 const parse_query_params_1 = __importDefault(require("./parse_query_params"));
+const dev_origin_re_1 = require("./dev-origin-re");
 var is_fixed_height;
 var is_amp;
 function isFixedHeight() {
@@ -214,7 +215,7 @@ function startEventListeners(callback, allowed_methods, embed_domain) {
                     return true;
                 }
             }
-            if (event.origin.match(/\/\/localhost:\d+$|\/\/(?:public|app)\.local\.flourish-internal\.com$|\/\/flourish-api\.com$|\.flourish\.(?:local(:\d+)?|net|rocks|studio)$|\.uri\.sh$|\/\/flourish-user-templates\.com$/)) {
+            if (event.origin.match(dev_origin_re_1.DEV_ORIGIN_RE)) {
                 return true;
             }
             return false;

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createInterpreter = void 0;
 exports.extractData = extractData;
+exports.extractUnboundColumns = extractUnboundColumns;
 exports.getColumnTypesForData = getColumnTypesForData;
 exports.getRandomSeededSample = getRandomSeededSample;
 exports.mulberry32 = mulberry32;
@@ -15,6 +16,7 @@ exports.interpretColumn = interpretColumn;
 exports.sortDataTables = sortDataTables;
 const interpreter_1 = require("@flourish/interpreter");
 require("./polyfills");
+const columns_1 = require("./columns");
 var interpreter_2 = require("@flourish/interpreter");
 Object.defineProperty(exports, "createInterpreter", { enumerable: true, get: function () { return interpreter_2.createInterpreter; } });
 function getLatestDataTimestamps(data_table_timestamps) {
@@ -185,6 +187,82 @@ data_rewriter) {
         dataset.push(o);
     }
     return dataset;
+}
+/**
+ * Find columns present in the loaded data tables that no data binding
+ * references. These are columns the user can see on the Data tab but that
+ * play no role in the visualisation — `extractData` drops them entirely.
+ *
+ * Only data tables present in `data_by_id` are considered, i.e. tables
+ * referenced by at least one binding row. Tables linked to the visualisation
+ * but with no binding rows at all are never loaded and so can't be reported
+ * here.
+ *
+ * Tables where every named column is bound are omitted from the result.
+ */
+function extractUnboundColumns(data_bindings, data_by_id, column_types_by_id, data_table_names_by_id = {}, template_datasets = null) {
+    const bound_indices_by_id = {};
+    for (const dataset in data_bindings) {
+        // Binding rows for datasets the template no longer declares are dropped
+        // by extractData (their columns never reach prepared_data), so they must
+        // not count as bound here either — otherwise the column appears in
+        // neither chart_data nor unbound_columns
+        if (template_datasets && !template_datasets.has(dataset)) {
+            continue;
+        }
+        for (const key in data_bindings[dataset]) {
+            const b = data_bindings[dataset][key];
+            if (b == null) {
+                continue;
+            }
+            if (!bound_indices_by_id[b.data_table_id]) {
+                bound_indices_by_id[b.data_table_id] = new Set();
+            }
+            const bound = bound_indices_by_id[b.data_table_id];
+            if (b.column != null) {
+                bound.add(b.column);
+            }
+            if (b.columns != null) {
+                for (const c of b.columns) {
+                    bound.add(c);
+                }
+            }
+        }
+    }
+    const result = [];
+    for (const data_table_id in data_by_id) {
+        const table = data_by_id[data_table_id];
+        if (!table || table.length === 0) {
+            continue;
+        }
+        const headers = table[0];
+        const bound = bound_indices_by_id[data_table_id];
+        const types_by_index = {};
+        for (const ct of column_types_by_id[data_table_id] || []) {
+            types_by_index[ct.index] = ct.type_id.split("$")[0];
+        }
+        const columns = [];
+        for (let i = 0; i < headers.length; i++) {
+            if (bound && bound.has(i)) {
+                continue;
+            }
+            const name = typeof headers[i] === "string" ? headers[i] : "";
+            const column = { name, column: (0, columns_1.printColumn)(i) };
+            if (types_by_index[i]) {
+                column.type = types_by_index[i];
+            }
+            columns.push(column);
+        }
+        if (columns.length === 0) {
+            continue;
+        }
+        result.push({
+            data_table_id: Number(data_table_id),
+            data_table_name: data_table_names_by_id[data_table_id] ?? null,
+            columns,
+        });
+    }
+    return result;
 }
 function getColumnTypesForData(data) {
     return transposeNestedArray(data)

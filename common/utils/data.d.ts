@@ -19,6 +19,37 @@ export type DatasheetsTimestamps = {
 export declare function extractData(data_binding: KeyToAugmentedDataBinding, data_by_id: {
     [data_table_id: string]: string[][] | undefined;
 }, column_types_by_id: NullableColumnTypesById, template_data_bindings: KeyToTemplateDataBinding | undefined, timestamps: DatasheetsTimestamps, data_rewriter?: (b: AugmentedDataBinding, value: unknown) => unknown): DatasetType;
+export type UnboundColumn = {
+    name: string;
+    column: string;
+    type?: string;
+};
+export type UnboundDataTableColumns = {
+    data_table_id: number;
+    data_table_name: string | null;
+    columns: UnboundColumn[];
+};
+/**
+ * Find columns present in the loaded data tables that no data binding
+ * references. These are columns the user can see on the Data tab but that
+ * play no role in the visualisation — `extractData` drops them entirely.
+ *
+ * Only data tables present in `data_by_id` are considered, i.e. tables
+ * referenced by at least one binding row. Tables linked to the visualisation
+ * but with no binding rows at all are never loaded and so can't be reported
+ * here.
+ *
+ * Tables where every named column is bound are omitted from the result.
+ */
+export declare function extractUnboundColumns(data_bindings: {
+    [dataset: string]: {
+        [key: string]: DataBinding | null;
+    };
+}, data_by_id: {
+    [data_table_id: string]: string[][] | undefined;
+}, column_types_by_id: NullableColumnTypesById, data_table_names_by_id?: {
+    [data_table_id: string]: string | undefined;
+}, template_datasets?: Set<string> | null): UnboundDataTableColumns[];
 export declare function getColumnTypesForData(data: string[][]): ColumnType[];
 export declare function getRandomSeededSample(column: string[], sample_size: number): string[];
 export declare function mulberry32(seed: number): () => number;

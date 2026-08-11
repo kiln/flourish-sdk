@@ -501,7 +501,12 @@ module.exports = function(template_dir, options) {
 			}
 		}
 
-		const chokidar_opts = { ignoreInitial: true, disableGlobbing: true, cwd: template_dir };
+		const chokidar_opts = {
+			ignoreInitial: true,
+			cwd: template_dir,
+			ignored: (watched_path) => watched_path.split(/[\\/]/)
+				.some((path_part) => path_part === ".git" || path_part === "node_modules"),
+		};
 		chokidar.watch(".", chokidar_opts).on("all", function(event_type, filename) {
 			const path_parts = filename.split(path.sep);
 

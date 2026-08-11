@@ -1,3 +1,6 @@
+# 5.2.10
+* Improve `flourish run` performance and prevent file-watcher resource usage from growing over time by upgrading Chokidar and excluding `node_modules` and `.git` from the watched tree.
+
 # 5.2.9
 * Re-publish of 5.2.8. Allow `cacheable_for_standalone_downloads: true` on settings of `type: font` (previously only permitted on `type: url`). This unblocks templates from caching font files into standalone HTML downloads.
 
